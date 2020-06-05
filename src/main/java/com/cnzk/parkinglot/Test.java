@@ -7,7 +7,7 @@ public static void main(String[] args) {
     String a="111";
 
 
-
+int i=1;
 }
 
 
