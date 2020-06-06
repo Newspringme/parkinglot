@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Layui</title>
+        <meta name="renderer" content="webkit">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<!--        <link rel="stylesheet" href="../layui/css/layui.css"  media="all">-->
+<!--        <script src="../layui/layui.js" charset="utf-8"></script>-->
+        <!--cdn静态库-->
+        <link rel="stylesheet" type="text/css" href="https://www.layuicdn.com/layui/css/layui.css" />
+        <script src="https://www.layuicdn.com/layui/layui.js"></script>
+    </head>
+    <body>
+<!--        搜索条件开始-->
+        <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+            <legend>搜索条件</legend>
+        </fieldset>
+        <form  action="" class="layui-form" method="post"  >
+            <div class="layui-inline">
+                <label class="layui-form-label">用户名:</label>
+                <div class="layui-input-block">
+                    <input type="text" name="userName" autocomplete="off" placeholder="请输入用户名" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label">注册时间：</label>
+                <div class="layui-input-block">
+                    <input type="text" name="starTime" id="starTime" readonly autocomplete="off" placeholder="请选择开始时间" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label">至：</label>
+                <div class="layui-input-block">
+                    <input type="text" name="endTime" id="endTime" readonly autocomplete="off" placeholder="请选择结束时间" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-inline">
+                <div class="layui-input-block">
+                    <button type="submit" class="layui-btn layui-btn-normal  layui-icon layui-icon-search" >搜索</button>
+                    <button type="reset" class="layui-btn layui-btn-warm layui-icon layui-icon-refresh">重置</button>
+                </div>
+            </div>
+        </form>
+<!--        搜索条件结束-->
+<!--        表格开始-->
+<!--        头部工具栏-->
+        <div style="display: none" id="userToolbar">
+            <button type="button" class="layui-btn layui-btn-xm layui-icon layui-icon-add-circle" lay-event="add">新增用户</button>
+            <button type="button" class="layui-btn layui-btn-xm layui-btn-danger layui-icon layui-icon-delete" lay-event="batchDelete">批量删除</button>
+        </div>
+<!--        行工具栏-->
+        <div style="display: none" id="userBar">
+            <button type="button" class="layui-btn layui-btn-sm layui-icon layui-icon-edit" lay-event="edit">编辑</button>
+            <button type="button" class="layui-btn layui-btn-sm  layui-btn-danger layui-icon layui-icon-delete" lay-event="delete">删除</button>
+        </div>
+<!--        表格主体-->
+        <table class="layui-hide" id="userTable" lay-filter="userTable"></table>
+<!--        表格结束-->
+<!--        添加弹出层开始-->
+        <div id="addUser" style="display: none">
+            <form class="layui-form" action="" style="margin-top: 30px">
+<!--                <div class="layui-form-item">-->
+<!--                    <fieldset class="layui-elem-field layui-field-title" >-->
+<!--                        <legend style="margin: 0 auto;">新增用户</legend>-->
+<!--                    </fieldset>-->
+<!--                </div>-->
+                <div class="layui-form-item">
+                    <label class="layui-form-label" style="margin-left: 120px;">用户昵称：</label>
+                    <div class="layui-input-block" style="float: left; margin-left: 20px;width: 200px;">
+                        <input  type="text" name="username" lay-verify="userName" lay-reqtext="用户名是必填项，岂能为空？"
+                                autocomplete="off" class="layui-input username">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label" style="margin-left: 120px;">手机号码：</label>
+                    <div class="layui-input-block" style="float: left; margin-left: 20px;width: 200px;">
+                        <input  type="text" name="userTel" lay-verify="required|phone" lay-reqtext="现在谁能离开手机？"
+                                autocomplete="off" class="layui-input userTel">
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <label class="layui-form-label"style="margin-left: 120px;">密&emsp;&emsp;码：</label>
+                    <div class="layui-input-block"style="float: left; margin-left: 20px;width: 200px;">
+                        <input type="password" name="userPass" lay-verify="userPass"
+                               autocomplete="off" class="layui-input userpass">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label"style="margin-left: 120px;">确认密码：</label>
+                    <div class="layui-input-block"style="float: left; margin-left: 20px;width: 200px;">
+                        <input type="password" name="surepass" required lay-verify="required" lay-reqtext="确认密码岂能为空？"
+                               autocomplete="off" class="layui-input surepass">
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <label class="layui-form-label"style="margin-left: 120px;">用户状态：</label>
+                    <div class="layui-input-block"style="float: left; margin-left: 20px;width: 200px;">
+                        <select name="userState"  lay-verify="required" lay-reqtext="用户状态岂能不选？">
+                            <option value="">请选择状态</option>
+                            <option value="1">启用</option>
+                            <option value="2">禁用</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label"style="margin-left: 120px;">所属角色：</label>
+                    <div class="layui-input-block"style="float: left; margin-left: 20px;width: 200px;">
+                        <select name="rolename" lay-verify="required" lay-search="" lay-reqtext="用户岂能没有角色？">
+                            <option value="" >请选择角色</option>
+                            <option value="1">普通用户</option>
+                            <option value="2">超级用户</option>
+<!--                            <c:forEach var="role" items="${rolelist}" >-->
+<!--                                <option value="${role.roleid}">${role.rolename}</option>-->
+<!--                            </c:forEach>-->
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label"style="margin-left: 120px;">性&emsp;&emsp;别：</label>
+                    <div class="layui-input-block"style="float: left; margin-left: 20px;width: 200px;">
+                        <input type="radio" name="usersex" value="男" title="男" checked>
+                        <input type="radio" name="usersex" value="女" title="女">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-input-block" style="margin-left: 220px;">
+                        <button type="submit" class="layui-btn layui-icon layui-icon-release" lay-submit>提交</button>
+                        <button type="reset" class="layui-btn layui-btn-warm layui-icon layui-icon-refresh">重置</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+<!--        添加弹出层结束-->
+        <script type="text/javascript">
+            layui.use(['jquery','layer','form','table','laydate'],function () {
+	            var $ = layui.jquery;
+	            var layer = layui.layer;
+	            var form = layui.form;
+	            var table = layui.table;
+	            var laydate=layui.laydate;
+                   //给开始时间和结束时间绑定时间选择器
+                laydate.render({
+                    elem:'#starTime'
+                });
+                laydate.render({
+                    elem:'#endTime'
+                })
+
+	               // 渲染数据表格
+	            table.render({
+		            elem: '#userTable'
+                    // , url: '${pageContext.request.contextPath}/UserServlet?method=getAllUser'
+		            , title: '用户数据表'
+		            , page: true
+                    ,toolbar:'#userToolbar'
+                    ,defaultToolbar:['filter','print']
+                    , totalRow:true//开启合计行
+                    // ,autoSort: true//自动排序
+                    ,initSort: {
+			            field: 'id' //排序字段，对应 cols 设定的各字段名
+			            ,type: 'desc' //排序方式  asc: 升序、desc: 降序、null: 默认排序
+		            }
+		            //等价于（“自动化渲染”配置方式）
+			        // <table class="layui-table" lay-data="{initSort:{field:'id', type:'desc'}}" lay-filter="test"> …… </table>
+		            , limit: 5//每页多少条数据
+                    , cellMinWidth:120//设置列的最小默认宽度
+		            ,skin: 'line' //行边框风格
+		            ,skin: 'row' //列边框风格
+		            ,even: true //开启隔行背景
+		            ,size: 'lg' //大尺寸的表格，sm为小尺寸
+		            , text: {
+			            none: '数据被小小苏吃了' //默认：无数据。注：该属性为 layui 2.2.5 开始新增
+		            }
+                    , done: function (res, curr, count) {
+                        // layer.alert(JSON.stringify(res));//返回json数据
+                        // layer.alert(curr);//返回当前页的行数量
+                        // layer.alert(count);//返回总行数
+		            }
+                    // , height: 'full-300'//总高-空白300
+		            ,data: [
+			            {
+				            "id": "10001",
+				            "username": "杜甫",
+				            "email": "xianxin@layui.com",
+				            "sex": "男",
+				            "city": "浙江杭州",
+				            "sign": "点击此处，显示更多。当内容超出时，点击单元格会自动显示更多内容。",
+				            "experience": "116",
+				            "ip": "192.168.0.8",
+				            "logins": "108",
+				            "joinTime": "2016-10-14"
+			            },
+			            {
+				            "id": "10002",
+				            "username": "李白",
+				            "email": "xianxin@layui.com",
+				            "sex": "男",
+				            "city": "浙江杭州",
+				            "sign": "君不见，黄河之水天上来，奔流到海不复回。",
+				            "experience": "12",
+				            "ip": "192.168.0.8",
+				            "logins": "106",
+				            "joinTime": "2016-10-14",
+				            // "LAY_CHECKED": true
+			            },
+			            {
+				            "id": "10003",
+				            "username": "王勃",
+				            "email": "xianxin@layui.com",
+				            "sex": "男",
+				            "city": "浙江杭州",
+				            "sign": "人生恰似一场修行",
+				            "experience": "65",
+				            "ip": "192.168.0.8",
+				            "logins": "106",
+				            "joinTime": "2016-10-14"
+			            },
+			            {
+				            "id": "10004",
+				            "username": "李清照",
+				            "email": "xianxin@layui.com",
+				            "sex": "女",
+				            "city": "浙江杭州",
+				            "sign": "人生恰似一场修行",
+				            "experience": "666",
+				            "ip": "192.168.0.8",
+				            "logins": "106",
+				            "joinTime": "2016-10-14"
+			            },
+			            {
+				            "id": "10005",
+				            "username": "冰心",
+				            "email": "xianxin@layui.com",
+				            "sex": "女",
+				            "city": "浙江杭州",
+				            "sign": "人生恰似一场修行",
+				            "experience": "86",
+				            "ip": "192.168.0.8",
+				            "logins": "106",
+				            "joinTime": "2016-10-14"
+			            },
+			            {
+				            "id": "10006",
+				            "username": "贤心",
+				            "email": "xianxin@layui.com",
+				            "sex": "男",
+				            "city": "浙江杭州",
+				            "sign": "人生恰似一场修行",
+				            "experience": "12",
+				            "ip": "192.168.0.8",
+				            "logins": "106",
+				            "joinTime": "2016-10-14"
+			            },
+			            {
+				            "id": "10007",
+				            "username": "贤心",
+				            "email": "xianxin@layui.com",
+				            "sex": "男",
+				            "city": "浙江杭州",
+				            "sign": "人生恰似一场修行",
+				            "experience": "16",
+				            "ip": "192.168.0.8",
+				            "logins": "106",
+				            "joinTime": "2016-10-14"
+			            },
+			            {
+				            "id": "10008",
+				            "username": "贤心",
+				            "email": "xianxin@layui.com",
+				            "sex": "男",
+				            "city": "浙江杭州",
+				            "sign": "人生恰似一场修行",
+				            "experience": "106",
+				            "ip": "192.168.0.8",
+				            "logins": "106",
+				            "joinTime": "2016-10-14"
+			            },
+			            {
+				            "id": "10009",
+				            "username": "杜甫",
+				            "email": "xianxin@layui.com",
+				            "sex": "男",
+				            "city": "浙江杭州",
+				            "sign": "点击此处，显示更多。当内容超出时，点击单元格会自动显示更多内容。",
+				            "experience": "116",
+				            "ip": "192.168.0.8",
+				            "logins": "108",
+				            "joinTime": "2016-10-14"
+			            },
+			            {
+				            "id": "100010",
+				            "username": "李白",
+				            "email": "xianxin@layui.com",
+				            "sex": "男",
+				            "city": "浙江杭州",
+				            "sign": "君不见，黄河之水天上来，奔流到海不复回。",
+				            "experience": "12",
+				            "ip": "192.168.0.8",
+				            "logins": "106",
+				            "joinTime": "2016-10-14",
+			            },
+			            {
+				            "id": "100011",
+				            "username": "王勃",
+				            "email": "xianxin@layui.com",
+				            "sex": "男",
+				            "city": "浙江杭州",
+				            "sign": "人生恰似一场修行",
+				            "experience": "65",
+				            "ip": "192.168.0.8",
+				            "logins": "106",
+				            "joinTime": "2016-10-14"
+			            },
+			            {
+				            "id": "100012",
+				            "username": "李清照",
+				            "email": "xianxin@layui.com",
+				            "sex": "女",
+				            "city": "浙江杭州",
+				            "sign": "人生恰似一场修行",
+				            "experience": "666",
+				            "ip": "192.168.0.8",
+				            "logins": "106",
+				            "joinTime": "2016-10-14"
+			            },
+			            {
+				            "id": "100013",
+				            "username": "冰心",
+				            "email": "xianxin@layui.com",
+				            "sex": "女",
+				            "city": "浙江杭州",
+				            "sign": "人生恰似一场修行",
+				            "experience": "86",
+				            "ip": "192.168.0.8",
+				            "logins": "106",
+				            "joinTime": "2016-10-14"
+			            },
+			            {
+				            "id": "100014",
+				            "username": "贤心",
+				            "email": "xianxin@layui.com",
+				            "sex": "男",
+				            "city": "浙江杭州",
+				            "sign": "人生恰似一场修行",
+				            "experience": "12",
+				            "ip": "192.168.0.8",
+				            "logins": "106",
+				            "joinTime": "2016-10-14"
+			            },
+			            {
+				            "id": "100015",
+				            "username": "贤心",
+				            "email": "xianxin@layui.com",
+				            "sex": "男",
+				            "city": "浙江杭州",
+				            "sign": "人生恰似一场修行",
+				            "experience": "16",
+				            "ip": "192.168.0.8",
+				            "logins": "106",
+				            "joinTime": "2016-10-14"
+			            },
+			            {
+				            "id": "100016",
+				            "username": "贤心",
+				            "email": "xianxin@layui.com",
+				            "sex": "男",
+				            "city": "浙江杭州",
+				            "sign": "人生恰似一场修行",
+				            "experience": "106",
+				            "ip": "192.168.0.8",
+				            "logins": "106",
+				            "joinTime": "2016-10-14"
+			            }
+		            ]
+		            , cols: [[
+			             {type: 'numbers',width:80, fixed: 'left',totalRowText:'合计：'}
+			            ,{type: 'checkbox'}
+			            ,{field:'id', title:'ID',width:100, unresize: true, sort: true}
+			            ,{field:'username', title:'用户名', width:120,templet:'#usernameTpl'}
+			            ,{field:'email', title:'邮箱', width:150, templet: function(res){
+					            return '<em>'+ res.email +'</em>'
+				            }}
+			            ,{field:'sex', title:'性别', width:80,templet: '#sexTpl'}
+			            // ,{field:'sex', title:'性别', width:80,templet:function (res) {
+			            // 	return res.sex=='男'?'汉子':'妹子';
+                        //     }}
+			            ,{field:'city', title:'城市', width:100,templet:'#levelNameTpl'}
+			            ,{field:'sign', title:'签名'}
+			            ,{field:'experience', title:'积分', width:100,templet:function (res) {
+			            	if (res.experience >= 100) {
+			            		return res.sex='超级会员';
+                            }else {
+					            return res.sex='普通会员';
+                            }
+                            }}
+			            ,{field:'ip', title:'IP', width:120}
+			            ,{field:'logins', title:'登入次数', width:120, sort: true,totalRow:true}
+			            ,{field:'joinTime', title:'加入时间', width:120}
+			            ,{fixed: 'right', title:'操作', toolbar: '#userBars',align:'center'}
+		            ]]
+	            })
+                //自定义验证规则
+	            form.verify({
+		            userName: function(value){
+			            if(value.length < 5){
+				            return '标题至少得5个字符啊';
+			            }
+		            }
+		            ,userPass: [
+			            /^[\S]{6,12}$/
+			            ,'密码必须6到12位，且不能出现空格'
+		            ]
+	            });
+	            //头部工具栏监听事件
+	            table.on('toolbar(userTable)', function(obj){
+		            // var checkStatus = table.checkStatus(obj.config.id);
+		            switch(obj.event){
+			            case 'add':
+				            layer.msg('新增用户');
+				            openAddUser();
+
+				            break;
+			            case 'batchDelete':
+				            layer.msg('批量删除');
+
+				            break;
+		            };
+	            });
+                //打开添加页面
+                function openAddUser(){
+                	layer.open({
+                        type: 1,
+                        title: '添加用户',
+                        content: $('#addUser'),
+                        area: ['600px','550px'],
+		                shade: [0.5,'#fff'], //0.5透明度的白色背景
+		                // shadeClose: true, //开启遮罩关闭
+		                skin: 'layui-layer-molv',//墨绿皮肤
+		                // skin: 'layui-layer-lan',//深蓝
+		                offset: '50px',//上边距
+		                shift: 1 //动画类型
+
+                    })
+                }
+	            //表格复选框监听事件
+	            table.on('checkbox(userTable)', function(obj){
+		           layer.alert(JSON.stringify(obj.data));
+	            });
+	            //单元格编辑事件
+	            table.on('edit(userTable)', function(obj){ //注：edit是固定事件名，userTable是table原始容器的属性 lay-filter="对应的值"
+		            console.log(obj.value); //得到修改后的值
+		            console.log(obj.field); //当前编辑的字段名
+		            console.log(obj.data); //所在行的所有相关数据
+                    // $.post('url?'+obj.field+'&id='+obj.data.id,function (data) {
+                    //     layer.alert(JSON.stringify(data));
+                    // });
+	            });
+	            //监听行工具条事件
+	            table.on('tool(userTable)', function(obj){ //注：tool 是工具条事件名，test 是 table 原始容器的属性 lay-filter="对应的值"
+		            var data = obj.data; //获得当前行数据
+		            var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
+		            var tr = obj.tr; //获得当前行 tr 的 DOM 对象（如果有的话）
+
+		            if(layEvent === 'delete'){ //删除
+			            layer.confirm('真的删除该行么',{icon: 7},function(index){
+				            obj.del(); //删除对应行（tr）的DOM结构，并更新缓存
+				            layer.close(index);
+				            //向服务端发送删除指令
+			            });
+		            } else if(layEvent === 'edit'){ //编辑
+			            //do something
+			            layer.msg('已开启（点击本行编辑）模式!', {icon: 6, time: 3000});
+			            $(tr).find("td").attr('data-edit','text');
+			            //单元格编辑事件
+			            table.on('edit(userTable)', function(obj){ //注：edit是固定事件名，test是table原始容器的属性 lay-filter="对应的值"
+				            console.log(obj.value); //得到修改后的值
+				            console.log(obj.field); //当前编辑的字段名
+				            console.log(obj.data); //所在行的所有相关数据
+				            //同步更新缓存对应的值
+				            obj.update({
+					            username: ''+obj.value
+					            ,title: '用户名'
+				            });
+
+			            });
+
+		            } else if(layEvent === 'LAYTABLE_TIPS'){
+			            layer.alert('Hi，头部工具栏扩展的右侧图标。');
+		            }
+	            });
+            });
+        </script>
+        <script type="text/html" id="userBars">
+            {{#  if(d.id==10005){ }}
+                 <button type="button" class="layui-btn layui-btn-sm  layui-btn-danger layui-icon layui-icon-close" lay-event="changeState">禁用</button>
+<!--            <a href="/detail/{{d.id}}" class="layui-table-link">{{d.title}}</a>-->
+            {{#  } else { }}
+                <button type="button" class="layui-btn layui-btn-sm  layui-btn layui-icon layui-icon-ok" lay-event="changeState">启用</button>
+            {{#  } }}
+        </script>
+<!--        根据性别更改样式-->
+        <script type="text/html" id="sexTpl">
+            {{#  if(d.sex === '女'){ }}
+            <span style="color: #F581B1;">{{ d.sex }}</span>
+            {{#  } else { }}
+            {{ d.sex }}
+            {{#  } }}
+        </script>
+<!--        用户名-->
+        <script type="text/html" id="usernameTpl">
+            <a href="/?table-demo-id={{d.id}}" class="layui-table-link" target="_blank">{{ d.username }}</a>
+        </script>
+        <script type="text/html" id="levelNameTpl">
+
+        </script>
+
+    </body>
+</html>
