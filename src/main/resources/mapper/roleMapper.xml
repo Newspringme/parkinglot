@@ -4,7 +4,11 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.cnzk.mapper.RoleMapper">
 
-    <select id="login" resultType="com.cnzk.pojo.TbRole" >
-        select * from  tab_role
+    <select id="queryRole" resultType="com.cnzk.pojo.TbRole" >
+        select * from  tb_role limit #{start},#{pageSize};
+    </select>
+
+    <select id="queryRoleCount" resultType="int">
+        select count(*) as count from tb_role;
     </select>
 </mapper>

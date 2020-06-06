@@ -8,13 +8,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
 
 /**
  * @author su
  * @date 2020/6/5-15:29
  */
-@RestController
+@Controller
 public class AdminController
 {
 	@Autowired
@@ -28,12 +27,9 @@ public class AdminController
 		if(msg!=null&&!"".equals(msg.trim())){
 			admin= JSON.parseObject(msg,Admin.class);
 		}
-		int startPage=1;//获取页码;
-		int pageSize=5;//每页数量
+		int startPage=Integer.parseInt(page);//获取页码;
+		int pageSize=Integer.parseInt(limit);//每页数量
 		int start = (startPage-1)*pageSize;//计算出起始查询位置
-//		int startPage=Integer.parseInt(page);//获取页码;
-//		int pageSize=Integer.parseInt(limit);//每页数量
-//		int start = (startPage-1)*pageSize;//计算出起始查询位置
 		LayuiData layuiData=adminService.queryAdmin(admin,start,pageSize);
 		System.out.println("layuiData = " + JSON.toJSONString(layuiData));
 		return layuiData;
