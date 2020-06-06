@@ -3,12 +3,23 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.cnzk.mapper.RoleMapper">
-
+<!--    查询所有角色-->
     <select id="queryRole" resultType="com.cnzk.pojo.TbRole" >
         select * from  tb_role limit #{start},#{pageSize};
     </select>
-
+<!--查询所有角色数量-->
     <select id="queryRoleCount" resultType="int">
         select count(*) as count from tb_role;
     </select>
+<!--添加新的角色-->
+    <insert id="addRole" parameterType="String">
+        insert into tb_role (role_name) values (#{roleName});
+    </insert>
+<!--    删除角色-->
+    <delete id="deleteRole" parameterType="com.cnzk.pojo.TbRole">
+        delete from tb_role  where role_id=#{roleId};
+    </delete>
+    <update id="editRole" parameterType="com.cnzk.pojo.TbRole">
+       update tb_role set role_name=#{roleName} where role_id=#{roleId};
+    </update>
 </mapper>

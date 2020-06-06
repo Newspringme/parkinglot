@@ -81,12 +81,12 @@
 </div>
 
 <script>
-    layui.use(['form', 'table'], function () {
+    var load=layui.use(['form', 'table'], function () {
         var $ = layui.jquery,
             form = layui.form,
             table = layui.table;
 
-        table.render({
+        var getlist=table.render({
             elem: '#currentTableId',
             url: '/parkinglot/queryRole',
             toolbar: '#toolbarDemo',
@@ -98,41 +98,18 @@
             cols: [[
                 {type: "checkbox", width: 50},
                 {field: 'roleId', width: 150, title: 'ID', sort: true},
-                {field: 'roleName', width: 765, title: '用户名'},
-                // {field: 'sex', width: 80, title: '性别', sort: true},
-                // {field: 'city', width: 80, title: '城市'},
-                // {field: 'sign', title: '签名', minWidth: 150},
-                // {field: 'experience', width: 80, title: '积分', sort: true},
-                // {field: 'score', width: 80, title: '评分', sort: true},
-                // {field: 'classify', width: 80, title: '职业'},
-                // {field: 'wealth', width: 135, title: '财富', sort: true},
+                {field: 'roleName', maxwidth: 765,minWidth: 100, title: '用户名'},
                 {title: '操作', minWidth: 150, toolbar: '#currentTableBar', align: "center"}
             ]],
             limits: [10, 15, 20, 25, 50, 100],
-            limit: 15,
+            limit: 10,
             page: true,
             skin: 'line'
         });
 
-        // 监听搜索操作
-        form.on('submit(data-search-btn)', function (data) {
-            var result = JSON.stringify(data.field);
-            layer.alert(result, {
-                title: '最终的搜索信息'
-            });
+   
 
-            //执行搜索重载
-            table.reload('currentTableId', {
-                page: {
-                    curr: 1
-                }
-                , where: {
-                    searchParams: result
-                }
-            }, 'data');
-
-            return false;
-        });
+       
 
         /**
          * toolbar监听事件
@@ -145,8 +122,8 @@
                     shade: 0.2,
                     maxmin:true,
                     shadeClose: true,
-                    area: ['100%', '100%'],
-                    content: '/parkinglot/static/jsp/table/add.html',
+                    area: ['50%', '30%'],
+                    content: '/parkinglot/static/jsp/table/role-add.jsp',
                 });
                 $(window).on("resize", function () {
                     layer.full(index);
@@ -173,16 +150,33 @@
                     shade: 0.2,
                     maxmin:true,
                     shadeClose: true,
-                    area: ['100%', '100%'],
-                    content: '/parkinglot/static/jsp/table/edit.html',
+                    area: ['50%', '30%'],
+                    content: '/parkinglot/static/jsp/table/role-edit.jsp?roleId='+data.roleId+'&roleName='+data.roleName,
                 });
                 $(window).on("resize", function () {
                     layer.full(index);
                 });
                 return false;
             } else if (obj.event === 'delete') {
-                layer.confirm('真的删除行么', function (index) {
-                    obj.del();
+                layer.confirm('真的删除'+obj.data.roleName, function (index) {
+                    $.ajax({
+                        url:"${pageContext.request.contextPath}/deleteRole"
+                        ,type:"POST"
+                        ,dataType:"text"
+                        ,data:{
+                            roleId:data.roleId
+                        },
+                        success:function (msg) {
+                            msg=msg+"";
+                            if (msg=='true'){
+                                layer.alert("删除成功");
+                                obj.del();
+                                load.get
+                            }else {
+                                layer.alert("删除失败");
+                            }
+                        }
+                    })
                     layer.close(index);
                 });
             }
