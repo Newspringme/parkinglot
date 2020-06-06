@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cnzk.mapper.AdminMapper">
+    <!--查询管理员记录数-->
+    <select id="queryAdminCount" resultType="int">
+        select count(*)as count from tb_admin
+        <where>
+            <if test="adminName!=null and adminName!=''">and admin_name like concat('%',#{adminName},'%')</if>
+            <if test="startTime!=null and startTime!=''">and reg_time &gt;=#{startTime}</if>
+            <if test="endTime!=null and endTime!=''">and reg_time &lt;= #{endTime}</if>
+        </where>
+    </select>
+    <!--带条件查询管理员-->
+    <select id="queryAdmin" resultType="com.cnzk.pojo.Admin">
+        select * from tb_admin a left join tb_role r on
+        r.role_id=a.role_id
+        <where>
+            <if test="admin.adminName!=null and admin.adminName!=''">and admin_name like
+                concat('%',#{admin.adminName},'%')
+            </if>
+            <if test="admin.startTime!=null and admin.startTime!=''">and reg_time &gt;=#{admin.startTime}
+            </if>
+            <if test="admin.endTime!=null and admin.endTime!=''">and reg_time &lt;= #{admin.endTime}</if>
+        </where>
+        limit #{start},#{pageSize};
+    </select>
+</mapper>
