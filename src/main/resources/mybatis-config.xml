@@ -10,4 +10,9 @@
         <!--开启驼峰命名映射配置-->
         <setting name="mapUnderscoreToCamelCase" value="true"/>
     </settings>
+
+    <typeAliases>
+        <!--这是给entity包下所有类取别名，在用完全限定命名的情况下可以通过类名直接调用 -->
+        <package name="com.cnzk.pojo" />
+    </typeAliases>
 </configuration>

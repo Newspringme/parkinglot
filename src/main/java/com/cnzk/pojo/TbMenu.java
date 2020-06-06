@@ -6,17 +6,19 @@ package com.cnzk.pojo;
  */
 public class TbMenu {
 
-  private long menuId;
+  private Integer menuId;
   private String menuName;
   private String menuUrl;
-  private long menuPid;
+  private Integer menuPid;
 
+  //为权限修改mapper批量插入角色菜单关系表所加
+  private Integer rolesid;
 
   public long getMenuId() {
     return menuId;
   }
 
-  public void setMenuId(long menuId) {
+  public void setMenuId(Integer menuId) {
     this.menuId = menuId;
   }
 
@@ -43,8 +45,26 @@ public class TbMenu {
     return menuPid;
   }
 
-  public void setMenuPid(long menuPid) {
+  public void setMenuPid(Integer menuPid) {
     this.menuPid = menuPid;
   }
 
+  public Integer getRolesid() {
+    return rolesid;
+  }
+
+  public void setRolesid(Integer rolesid) {
+    this.rolesid = rolesid;
+  }
+
+  @Override
+  public String toString() {
+    return "TbMenu{" +
+            "menuId=" + menuId +
+            ", menuName='" + menuName + '\'' +
+            ", menuUrl='" + menuUrl + '\'' +
+            ", menuPid=" + menuPid +
+            ", rolesid=" + rolesid +
+            '}';
+  }
 }

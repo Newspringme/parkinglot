@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--命名空间，区别不同xml中，出现相同的id-->
+<mapper namespace="com.cnzk.mapper.MenuMapper">
+<!--二级菜单-->
+	<select id ="findMenu" parameterType="java.lang.Integer" resultType="TbMenu">
+		select A.* from menutbl A join rolesandmenu B on A.MENUID = B.MENUID where B.ROLESID = #{rolesid}
+	</select>
+<!--一级菜单-->
+	<select id ="findMenuSon" parameterType="java.lang.Integer" resultType="TbMenu">
+		select * from menutbl where MENUID in (
+		select DISTINCT MENUSONID from menutbl where MENUID in (
+		select MENUID from rolesandmenu where ROLESID = #{rolesid}))
+	</select>
+
+	<select id ="findAllMenus" resultType="TbMenu">
+		select * from menutbl where MENUSONID not in (0)
+	</select>
+
+	<select id ="findAllMenuSon" resultType="TbMenu">
+		select * from menutbl where MENUSONID = 0
+	</select>
+
+    </mapper>
