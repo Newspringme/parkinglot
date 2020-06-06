@@ -13,9 +13,11 @@ import java.util.List;
 @Mapper
 public interface AdminMapper
 {
-	//	查询管理员记录数，包括带条件
-	int queryAdminCount(Admin admin);
+    //	查询管理员记录数，包括带条件
+    int queryAdminCount(Admin admin);
 
-	//	查询管理员，包括带条件及分页
-	List<Admin> queryAdmin(@Param("admin") Admin admin, @Param("start") int start, @Param("pageSize") int pageSize);
+    //	查询管理员，包括带条件及分页
+    List<Admin> queryAdmin(@Param("admin") Admin admin, @Param("start") int start, @Param("pageSize") int pageSize);
+
+
 }

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cnzk.mapper.ChargeMapper">
+    <!--收费员列表查询-->
+    <select id="queryChargeList" resultMap="chargeMap">
+        select * from tb_admin
+        <where>
+            role_id = 3
+            <if test="admin.adminState!=null and admin.adminState!=''">
+                and admin_state like concat('%',#{admin.adminState},'%')
+            </if>
+            <if test="admin.adminName!=null and admin.adminName!=''">
+                and admin_name like concat('%',#{admin.adminName},'%')
+            </if>
+            <if test="admin.startTime!=null and admin.startTime!=''">and reg_time &gt;=#{startTime}</if>
+            <if test="admin.endTime!=null and admin.endTime!=''">and reg_time &lt;= #{endTime}</if>
+        </where>
+        limit #{start},#{pageSize};
+    </select>
+
+    <resultMap id="chargeMap" type="com.cnzk.pojo.Charge">
+        <result property="roleId" column="role_id"/>
+        <association property="tbRole" column="role_id" javaType="com.cnzk.pojo.TbRole" select="selectRole"/>
+    </resultMap>
+
+    <select id="selectRole" parameterType="int" resultType="com.cnzk.pojo.TbRole">
+        select role_name from tb_role where role_id = #{roleId}
+    </select>
+
+    <!--查询收费员数量-->
+    <select id="queryChargeCount" resultType="int">
+        select count(*) from tb_admin
+        <where>
+            role_id = 3
+            <if test="adminState!=null and adminState!=''">
+                and admin_state like concat('%',#{adminState},'%')
+            </if>
+            <if test="adminName!=null and adminName!=''">
+                and admin_name like concat('%',#{adminName},'%')
+            </if>
+            <if test="startTime!=null and startTime!=''">and reg_time &gt;=#{startTime}</if>
+            <if test="endTime!=null and endTime!=''">and reg_time &lt;= #{endTime}</if>
+        </where>
+    </select>
+</mapper>
