@@ -23,12 +23,15 @@ public class AuthorityServiceImpl implements AuthorityService {
     //  可修改的角色列表
     @Override
     public LayuiData queryRolesList(HashMap<String, Object> condition){
-        Integer roleId = Integer.parseInt(condition.get("roleId").toString());
-        Integer roleSort = roleMapper.querySort(roleId);
-        condition.put("roleSort",roleSort);
-        List<TbRole> tbRoleList = roleMapper.queryRolesList(condition);
-        int count = roleMapper.queryCount(condition);
 
+        Integer roleId = Integer.parseInt(condition.get("roleId").toString());
+        TbRole tbRole = roleMapper.querySort(roleId);
+        condition.put("roleSort",tbRole.getRoleSort());
+
+        System.out.println("-----------------------"+condition);
+        List<TbRole> tbRoleList = roleMapper.queryRolesList(condition);
+
+        int count = roleMapper.queryCount(condition);
         LayuiData layuiData=new LayuiData();
         layuiData.setCode(0);
         layuiData.setCount(count);

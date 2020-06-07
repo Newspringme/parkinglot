@@ -20,7 +20,7 @@ public interface RoleMapper {
     void editRole(TbRole role);
 
     //根据角色id查角色等级
-    public Integer querySort(Integer roleId);
+    public TbRole querySort(Integer roleId);
 
     //查当前用户所能修改角色的权限的角色集合
     public List<TbRole> queryRolesList(HashMap<String, Object> condition);

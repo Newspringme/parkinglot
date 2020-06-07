@@ -145,26 +145,43 @@ public class AdminController
 	//查角色列表
 	@ResponseBody
 	@RequestMapping("queryRolesList")
-	public Object queryRolesList(String page,String limit){
-        //获取页码
-		int startPage=Integer.parseInt(page);
-        //每页数量
-		int pageSize=Integer.parseInt(limit);
-        //计算出起始查询位置
-		int start = (startPage-1)*pageSize;
+	public Object queryRolesList(String page,String limit,String roleName){
 
 		Admin admin = new Admin();
 		admin.setAdminName("admin");
-		admin.setRoleId(2);
+		admin.setRoleId(1);
 		System.out.println("findRolesList-admin="+admin.toString());
 		Integer roleId = admin.getRoleId();
 
 		//存带有值得条件
 		HashMap<String, Object> condition = new HashMap<>();
 		condition.put("roleId",roleId);
-		condition.put("start",start);
-		condition.put("pageSize",pageSize);
-		System.out.println(condition);
+
+		//获取页码
+		int startPage;
+		//每页数量
+		int pageSize;
+		//计算出起始查询位置
+		int start;
+
+		if (null != limit && !"".equals(limit.trim()) && !"0".equals(limit)) {
+			pageSize = Integer.valueOf(limit);
+			condition.put("pageSize", pageSize);
+		} else {
+			pageSize = 10;
+			condition.put("pageSize", pageSize);
+		}
+		if (null != page && !"".equals(page.trim()) && !"0".equals(page)) {
+			startPage=Integer.parseInt(page);
+			start = (startPage - 1) * pageSize;
+			condition.put("start", start);
+		} else {
+			start = 0;
+			condition.put("start", start);
+		}
+
+		condition.put("roleName",roleName);
+		System.out.println("+++++++++"+condition);
 
 		LayuiData layuiData=authorityService.queryRolesList(condition);
 		System.out.println("layuiData = " + JSON.toJSONString(layuiData));

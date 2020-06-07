@@ -38,11 +38,11 @@
                         <div class="layui-inline">
                             <label class="layui-form-label">角色名称：</label>
                             <div class="layui-input-inline">
-                                <input class="layui-input" id="rolesname" name="rolesname" placeholder="请输入角色名称" autocomplete="off" />
+                                <input class="layui-input" id="roleName" name="roleName" placeholder="请输入角色名称" autocomplete="off" />
                             </div>
                         </div>
                         <div class="layui-inline">
-                            <button type="submit" class="layui-btn layui-btn-primary"  lay-submit lay-filter="data-search-btn"><i class="layui-icon"></i> 搜 索</button>
+                            <button type="submit" class="layui-btn layui-btn-primary search"  lay-submit lay-filter="data-search-btn" data-type="reload"><i class="layui-icon"></i> 搜 索</button>
                         </div>
                     </div>
                 </form>
@@ -52,8 +52,8 @@
         <table class="layui-hide" id="authorityMsgTbl" lay-filter="currentTableFilter"></table>
 
         <%--表格中按钮的模板--%>
-        <script type="text/html" id="barDemo">
-            <a class="layui-btn layui-btn-xs" lay-event="changeAuthority">修改权限</a>
+        <script type="text/html" id="currentTableBar">
+            <a class="layui-btn layui-btn-normal layui-btn-xs data-count-edit" lay-event="changeAuthority">修改权限</a>
         </script>
     </div>
 </div>
@@ -74,38 +74,31 @@
         var path = $('#path').val();
 
         var getlist = table.render({
-            elem: '#authorityMsgTbl'   //表格的id
-            , url: path+'/AuthorityController/findAdminRolesList'
-            , page: true //开启分页
-            , id: 'authorityMsg'
-            , limits: [5, 10, 20, 30]//下拉框中得数量
-            , limit: 5 //每页默认显示的数量
-            , cols: [[ //表头
-                {field: 'rolesid', title: 'ID', width:'20%' , sort: true, fixed: 'left',align:'center'}
-                , {field: 'rolesname', title: '角色', width: '30%' ,sort: true, fixed: 'left',align:'center'}
-                , {field: 'operation', title: '操作', fixed: 'right', width:'50%', align:'center', toolbar: '#barDemo'}
-            ]]
-        });
-
-        $('.authorityMsg .search').on('click', function () {
-            var type = $(this).data('type');
-            if (type == 'reload') {
-                //执行重载
-                table.reload('authorityMsg', {
-                    page: {
-                        curr: 1 //重新从第 1 页开始
-                    }
-                    , where: {
-                        rolesname: $("#rolesname").val(),
-                    }
-                });
-            }
+            elem: '#authorityMsgTbl',   //表格的id
+            url: path+'/AdminController/queryRolesList',
+            defaultToolbar: ['filter', 'exports', 'print', {
+                 title: '提示',
+                 layEvent: 'LAYTABLE_TIPS',
+                 icon: 'layui-icon-tips'
+            }],
+            cols: [[
+                 {field: 'roleId', width: 150, title: 'ID', sort: true},
+                 {field: 'roleName', maxwidth: 765,minWidth: 100, title: '用户名'},
+                 {title: '操作', minWidth: 150, toolbar: '#currentTableBar', align: "center"}
+                ]],
+            limits: [10, 15, 20, 25, 50, 100],
+            limit: 10,
+            page: true,
+            skin: 'line',
         });
 
         //监听事件
-        table.on('tool(test)', function(obj){
+        table.on('tool(currentTableFilter)', function(obj){
             var data = obj.data;
             //obj点击那行的所有字段属性
+            if (obj.event === 'changeAuthority') {
+
+            }
             var tr = obj.tr; //获得当前行 tr 的DOM对象
             var rolesid = tr.children("td").eq(0).text();
             console.log(rolesid);

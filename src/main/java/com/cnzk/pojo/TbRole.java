@@ -42,4 +42,19 @@ public class TbRole {
     this.roleName = roleName;
   }
 
+  public Integer getRoleSort() {
+    return roleSort;
+  }
+
+  public void setRoleSort(Integer roleSort) {
+    this.roleSort = roleSort;
+  }
+
+  public List<TbMenu> getMenutblList() {
+    return menutblList;
+  }
+
+  public void setMenutblList(List<TbMenu> menutblList) {
+    this.menutblList = menutblList;
+  }
 }
