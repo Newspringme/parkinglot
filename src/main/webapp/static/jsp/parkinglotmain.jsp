@@ -87,7 +87,9 @@
 
     <div class="layui-body">
         <!-- 内容主体区域 -->
-        <div style="padding: 15px;">内容主体区域</div>
+        <div style="padding: 15px;">
+            <iframe src = "" name = "click" style = "border:0" id="myiframe"></iframe>
+        </div>
     </div>
 
     <div class="layui-footer">
@@ -111,11 +113,21 @@
             type: "POST",
             success: function (data) {
                 if (data=='success') {
-                    location.href=path+"/static/jsp/ParkingLotMain.jsp";
+                    location.href=path+"/static/jsp/parkinglotmain.jsp";
                 }
             }
         });
     }
+
+    //iframe的页面路径获取
+    var mytitle;
+    function getsrc(node){
+        mytitle = node.title;
+        var myiframe = document.getElementById("myiframe");
+        myiframe.src = mytitle;
+        console.log(myiframe.src)
+    }
+
 </script>
 </body>
 </html>
