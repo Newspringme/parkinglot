@@ -4,7 +4,9 @@ import com.cnzk.pojo.Admin;
 import com.cnzk.pojo.LayuiData;
 import org.apache.ibatis.annotations.Param;
 
+import javax.servlet.http.HttpSession;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author su
@@ -12,6 +14,9 @@ import java.util.List;
  */
 public interface AdminService
 {
+	//	登录
+	String adminlogin(Map<String,Object> map, HttpSession session);
+
 	//	查询管理员，包括带条件,分页,记录数
 	LayuiData queryAdmin(Admin admin, int start, int pageSize);
 }

@@ -1,121 +1,139 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: 96581
-  Date: 2020/6/6
-  Time: 14:54
-  To change this template use File | Settings | File Templates.
---%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%
     String path = request.getContextPath();
 %>
-<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <title>后台管理-登陆</title>
+    <title>管理员登录</title>
+    <meta name="renderer" content="webkit">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <meta http-equiv="Access-Control-Allow-Origin" content="*">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="format-detection" content="telephone=no">
-    <link rel="stylesheet" href="<%=path%>/static//lib/layui-v2.5.5/css/layui.css" media="all">
-    <!--[if lt IE 9]>
-    <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
-    <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
-    <![endif]-->
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link rel="stylesheet" href=<%=path+"/static/layuiadmin/layui/css/layui.css"%> media="all">
+    <link rel="stylesheet" href=<%=path+"/static/layuiadmin/style/admin.css"%> media="all">
+    <link rel="stylesheet" href=<%=path+"/static/layuiadmin/style/login.css"%> media="all">
+    <script src=<%=path + "/static/js/jquery-3.4.1.js"%>></script>
     <style>
-        html, body {width: 100%;height: 100%;overflow: hidden}
-        body {background: #1E9FFF;}
-        body:after {content:'';background-repeat:no-repeat;background-size:cover;-webkit-filter:blur(3px);-moz-filter:blur(3px);-o-filter:blur(3px);-ms-filter:blur(3px);filter:blur(3px);position:absolute;top:0;left:0;right:0;bottom:0;z-index:-1;}
-        .layui-container {width: 100%;height: 100%;overflow: hidden}
-        .admin-login-background {width:360px;height:300px;position:absolute;left:50%;top:40%;margin-left:-180px;margin-top:-100px;}
-        .logo-title {text-align:center;letter-spacing:2px;padding:14px 0;}
-        .logo-title h1 {color:#1E9FFF;font-size:25px;font-weight:bold;}
-        .login-form {background-color:#fff;border:1px solid #fff;border-radius:3px;padding:14px 20px;box-shadow:0 0 8px #eeeeee;}
-        .login-form .layui-form-item {position:relative;}
-        .login-form .layui-form-item label {position:absolute;left:1px;top:1px;width:38px;line-height:36px;text-align:center;color:#d2d2d2;}
-        .login-form .layui-form-item input {padding-left:36px;}
-        .captcha {width:60%;display:inline-block;}
-        .captcha-img {display:inline-block;width:34%;float:right;}
-        .captcha-img img {height:34px;border:1px solid #e6e6e6;height:36px;width:100%;}
+        /* 登陆表单 */
+        .lofo_main {
+            background-color: rgba(255, 255, 255, 0.9);
+            width: 400px;
+            position: absolute;
+            right: 10%;
+            top: 22%;
+            z-index: 99999999;
+        }
+
+        @media screen and (max-width: 768px) {
+            .lofo_main {
+                width: 100%;
+                height: 350px;
+                right: 0;
+            }
+        }
     </style>
 </head>
-<body>
-<div class="layui-container">
-    <div class="admin-login-background">
-        <div class="layui-form login-form">
-            <form class="layui-form" action="">
-                <div class="layui-form-item logo-title">
-                    <h1>LayuiMini后台登录</h1>
+
+
+<body style="background-image: url(https://i.loli.net/2020/06/07/bSNrAEl4FdQa7qs.jpg);background-repeat:no-repeat;
+        background-size:100% 100%;
+        background-attachment: fixed;">
+<input type="hidden" id="path" value="<%=path%>">
+<form class="layui-form" onsubmit="return false;">
+    <div class="lofo_main">
+        <div class="layui-row layui-col-space15">
+            <div class="layadmin-user-login-main">
+                <div class="layadmin-user-login-box layadmin-user-login-header">
+                    <h2>菜鸟停车管理系统</h2>
+                    <p>管理员登录</p>
                 </div>
-                <div class="layui-form-item">
-                    <label class="layui-icon layui-icon-username" for="username"></label>
-                    <input type="text" name="username" lay-verify="required|account" placeholder="用户名或者邮箱" autocomplete="off" class="layui-input" value="admin">
-                </div>
-                <div class="layui-form-item">
-                    <label class="layui-icon layui-icon-password" for="password"></label>
-                    <input type="password" name="password" lay-verify="required|password" placeholder="密码" autocomplete="off" class="layui-input" value="123456">
-                </div>
-                <div class="layui-form-item">
-                    <label class="layui-icon layui-icon-vercode" for="captcha"></label>
-                    <input type="text" name="captcha" lay-verify="required|captcha" placeholder="图形验证码" autocomplete="off" class="layui-input verification captcha" value="xszg">
-                    <div class="captcha-img">
-                        <img id="captchaPic" src="../images/captcha.jpg">
+                <div class="layadmin-user-login-box layadmin-user-login-body layui-form">
+                    <div class="layui-form-item">
+                        <label class="layadmin-user-login-icon layui-icon layui-icon-username"
+                               for="adminname"></label>
+                        <input type="text" name="adminname" id="adminname" required
+                               lay-verify="required" autocomplete="off"
+                               placeholder="请输入帐号"
+                               class="layui-input">
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layadmin-user-login-icon layui-icon layui-icon-password"
+                               for="adminpass"></label>
+                        <input type="password" name="adminpass" id="adminpass" required
+                               lay-verify="required"
+                               placeholder="请输入密码" autocomplete="off" class="layui-input">
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-row">
+                            <div class="layui-col-xs7">
+                                <label class="layadmin-user-login-icon layui-icon layui-icon-vercode"
+                                       for="adminvcode"></label>
+                                <input type="text" name="adminvcode" id="adminvcode" required
+                                       lay-verify="required" autocomplete="off"
+                                       placeholder="图形验证码" class="layui-input">
+                            </div>
+                            <div class="layui-col-xs5">
+                                <div style="margin-left: 10px;">
+                                    <img id="image" src="${pageContext.request.contextPath}/AdminController/CheckCodeServlet"
+                                         alt="更换验证码"
+                                         height="36" width="100%" onclick="changeCode(this)">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-form-item" style="margin-bottom: 20px;">
+                        <a class="layadmin-user-jump-change layadmin-link" style="margin-top: 7px;"
+                           href=<%=path + "/adminFace/path/adminFaceLogin"%>>人脸识别登录&nbsp;&nbsp;</a>
+                    </div>
+                    <div class="layui-form-item">
+                        <button class="layui-btn layui-btn-fluid" lay-submit lay-filter="login">登&nbsp;&nbsp;&nbsp;&nbsp;录</button>
                     </div>
                 </div>
-                <div class="layui-form-item">
-                    <input type="checkbox" name="rememberMe" value="true" lay-skin="primary" title="记住密码">
-                </div>
-                <div class="layui-form-item">
-                    <button class="layui-btn layui-btn layui-btn-normal layui-btn-fluid" lay-submit="" lay-filter="login">登 入</button>
-                </div>
-            </form>
+            </div>
         </div>
     </div>
-</div>
-<script src="../lib/jquery-3.4.1/jquery-3.4.1.min.js" charset="utf-8"></script>
-<script src="../lib/layui-v2.5.5/layui.js" charset="utf-8"></script>
-<script src="../lib/jq-module/jquery.particleground.min.js" charset="utf-8"></script>
+</form>
+
+
+<script src=<%=path + "/static/layuiadmin/layui/layui.js"%>></script>
 <script>
-    layui.use(['form'], function () {
-        var form = layui.form,
-            layer = layui.layer;
-
-        // 登录过期的时候，跳出ifram框架
-        if (top.location != self.location) top.location = self.location;
-
-        // 粒子线条背景
-        $(document).ready(function(){
-            $('.layui-container').particleground({
-                dotColor:'#7ec7fd',
-                lineColor:'#7ec7fd'
-            });
-        });
-
-        // 进行登录操作
-        form.on('submit(login)', function (data) {
-            data = data.field;
-            if (data.username == '') {
-                layer.msg('用户名不能为空');
-                return false;
-            }
-            if (data.password == '') {
-                layer.msg('密码不能为空');
-                return false;
-            }
-            if (data.captcha == '') {
-                layer.msg('验证码不能为空');
-                return false;
-            }
-            layer.msg('登录成功', function () {
-                window.location = '../index.html';
-            });
+    //获取路径
+    var path = $("#path").val();
+    //管理员ajax登陆
+    layui.use('form', function(){
+        var form = layui.form;
+        //监听提交
+        form.on('submit(login)', function(data){
+            $.ajax({
+                        url: path + "/AdminController/adminlogin",
+                        type: "post",
+                        data: data.field,
+                        dataType: "text",
+                        success: function (res) {
+                            if(res === 'success'){
+                                layer.msg('验证成功，两秒后自动跳转',{icon:6, time:2000},function () {
+                                    window.location.href = path+'/url/admin_manage';
+                                })
+                            }else {
+                                layer.msg(res);
+                                changeCode();
+                            }
+                        },
+                        error: function () {
+                            layer.msg('网络正忙', {icon: 5});
+                        }
+                    }
+            );
             return false;
         });
     });
+    //ajax获取验证码
+    function changeCode() {
+        $("#image").attr("src",path + "/AdminController/CheckCodeServlet?num="+Math.random())
+    }
+
 </script>
 </body>
 </html>

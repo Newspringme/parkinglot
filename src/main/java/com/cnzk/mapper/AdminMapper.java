@@ -5,6 +5,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author su
@@ -13,6 +14,9 @@ import java.util.List;
 @Mapper
 public interface AdminMapper
 {
+    //	管理员登录
+    Admin adminlogin(Map<String,Object> map);
+
     //	查询管理员记录数，包括带条件
     int queryAdminCount(Admin admin);
 
