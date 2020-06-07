@@ -1,26 +1,24 @@
 package com.cnzk.pojo;
 
 
-/**
- * @author LQ
- */
 public class TbMenu {
 
-  private Long menuId;
+  private long menuId;
   private String menuName;
   private String menuUrl;
-  private Long menuPid;
+  private long menuPid;
+  private String menuIcon;
+  private String meniTarget;
 
-  //为权限修改mapper批量插入角色菜单关系表所加
-  private Long rolesid;
 
-  public Long getMenuId() {
+  public long getMenuId() {
     return menuId;
   }
 
-  public void setMenuId(Long menuId) {
+  public void setMenuId(long menuId) {
     this.menuId = menuId;
   }
+
 
   public String getMenuName() {
     return menuName;
@@ -40,30 +38,30 @@ public class TbMenu {
   }
 
 
-  public Long getMenuPid() {
+  public long getMenuPid() {
     return menuPid;
   }
 
-  public void setMenuPid(Long menuPid) {
+  public void setMenuPid(long menuPid) {
     this.menuPid = menuPid;
   }
 
-  public Long getRolesid() {
-    return rolesid;
+
+  public String getMenuIcon() {
+    return menuIcon;
   }
 
-  public void setRolesid(Long rolesid) {
-    this.rolesid = rolesid;
+  public void setMenuIcon(String menuIcon) {
+    this.menuIcon = menuIcon;
   }
 
-  @Override
-  public String toString() {
-    return "TbMenu{" +
-            "menuId=" + menuId +
-            ", menuName='" + menuName + '\'' +
-            ", menuUrl='" + menuUrl + '\'' +
-            ", menuPid=" + menuPid +
-            ", rolesid=" + rolesid +
-            '}';
+
+  public String getMeniTarget() {
+    return meniTarget;
   }
+
+  public void setMeniTarget(String meniTarget) {
+    this.meniTarget = meniTarget;
+  }
+
 }

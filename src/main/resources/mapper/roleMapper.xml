@@ -12,15 +12,15 @@
         select count(*) as count from tb_role;
     </select>
 <!--添加新的角色-->
-    <insert id="addRole" parameterType="String">
-        insert into tb_role (role_name) values (#{roleName});
+    <insert id="addRole" parameterType="com.cnzk.pojo.TbRole">
+        insert into tb_role (role_name,role_sort) values (#{roleName},#{roleSort});
     </insert>
 <!--    删除角色-->
     <delete id="deleteRole" parameterType="com.cnzk.pojo.TbRole">
         delete from tb_role  where role_id=#{roleId};
     </delete>
     <update id="editRole" parameterType="com.cnzk.pojo.TbRole">
-       update tb_role set role_name=#{roleName} where role_id=#{roleId};
+       update tb_role set role_name=#{roleName},role_sort=#{roleSort} where role_id=#{roleId};
     </update>
 
 <!--    根据角色id查角色等级-->

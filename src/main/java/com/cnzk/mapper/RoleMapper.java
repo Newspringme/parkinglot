@@ -10,10 +10,10 @@ import java.util.List;
 @Mapper
 public interface RoleMapper {
     int queryRoleCount();
-    //	查询角色，包括带条件及分页
+    //	查询角色
     List<TbRole> queryRole(@Param("start") int start, @Param("pageSize") int pageSize);
 
-    void addRole(@Param("roleName") String roleName);
+    void addRole(TbRole role);
 
     void deleteRole(TbRole role);
 

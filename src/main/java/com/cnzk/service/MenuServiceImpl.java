@@ -1,5 +1,6 @@
 package com.cnzk.service;
 
+import com.alibaba.fastjson.JSON;
 import com.cnzk.mapper.MenuMapper;
 import com.cnzk.pojo.*;
 import org.springframework.stereotype.Service;
@@ -29,9 +30,9 @@ public class MenuServiceImpl implements MenuService {
         for (int i=0;i<menutblsonList.size();i++) {
             List<TbMenu> menutblList = new ArrayList<>();
             for (int j=0;j<menutblList1.size();j++){
-                if (menutblsonList.get(i).getMenuId().equals(menutblList1.get(j).getMenuPid())){
-                    menutblList.add(menutblList1.get(j));
-                }
+//                if (menutblsonList.get(i).getMenuId().equals(menutblList1.get(j).getMenuPid())){
+//                    menutblList.add(menutblList1.get(j));
+//                }
             }
             menuMap.put(menutblsonList.get(i).getMenuName(),menutblList);
         }
@@ -51,17 +52,18 @@ public class MenuServiceImpl implements MenuService {
             menuVO.setPid(e.getMenuPid());
             menuVO.setHref(e.getMenuUrl());
             menuVO.setTitle(e.getMenuName());
-            menuVO.setIcon("");
-            menuVO.setTarget("_self");
+            menuVO.setIcon(e.getMenuIcon());
+            menuVO.setTarget(e.getMeniTarget());
             menuInfo.add(menuVO);
         }
         map.put("menuInfo", TreeUtil.toTree(menuInfo, 0L));
         home.put("title","首页");
         home.put("href","/page/welcome-1");//控制器路由,自行定义
         logo.put("title","后台管理系统");
-        logo.put("image","/static/images/back.jpg");//静态资源文件路径,可使用默认的logo.png
+        logo.put("image","/static/img/back.jpg");//静态资源文件路径,可使用默认的logo.png
         map.put("homeInfo", "{title: '首页',href: '/ruge-web-admin/page/welcome.html'}}");
-        map.put("logoInfo", "{title: 'RUGE ADMIN',image: 'images/logo.png'}");
+        map.put("logoInfo", "{title: 'RUGE ADMIN',image: '/static/img/logo.png'}");
+        System.out.println(JSON.toJSON(map));
         return map;
     }
 }
