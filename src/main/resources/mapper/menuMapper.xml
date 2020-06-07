@@ -20,7 +20,11 @@
 	</select>
 
 	<select id ="findAllMenuSon" resultType="TbMenu">
-		select * from tb_menu where MENUSONID = 0
+		select * from tb_menu
+	</select>
+
+	<select id="findAllByStatusOrderBySort" resultType="MenuVo">
+		select * from  system_menu where STATUS = 1  ORDER BY  sort
 	</select>
 
     </mapper>

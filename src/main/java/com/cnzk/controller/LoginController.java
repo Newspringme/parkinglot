@@ -12,8 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.LinkedHashMap;
 import java.util.List;
-
-
+import java.util.Map;
 
 
 @Controller
@@ -45,6 +44,11 @@ public class LoginController {
         }else{
             ResponseUtils.outHtml(response,"error");
         }
+    }
+    @RequestMapping("/Menu")
+    @ResponseBody
+    public Map<String, Object> menu() {
+        return menuService.menu();
     }
 
 }

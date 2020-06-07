@@ -2,6 +2,7 @@ package com.cnzk.mapper;
 
 
 
+import com.cnzk.pojo.MenuVo;
 import com.cnzk.pojo.TbMenu;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -18,4 +19,5 @@ public interface MenuMapper {
     public List<TbMenu> findAllMenuSon();
 //    找所有的二级菜单
     public List<TbMenu> findAllMenus();
+    List<MenuVo> findAllByStatusOrderBySort();
 }
