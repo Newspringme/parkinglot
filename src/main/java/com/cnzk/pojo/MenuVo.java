@@ -4,9 +4,9 @@ import java.util.List;
 
 public class MenuVo {
 
-    private Integer id;
+    private Long id;
 
-    private Integer pid;
+    private Long pid;
 
     private String title;
 
@@ -18,19 +18,19 @@ public class MenuVo {
 
     private List<MenuVo> child;
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
-    public Integer getPid() {
+    public Long getPid() {
         return pid;
     }
 
-    public void setPid(Integer pid) {
+    public void setPid(Long pid) {
         this.pid = pid;
     }
 

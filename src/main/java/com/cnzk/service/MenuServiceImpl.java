@@ -29,7 +29,7 @@ public class MenuServiceImpl implements MenuService {
         for (int i=0;i<menutblsonList.size();i++) {
             List<TbMenu> menutblList = new ArrayList<>();
             for (int j=0;j<menutblList1.size();j++){
-                if (menutblsonList.get(i).getMenuId()==menutblList1.get(j).getMenuPid()){
+                if (menutblsonList.get(i).getMenuId().equals(menutblList1.get(j).getMenuPid())){
                     menutblList.add(menutblList1.get(j));
                 }
             }
