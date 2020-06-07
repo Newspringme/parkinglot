@@ -22,4 +22,20 @@
     <update id="editRole" parameterType="com.cnzk.pojo.TbRole">
        update tb_role set role_name=#{roleName} where role_id=#{roleId};
     </update>
+
+<!--    根据角色id查角色等级-->
+    <select id="querySort" resultType="java.lang.Integer" parameterType="java.lang.Integer">
+        select role_sort from  tb_role where role_id = #{rolesid};
+    </select>
+
+    <!--查当前用户所能修改角色的权限的角色集合-->
+    <select id="queryRolesList" parameterType="java.util.Map" resultType="TbRole">
+        select * from tb_role where role_sort &gt; #{roleSort} limit #{pageInt},#{limitInt};
+    </select>
+
+    <!--角色集合数量-->
+    <select id="queryCount" parameterType="java.util.Map" resultType="java.lang.Integer">
+        select COUNT(*) from tb_role where role_sort &gt; #{roleSort};
+    </select>
+
 </mapper>

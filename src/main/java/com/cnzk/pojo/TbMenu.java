@@ -14,14 +14,13 @@ public class TbMenu {
   //为权限修改mapper批量插入角色菜单关系表所加
   private Integer rolesid;
 
-  public long getMenuId() {
+  public Integer getMenuId() {
     return menuId;
   }
 
   public void setMenuId(Integer menuId) {
     this.menuId = menuId;
   }
-
 
   public String getMenuName() {
     return menuName;
@@ -41,7 +40,7 @@ public class TbMenu {
   }
 
 
-  public long getMenuPid() {
+  public Integer getMenuPid() {
     return menuPid;
   }
 

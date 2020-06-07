@@ -1,7 +1,6 @@
 package com.cnzk.controller;
 
 import com.alibaba.fastjson.JSON;
-import com.cnzk.pojo.Admin;
 import com.cnzk.pojo.LayuiData;
 import com.cnzk.pojo.TbRole;
 import com.cnzk.service.RoleServeice;

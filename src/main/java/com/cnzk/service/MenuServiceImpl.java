@@ -7,8 +7,11 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import java.util.*;
 
+/**
+ * @author LQ
+ */
 @Service
-public class BackMenuServiceImpl implements MenuService {
+public class MenuServiceImpl implements MenuService {
 
     @Resource
     private MenuMapper menuMapper;

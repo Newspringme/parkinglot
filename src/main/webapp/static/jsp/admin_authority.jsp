@@ -7,20 +7,23 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" isELIgnored="false"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<%
+    String path = request.getContextPath();
+%>
+<!DOCTYPE html>
 <head>
     <meta charset="utf-8">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <title>权限管理</title>
-    <%
-        String path = request.getContextPath();
-        System.out.println(path);
-    %>
-    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/static/js/layui/css/layui.css"/>
+    <link rel="stylesheet" href="<%=path%>/static/lib/layui-v2.5.5/css/layui.css" media="all">
+    <link rel="stylesheet" href="<%=path%>/static/css/public.css" media="all">
 
-    <script charset="UTF-8" src="${pageContext.request.contextPath}/static/js/jquery-3.4.1.js" charset="utf-8"></script>
-    <script charset="UTF-8" src="${pageContext.request.contextPath}/static/js/json2.js" type="text/javascript" ></script>
-    <script charset="UTF-8" src="${pageContext.request.contextPath}/static/js/layui/layui.js"></script>
+    <script charset="UTF-8" src="<%=path%>/static/js/jquery-3.4.1.js" charset="utf-8"></script>
+    <script charset="UTF-8" src="<%=path%>/static/js/json2.js" type="text/javascript" ></script>
+
+    <script src="<%=path%>/static/lib/layui-v2.5.5/layui.js" charset="utf-8"></script>
 
 </head>
 <body>
@@ -46,14 +49,7 @@
             </div>
         </fieldset>
 
-        <script type="text/html" id="toolbarDemo">
-            <div class="layui-btn-container">
-                <button class="layui-btn layui-btn-normal layui-btn-sm data-add-btn" lay-event="add"> 添加 </button>
-                <button class="layui-btn layui-btn-sm layui-btn-danger data-delete-btn" lay-event="delete"> 删除 </button>
-            </div>
-        </script>
-
-        <table id="authorityMsgTbl" lay-filter="test"></table>
+        <table class="layui-hide" id="authorityMsgTbl" lay-filter="currentTableFilter"></table>
 
         <%--表格中按钮的模板--%>
         <script type="text/html" id="barDemo">
@@ -61,10 +57,6 @@
         </script>
     </div>
 </div>
-
-<%--    <div class="authorityMsg">--%>
-
-<%--    <table id="authorityMsgTbl" lay-filter="test"></table>--%>
 
     <%--    点击按钮弹出层的form--%>
     <form class = "layui-form" action="" style="display: none" id="changeAForm">
@@ -78,6 +70,7 @@
         var table = layui.table,
             form = layui.form,
             $ = layui.jquery;
+
         var path = $('#path').val();
 
         var getlist = table.render({
