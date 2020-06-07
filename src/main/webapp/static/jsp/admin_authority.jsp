@@ -9,14 +9,14 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <title>权限管理</title>
     <%
         String path = request.getContextPath();
         System.out.println(path);
     %>
     <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/static/js/layui/css/layui.css"/>
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/static/back/backcss/BackMain_Authority.css">
 
     <script charset="UTF-8" src="${pageContext.request.contextPath}/static/js/jquery-3.4.1.js" charset="utf-8"></script>
     <script charset="UTF-8" src="${pageContext.request.contextPath}/static/js/json2.js" type="text/javascript" ></script>
@@ -24,36 +24,63 @@
 
 </head>
 <body>
-    <div class="authorityMsg">
+<div class="layuimini-container">
     <input type="hidden" id="path" value="<%=path%>">
-    <div class="top">
-        <p>权限管理</p>
-    </div>
-    <div class="table_top">
-        <label class="layui-form-label">搜索角色:</label>
-        <div class="layui-inline">
-            <input class="layui-input" id="rolesname" name="rolesname" placeholder="请输入角色名称" autocomplete="off" />
-        </div>
-        <%--    reload是表格重载--%>
-        <button class= "layui-btn search" data-type="reload" style="margin-left: 26px">搜索</button>
+    <div class="layuimini-main">
+        <fieldset class="table-search-fieldset">
+            <legend>搜索信息</legend>
+            <div style="margin: 10px 10px 10px 10px">
+                <form class="layui-form layui-form-pane" action="">
+                    <div class="layui-form-item">
+                        <div class="layui-inline">
+                            <label class="layui-form-label">角色名称：</label>
+                            <div class="layui-input-inline">
+                                <input class="layui-input" id="rolesname" name="rolesname" placeholder="请输入角色名称" autocomplete="off" />
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <button type="submit" class="layui-btn layui-btn-primary"  lay-submit lay-filter="data-search-btn"><i class="layui-icon"></i> 搜 索</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </fieldset>
 
+        <script type="text/html" id="toolbarDemo">
+            <div class="layui-btn-container">
+                <button class="layui-btn layui-btn-normal layui-btn-sm data-add-btn" lay-event="add"> 添加 </button>
+                <button class="layui-btn layui-btn-sm layui-btn-danger data-delete-btn" lay-event="delete"> 删除 </button>
+            </div>
+        </script>
+
+        <table id="authorityMsgTbl" lay-filter="test"></table>
+
+        <%--表格中按钮的模板--%>
+        <script type="text/html" id="barDemo">
+            <a class="layui-btn layui-btn-xs" lay-event="changeAuthority">修改权限</a>
+        </script>
     </div>
-    <table id="authorityMsgTbl" lay-filter="test"></table>
+</div>
+
+<%--    <div class="authorityMsg">--%>
+
+<%--    <table id="authorityMsgTbl" lay-filter="test"></table>--%>
 
     <%--    点击按钮弹出层的form--%>
     <form class = "layui-form" action="" style="display: none" id="changeAForm">
         <div id="test12" class="demo-tree-more"></div>
     </form>
 
-    <%--    表格的js--%>
-    <script>
+<%--    表格的js--%>
+<script>
     //layui.use加载模块
-    layui.use(['table','layer'], function () {
+    var load=layui.use(['form', 'table'], function () {
         var table = layui.table,
+            form = layui.form,
             $ = layui.jquery;
         var path = $('#path').val();
-        //第一个实例
-        table.render({
+
+        var getlist = table.render({
             elem: '#authorityMsgTbl'   //表格的id
             , url: path+'/AuthorityController/findAdminRolesList'
             , page: true //开启分页
@@ -187,9 +214,6 @@
 
     });
     </script>
-    <%--表格中按钮的模板--%>
-    <script type="text/html" id="barDemo">
-    <a class="layui-btn layui-btn-xs" lay-event="changeAuthority">修改权限</a>
-    </script>
+
 </body>
 </html>
