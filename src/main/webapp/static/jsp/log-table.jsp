@@ -26,7 +26,42 @@
 <div class="layuimini-container">
     <div class="layuimini-main">
 
-        
+        <fieldset class="table-search-fieldset">
+            <legend>搜索信息</legend>
+            <div style="margin: 10px 10px 10px 10px">
+                <form class="layui-form layui-form-pane" action="">
+                    <div class="layui-form-item">
+                        <div class="layui-inline">
+                            <label class="layui-form-label">用户姓名</label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="username" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">用户性别</label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="sex" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">用户城市</label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="city" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">用户职业</label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="classify" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <button type="submit" class="layui-btn layui-btn-primary"  lay-submit lay-filter="data-search-btn"><i class="layui-icon"></i> 搜 索</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </fieldset>
 
         <script type="text/html" id="toolbarDemo">
             <div class="layui-btn-container">
@@ -53,7 +88,7 @@
 
         var getlist=table.render({
             elem: '#currentTableId',
-            url: '/parkinglot/queryRole',
+            url: '/parkinglot/queryLog',
             toolbar: '#toolbarDemo',
             defaultToolbar: ['filter', 'exports', 'print', {
                 title: '提示',
@@ -62,9 +97,10 @@
             }],
             cols: [[
                 {type: "checkbox", width: 50},
-                {field: 'roleId', width: 150, title: 'ID', sort: true},
-                {field: 'roleName', maxwidth: 150,minWidth: 100, title: '用户名'},
-                {field: 'roleSort', maxwidth: 620,minWidth: 100, title: '权限值'},
+                {field: 'logId', width: 150, title: 'ID', sort: true},
+                {field: 'operateName', maxwidth: 150,minWidth: 100, title: '操作人'},
+                {field: 'operateThing', maxwidth: 200,minWidth: 100, title: '操作事项'},
+                {field: 'operateTime', maxwidth: 150,minWidth: 100, title: '操作时间'},
                 {title: '操作', minWidth: 150, toolbar: '#currentTableBar', align: "center"}
             ]],
             limits: [10, 15, 20, 25, 50, 100],
@@ -117,7 +153,7 @@
                     maxmin:true,
                     shadeClose: true,
                     area: ['50%', '30%'],
-                    content: '/parkinglot/static/jsp/table/role-edit.jsp?roleId='+data.roleId+'&roleName='+data.roleName+'&roleSort='+data.roleSort,
+                    content: '/parkinglot/static/jsp/table/role-edit.jsp?roleId='+data.roleId+'&roleName='+data.roleName,
                 });
                 $(window).on("resize", function () {
                     layer.full(index);

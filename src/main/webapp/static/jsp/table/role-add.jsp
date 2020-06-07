@@ -33,7 +33,12 @@
             <input type="text" name="rolename" lay-verify="required" lay-reqtext="角色名不能为空" placeholder="请输入角色名" value="" class="layui-input">
         </div>
     </div>
-
+    <div class="layui-form-item">
+        <label class="layui-form-label required">权限值</label>
+        <div class="layui-input-block">
+            <input type="number" name="rolesort" lay-verify="required" lay-reqtext="权限值不能为空" placeholder="请输入权限值" value="" class="layui-input">
+        </div>
+    </div>
     <div class="layui-form-item">
         <div class="layui-input-block">
             <button class="layui-btn layui-btn-normal" lay-submit lay-filter="saveBtn">确认保存</button>
@@ -54,7 +59,8 @@
                 ,type:"POST"
                 ,dataType:"text"
                 ,data:{
-                    roleName:data.field.rolename
+                    roleName:data.field.rolename,
+                    roleSort:data.field.rolesort
                 },
                 success:function (msg) {
                     msg=msg+"";
@@ -62,6 +68,7 @@
                         var index = layer.alert("添加成功",  function () {
                             // 关闭弹出层
                             layer.close(index);
+                            $(".layui-laypage-btn").click();
                             var iframeIndex = parent.layer.getFrameIndex(window.name);
                             parent.layer.close(iframeIndex);
 

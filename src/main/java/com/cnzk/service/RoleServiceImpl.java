@@ -27,8 +27,8 @@ public class RoleServiceImpl implements RoleServeice{
     }
 
     @Override
-    public void addRole(String roleName) {
-        roleMapper.addRole(roleName);
+    public void addRole(TbRole role) {
+        roleMapper.addRole(role);
 
     }
 

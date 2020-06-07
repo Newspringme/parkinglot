@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cnzk.mapper.LogMapper">
+    <!--    查询所有日志-->
+    <select id="queryLog" resultType="com.cnzk.pojo.TbLog" >
+        select * from  tb_log limit #{start},#{pageSize};
+    </select>
+    <!--查询所有日志数量-->
+    <select id="queryLogCount" resultType="int">
+        select count(*) as count from tb_log;
+    </select>
+<!--    &lt;!&ndash;添加新的角色&ndash;&gt;-->
+<!--    <insert id="addRole" parameterType="String">-->
+<!--        insert into tb_role (role_name) values (#{roleName});-->
+<!--    </insert>-->
+<!--    &lt;!&ndash;    删除角色&ndash;&gt;-->
+<!--    <delete id="deleteRole" parameterType="com.cnzk.pojo.TbRole">-->
+<!--        delete from tb_role  where role_id=#{roleId};-->
+<!--    </delete>-->
+<!--    <update id="editRole" parameterType="com.cnzk.pojo.TbRole">-->
+<!--       update tb_role set role_name=#{roleName} where role_id=#{roleId};-->
+<!--    </update>-->
+</mapper>

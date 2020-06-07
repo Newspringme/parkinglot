@@ -39,6 +39,12 @@
             <input type="text" name="rolename" lay-verify="required" lay-reqtext="角色名不能为空" placeholder="请输入角色名" value="<%=request.getParameter("roleName")%>" class="layui-input">
         </div>
     </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label required">权限值</label>
+        <div class="layui-input-block">
+            <input type="text" name="rolesort" lay-verify="required" lay-reqtext="权限值不能为空" placeholder="请输入权限值" value="<%=request.getParameter("roleSort")%>" class="layui-input">
+        </div>
+    </div>
 
     <div class="layui-form-item">
         <div class="layui-input-block">
@@ -61,7 +67,8 @@
                 ,dataType:"text"
                 ,data:{
                     roleId:data.field.roleid,
-                    roleName:data.field.rolename
+                    roleName:data.field.rolename,
+                    roleSort:data.field.rolesort
                 },
                 success:function (msg) {
                     msg=msg+"";

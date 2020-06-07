@@ -1,35 +1,18 @@
 package com.cnzk.pojo;
 
 
-import java.util.List;
-
 public class TbRole {
 
-  private Long roleId;
+  private long roleId;
   private String roleName;
-  private Integer roleSort;
-  private List<TbMenu> menutblList;
+  private long roleSort;
 
-  public TbRole() {
-  }
 
-  public TbRole(Long roleId, String roleName) {
-    this.roleId = roleId;
-    this.roleName = roleName;
-  }
-
-  public TbRole(Long roleId, String roleName, Integer roleSort, List<TbMenu> menutblList) {
-    this.roleId = roleId;
-    this.roleName = roleName;
-    this.roleSort = roleSort;
-    this.menutblList = menutblList;
-  }
-
-  public Long getRoleId() {
+  public long getRoleId() {
     return roleId;
   }
 
-  public void setRoleId(Long roleId) {
+  public void setRoleId(long roleId) {
     this.roleId = roleId;
   }
 
@@ -40,6 +23,15 @@ public class TbRole {
 
   public void setRoleName(String roleName) {
     this.roleName = roleName;
+  }
+
+
+  public long getRoleSort() {
+    return roleSort;
+  }
+
+  public void setRoleSort(long roleSort) {
+    this.roleSort = roleSort;
   }
 
 }
