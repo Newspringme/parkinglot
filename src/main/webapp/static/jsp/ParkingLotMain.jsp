@@ -6,6 +6,7 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <head>
     <meta charset="utf-8">
@@ -24,6 +25,13 @@
 
 </head>
 <body class="layui-layout-body">
+
+<input type="hidden" id="path" value="<%=path%>">
+<div class="layui-btn-group">
+    <button type="button" class="layui-btn" onclick="findmenu()">菜单</button>
+
+</div>
+
 <div class="layui-layout layui-layout-admin">
     <div class="layui-header">
         <div class="layui-logo">layui 后台布局</div>
@@ -59,26 +67,20 @@
     <div class="layui-side layui-bg-black">
         <div class="layui-side-scroll">
             <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
-            <ul class="layui-nav layui-nav-tree"  lay-filter="test">
-                <li class="layui-nav-item layui-nav-itemed">
-                    <a class="" href="javascript:;">所有商品</a>
-                    <dl class="layui-nav-child">
-                        <dd><a href="javascript:;">列表一</a></dd>
-                        <dd><a href="javascript:;">列表二</a></dd>
-                        <dd><a href="javascript:;">列表三</a></dd>
-                        <dd><a href="">超链接</a></dd>
-                    </dl>
-                </li>
-                <li class="layui-nav-item">
-                    <a href="javascript:;">解决方案</a>
-                    <dl class="layui-nav-child">
-                        <dd><a href="javascript:;">列表一</a></dd>
-                        <dd><a href="javascript:;">列表二</a></dd>
-                        <dd><a href="">超链接</a></dd>
-                    </dl>
-                </li>
-                <li class="layui-nav-item"><a href="">云市场</a></li>
-                <li class="layui-nav-item"><a href="">发布商品</a></li>
+            <ul class="layui-nav layui-nav-tree" lay-filter="test" lay-shrink="all" style="height: 100%">
+                <c:if test="${not empty menuMap}">
+                    <c:forEach items="${menuMap}" var="menu1" step="1">
+                        <li class="layui-nav-item">
+                            <a href="javascript:;">${menu1.key}</a>
+                            <dl class="layui-nav-child">
+                                <c:forEach items="${menu1.value}" var="menu2" step="1">
+                                    <%--                            获取根目录：${pageContext.request.contextPath}        /${menu2.getMenu_url()}         拿到的是servlet返回的数据--%>
+                                    <dd><a href= "javascript:void(0)" title="${pageContext.request.contextPath}/${menu2.getMenuUrl()}" onclick="getsrc(this)">${menu2.getMenuName()}</a></dd>
+                                </c:forEach>
+                            </dl>
+                        </li>
+                    </c:forEach>
+                </c:if>
             </ul>
         </div>
     </div>
@@ -98,8 +100,22 @@
     //JavaScript代码区域
     layui.use('element', function(){
         var element = layui.element;
-
+        
     });
+    function findmenu() {
+
+        var path = $("#path").val();
+        $.ajax({
+            url: path + "/LoginController/findMenu",
+            async: true,
+            type: "POST",
+            success: function (data) {
+                if (data=='success') {
+                    location.href=path+"/static/jsp/ParkingLotMain.jsp";
+                }
+            }
+        });
+    }
 </script>
 </body>
 </html>
