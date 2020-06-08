@@ -7,6 +7,8 @@ public class TbLog {
   private String operateName;
   private String operateThing;
   private java.sql.Timestamp operateTime;
+  private String operateType;
+  private String operateIp;
 
 
   public long getLogId() {
@@ -42,6 +44,24 @@ public class TbLog {
 
   public void setOperateTime(java.sql.Timestamp operateTime) {
     this.operateTime = operateTime;
+  }
+
+
+  public String getOperateType() {
+    return operateType;
+  }
+
+  public void setOperateType(String operateType) {
+    this.operateType = operateType;
+  }
+
+
+  public String getOperateIp() {
+    return operateIp;
+  }
+
+  public void setOperateIp(String operateIp) {
+    this.operateIp = operateIp;
   }
 
 }

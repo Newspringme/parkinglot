@@ -100,7 +100,9 @@
                 {field: 'logId', width: 150, title: 'ID', sort: true},
                 {field: 'operateName', maxwidth: 150,minWidth: 100, title: '操作人'},
                 {field: 'operateThing', maxwidth: 200,minWidth: 100, title: '操作事项'},
-                {field: 'operateTime', maxwidth: 150,minWidth: 100, title: '操作时间'},
+                {field: 'operateType', minWidth: 80, title: '操作类型'},
+                {field: 'operateTime', minWidth: 100, title: '操作时间'},
+                {field: 'operateIp', maxwidth: 150,minWidth: 100, title: '操作ip'},
                 {title: '操作', minWidth: 150, toolbar: '#currentTableBar', align: "center"}
             ]],
             limits: [10, 15, 20, 25, 50, 100],

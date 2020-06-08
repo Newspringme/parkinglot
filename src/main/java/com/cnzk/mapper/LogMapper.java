@@ -11,4 +11,6 @@ public interface LogMapper {
     int queryLogCount();
     //	查询角色，
     List<TbLog> queryLog(@Param("start") int start, @Param("pageSize") int pageSize);
+
+    int addLog(TbLog log);
 }

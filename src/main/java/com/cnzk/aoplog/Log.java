@@ -27,14 +27,10 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 public @interface Log {
-    /**
-     * 执行的操作类型  比如：登录、注册、预约
-     */
-    public String operationType() default "";
 
-    /**
-     * 执行的具体操作内容    比如：某某用户登录
-     */
-    public String operationName() default "";
+    public String operationThing() default "";
+
+
+    public String operationType() default "";
 
 }

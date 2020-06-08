@@ -1,6 +1,7 @@
 package com.cnzk.controller;
 
 import com.alibaba.fastjson.JSON;
+import com.cnzk.aoplog.Log;
 import com.cnzk.pojo.LayuiData;
 import com.cnzk.pojo.TbRole;
 import com.cnzk.service.RoleServeice;
@@ -28,6 +29,7 @@ public class RoleController {
 
     @ResponseBody
     @RequestMapping("addRole")
+    @Log(operationThing = "添加角色",operationType = "添加")
     public Object addRole(TbRole role){
         roleService.addRole(role);
         return "true";
