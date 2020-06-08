@@ -120,7 +120,7 @@ public class SystemLogAspect {
                 System.out.println("请求IP:" + ip);
                 //*========数据库日志=========*//
                 TbLog logtbl = new TbLog();
-                SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//设置日期格式
+
                 logtbl.setOperateName("请求人:" +admintbl.getAdminName());
                 logtbl.setOperateThing("事件:"+operationThing);
                 logtbl.setOperateType("操作类型:"+operationType);
@@ -202,7 +202,6 @@ public class SystemLogAspect {
                 System.out.println("请求参数:" + params);
                 /*==========数据库日志=========*/
                 TbLog logtbl = new TbLog();
-                SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//设置日期格式
                 logtbl.setOperateName("请求人:" +admin.getAdminName());
                 logtbl.setOperateThing("事件:"+operationThing);
                 logtbl.setOperateType("操作类型:"+operationType);
