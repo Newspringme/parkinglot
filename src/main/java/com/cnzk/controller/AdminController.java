@@ -205,7 +205,7 @@ public class AdminController
 	@Transactional
 	@ResponseBody
 	public void updateMenuTree(HttpServletRequest request, HttpServletResponse response){
-		Integer rolesid = Integer.valueOf(request.getParameter("rolesid"));
+		Integer rolesid = Integer.valueOf(request.getParameter("roleId"));
 		String treeStr = request.getParameter("checkData");
 		Integer row = roleServeice.updateMenuTree(treeStr,rolesid);
 		if (row != 0) {
