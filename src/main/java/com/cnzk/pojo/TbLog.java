@@ -1,12 +1,14 @@
 package com.cnzk.pojo;
 
 
+import java.text.SimpleDateFormat;
+
 public class TbLog {
 
   private long logId;
   private String operateName;
   private String operateThing;
-  private java.sql.Timestamp operateTime;
+  private String operateTime;
   private String operateType;
   private String operateIp;
 
@@ -38,11 +40,11 @@ public class TbLog {
   }
 
 
-  public java.sql.Timestamp getOperateTime() {
+  public String getOperateTime() {
     return operateTime;
   }
 
-  public void setOperateTime(java.sql.Timestamp operateTime) {
+  public void setOperateTime(String operateTime) {
     this.operateTime = operateTime;
   }
 
