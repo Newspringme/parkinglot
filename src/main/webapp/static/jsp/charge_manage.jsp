@@ -122,6 +122,7 @@
         </div>
     </form>
 </div>
+<!--        添加弹出层结束->
 <!--        编辑弹出层开始-->
 <div id="updateCharge" onsubmit="return false;" style="display: none">
     <form class="layui-form" lay-filter="formUpdateAdmin" id="updateForm" action="" style="margin-top: 30px" >
@@ -135,31 +136,19 @@
 
         <input type="hidden" name="adminId" autocomplete="off" class="layui-input layui-form-item adminId">
 
+        <%--//上传头像--%>
         <div class="layui-form-item">
             <label class="layui-form-label" style="margin-left: 120px;">上传头像：</label>
             <div class="layui-upload-button" style="float: left; margin-left: 20px;width: 200px;">
-                <%--<input  type="image" name="adminTel" lay-verify="required" lay-reqtext="账号不能为空"--%>
-                        <%--autocomplete="off" class="layui-input adminTel">--%>
                     <button type="button" class="layui-btn" id="upload">
                         <i class="layui-icon">&#xe67c;</i>点击上传
-                        <script>
-                            layui.use('upload', function(){
-                                var upload = layui.upload;
-
-                                //执行实例
-                                var uploadInst = upload.render({
-                                    elem: '#upload' //绑定元素
-                                    ,url: '/upload/' //上传接口
-                                    ,done: function(res){
-                                        //上传完毕回调
-                                    }
-                                    ,error: function(){
-                                        //请求异常回调
-                                    }
-                                });
-                            });
-                        </script>
                     </button>
+            </div>
+        </div>
+        <%--进度条--%>
+        <div class="layui-form-item" style="width:300px;padding-left: 25%">
+            <div class="layui-progress" lay-showPercent="yes">
+                <div class="layui-progress-bar layui-bg-green" lay-percent="30%"></div>
             </div>
         </div>
 
@@ -178,275 +167,315 @@
         </div>
 
 
-        <script type="text/javascript">
-            layui.use(['jquery','layer','form','table','laydate'],function () {
-                var $ = layui.jquery;
-                var layer = layui.layer;
-                var form = layui.form;
-                var table = layui.table;
-                var laydate=layui.laydate;
-                //给开始时间和结束时间绑定时间选择器
-                laydate.render({
-                    elem:'#startTime'
-                });
-                laydate.render({
-                    elem:'#endTime'
-                });
-                // 渲染数据表格
-                table.render({
-                    id: 'chargeTable'
-                    ,elem: '#chargeTable'
-                    , url: '${pageContext.request.contextPath}/getChargeList'
-                    , title: '收费员数据表'
-                    , limit: 5//每页多少条数据
-                    , limits: [5,10,20,40,80,100]
-                    ,page:true
-                    ,toolbar:'#chargeToolbar'
-                    ,defaultToolbar:['filter','print']
-                    , totalRow:true//开启合计行
-                    ,initSort: {
-                        field: 'regTime' //排序字段，对应 cols 设定的各字段名
-                        ,type: 'desc' //排序方式  asc: 升序、desc: 降序、null: 默认排序
-                    }
-                    ,skin: 'line' //行边框风格
-                    ,skin: 'row' //列边框风格
-                    ,even: true //开启隔行背景
-                    ,size: 'lg' //大尺寸的表格，sm为小尺寸
-                    , text: {
-                        none: '数据被组长吃了' //默认：无数据。注：该属性为 layui 2.2.5 开始新增
-                    }
-                    , cols: [[
-                        {type: 'numbers',align:'center',width:100, fixed: 'left',totalRowText:'合计：'}
-                        ,{field:'checkbox' ,type: 'checkbox',width:70}
-                        ,{field:'adminName', title:'收费员账号',align:'center', width:110}
-                        ,{field:'adminSex', title:'性别',align:'center', width:100,sort: true}
-                        ,{field:'adminState', title:'状态',align:'center', width:100,sort: true}
-                        ,{field:'adminTel', title:'联系方式',align:'center', width:120}
-                        ,{field:'headImg', title:'头像路径',align:'center', width:120,hide:true}
-                        ,{field:'regTime', title:'注册时间',align:'center', width:200,sort: true}
-                        ,{fixed: 'right', title:'操作',align:'center',width:550, toolbar: '#chargeBar'}
-                    ]]
-                });
 
-                //头部工具栏监听事件
-                table.on('toolbar(chargeTable)', function(obj){
-                    var nowId='${admin.adminId}';
-                    var checkStatus = table.checkStatus('chargeTable');
-                    data=checkStatus.data;
-                    delList=[];
-                    data.forEach(function(n,i){
-                        if (n.adminId==nowId){
-                            alert("当前登录的账号不能删除的哦(*￣︶￣)");
-                        }else {
-                            delList.push(n.adminId);
-                        }
-                    });
-                    switch(obj.event){
-                        case 'add':
-                            openAddCharge();
-                            break;
-                        case 'batchDelete':
-                            if (delList.length > 0) {
-                                layer.confirm('真的要删除这么多吗？',{icon:5},function (index) {
-                                    layer.close(index);
-                                    // 向服务端发送删除指令
-                                    $.post("${pageContext.request.contextPath}/deleteAdmin?delList="+delList,null,function (msg) {
-                                        if (msg == 'true') {
-                                            layer.alert('删除成功',{icon:6},function (index) {
-                                                window.location.reload();
-                                            });
-                                        }else {
-                                            layer.alert('删除失败',{icon:2});
-                                        }
-                                    });
-                                });
-                            }else {
-                                layer.alert("至少选一个删除吧",{icon:4},function (index) {
-                                    layer.close(index);
-                                });
-                            }
-                            break;
-                    }
-                });
-                //打开添加页面
-                function openAddCharge(){
-                    layer.open({
-                        type: 1,
-                        title: '添加收费员',
-                        content: $('#addCharge'),
-                        area: ['600px','400px'],
-                        shade: [0.5,'#fff'], //0.5透明度的白色背景
-                        // shadeClose: true, //开启遮罩关闭
-                        skin: 'layui-layer-molv',//墨绿皮肤
-                        offset: '50px',//上边距
-                        shift: 1 //动画类型
-                    });
-                    //提交添加表单
-                    form.on('submit(addCharge)', function(data){
-                        if ($(".adminPass").val() != $(".surePass").val()) {
-                            layer.alert("确认密码有误",{icon:2},function (index) {
-                                layer.close(index);
-                            });
-                        }else {
-                            var msg=JSON.stringify(data.field);
-                            $.post("${pageContext.request.contextPath}/insertNewCharge?msg="+encodeURI(msg),function (msg) {
-                                if (msg=='true'){
-                                    layer.alert('收费员添加成功',{icon:6},function () {
-                                        location.reload(true);
-                                    });
-                                } else {
-                                    layer.alert(msg,{icon:2});
-                                }
-                            })
-                        }
-                        return false;//阻止页面刷新
-
-                    });
-                }
-                //打开编辑页面
-                function openUpdateAdmin(obj){
-                    layer.open({
-                        type: 1,
-                        title: '更新收费员',
-                        content: $('#updateCharge'),
-                        area: ['600px','300px'],
-                        shade: [0.5,'#fff'], //0.5透明度的白色背景
-                        // shadeClose: true, //开启遮罩关闭
-                        skin: 'layui-layer-molv',//墨绿皮肤
-                        offset: '50px',//上边距
-                        shift: 2, //动画类型
-                        success:function (index) {
-                            form.val("formUpdateAdmin",obj.data);
-                        }
-                    });
-                    //提交修改表单
-                    form.on('submit(formUpdateAdmin)', function(data){
-                        var msg=JSON.stringify(data.field);
-                        alert(msg);
-                        $.post("${pageContext.request.contextPath}/updateAdmin?msg="+encodeURI(msg),function (msg) {
-                            msg=msg+"";
-                            if (msg=='true'){
-                                layer.alert('修改成功',{icon:6},function (index) {
-                                    window.location.reload();
-                                });
-                            } else {
-                                layer.alert("修改失败",{icon:2});
-                            }
-                        });
-                        return false;//阻止页面刷新
-                    });
-                }
-                //提交条件查询表单
-                form.on('submit(formSearch)', function(data){
-                    var msg=JSON.stringify(data.field);
-                    //表格重载之后就会根据条件参数进行分页
-                    table.reload('chargeTable',{
-                        page:{
-                            curr:1//从第一页开始
-                        },
-                        where:{
-                            msg:msg//条件
-
-                        },
-                        method:'post',
-                        url:'${pageContext.request.contextPath}/getChargeList'
-
-                    })
-                });
-                //监听行工具条事件
-                table.on('tool(chargeTable)', function(obj){ //注：tool 是工具条事件名，test 是 table 原始容器的属性 lay-filter="对应的值"
-                    var data = obj.data; //获得当前行数据
-                    var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
-                    var tr = obj.tr; //获得当前行 tr 的 DOM 对象（如果有的话）
-                    var loginId='${admin.adminId}';
-                    <%--if(layEvent === 'delete'){ //删除--%>
-                        <%--if (loginId==data.adminId){--%>
-                            <%--layer.alert("当前登录账号不可删除！",{icon:2},function (index) {--%>
-                                <%--layer.close(index);--%>
-                            <%--});--%>
-                        <%--}else {--%>
-                            <%--layer.confirm('确定删除这一行吗？',{icon: 7},function(index){--%>
-                                <%--layer.close(index);--%>
-                                <%--//向服务端发送删除指令--%>
-                                <%--$.post("${pageContext.request.contextPath}/deleteCharge?adminId="+data.adminId,null,function (msg) {--%>
-                                    <%--msg=msg+'';--%>
-                                    <%--if (msg == 'true') {--%>
-                                        <%--obj.del(); //删除对应行（tr）的DOM结构，并更新缓存--%>
-                                        <%--layer.alert('删除成功',{icon:6});--%>
-                                    <%--}else {--%>
-                                        <%--layer.alert('删除失败',{icon:2});--%>
-                                    <%--}--%>
-                                <%--});--%>
-                            <%--});--%>
-                        <%--}--%>
-                    <%--} else --%>
-                    if(layEvent === 'edit'){ //编辑
-                        openUpdateAdmin(obj);
-                    } else if(layEvent === 'modifyState'){//更新状态
-                        console.log(data);
-                        var state = data.adminState;
-                        var newState;
-                        if (state==='启用'){
-                            newState = "禁用";
-                        }else{
-                            newState = "启用";
-                        }
-                        layer.confirm('是否'+newState+'？',{icon:7},function (index) {
-                            layer.close(index);
-                            $.post("${pageContext.request.contextPath}/updateState?adminName="+data.adminName+"&adminState="+newState,null,function (msg) {
-                                msg=msg+'';
-                                if (msg == 'true') {
-                                    layer.alert('更新成功',{icon:6},function () {
-                                        location.reload(true);
-                                    });
-                                }else {
-                                    layer.alert('更新失败',{icon:2});
-                                }
-                            });
-                        });
-                    }else if (layEvent==='logOff'){//离职
-                        layer.confirm('是否离职？',null,function (index) {
-                            layer.close(index);
-                            $.post("${pageContext.request.contextPath}/logOff?adminName="+data.adminName,null,function (msg) {
-                                if (msg==='true'){
-                                    layer.alert('离职成功',{icon:6},function () {
-                                        location.reload(true);
-                                    });
-                                }else{
-                                    layer.alert('离职失败',{icon:2});
-                                }
-                            });
-                        });
-                    }else if (layEvent==='resetPass'){
-                        layer.confirm('是否重置密码？',null,function (index) {
-                            layer.close(index);
-                            $.post("${pageContext.request.contextPath}/resetPass?adminName="+data.adminName,null,function (msg) {
-                                if (msg==='true'){
-                                    layer.alert('密码重置成功',{icon:6});
-                                }else{
-                                    layer.alert('密码重置失败',{icon:2});
-                                }
-                            });
-                        });
-                    }
-
-                });
-                //	自定义验证规则
-                form.verify({
-                    adminName: function(value){
-                        if(value.length < 2){
-                            return '管理员名称至少得2个字符啊';
-                        }
-                    }
-                    ,adminPass: [
-                        /^[\S]{6,12}$/
-                        ,'密码必须6到12位，且不能出现空格'
-                    ]
-                });
-            });
-        </script>
     </form>
 </div>
 <!--        添加弹出层结束-->
+<%--图片弹出层开始--%>
+<div id="headImg" style="display: none">
+</div>
+<%--图片弹出层结束--%>
+<script type="text/javascript">
+    layui.use(['jquery','layer','form','table','laydate'],function () {
+        var $ = layui.jquery;
+        var layer = layui.layer;
+        var form = layui.form;
+        var table = layui.table;
+        var laydate=layui.laydate;
+        //给开始时间和结束时间绑定时间选择器
+        laydate.render({
+            elem:'#startTime'
+        });
+        laydate.render({
+            elem:'#endTime'
+        });
+        // 渲染数据表格
+        table.render({
+            id: 'chargeTable'
+            ,elem: '#chargeTable'
+            , url: '${pageContext.request.contextPath}/getChargeList'
+            , title: '收费员数据表'
+            , limit: 5//每页多少条数据
+            , limits: [5,10,20,40,80,100]
+            ,page:true
+            ,toolbar:'#chargeToolbar'
+            ,defaultToolbar:['filter','print']
+            , totalRow:true//开启合计行
+            ,initSort: {
+                field: 'regTime' //排序字段，对应 cols 设定的各字段名
+                ,type: 'desc' //排序方式  asc: 升序、desc: 降序、null: 默认排序
+            }
+            ,skin: 'line' //行边框风格
+            ,skin: 'row' //列边框风格
+            ,even: true //开启隔行背景
+            ,size: 'lg' //大尺寸的表格，sm为小尺寸
+            , text: {
+                none: '数据被组长吃了' //默认：无数据。注：该属性为 layui 2.2.5 开始新增
+            }
+            , cols: [[
+                {type: 'numbers',align:'center',width:100, fixed: 'left',totalRowText:'合计：'}
+                ,{field:'checkbox' ,type: 'checkbox',width:70}
+                ,{field:'adminName', title:'收费员账号',align:'center', width:110}
+                ,{field:'adminSex', title:'性别',align:'center', width:100,sort: true}
+                ,{field:'adminState', title:'状态',align:'center', width:100,sort: true}
+                ,{field:'adminTel', title:'联系方式',align:'center', width:120}
+                ,{field:'headImg', title:'头像路径',align:'center', width:120,hide:true}
+                ,{field:'regTime', title:'注册时间',align:'center', width:200,sort: true}
+                ,{fixed: 'right', title:'操作',align:'center',width:550, toolbar: '#chargeBar'}
+            ]]
+        });
+
+        //头部工具栏监听事件
+        table.on('toolbar(chargeTable)', function(obj){
+            var nowId='${admin.adminId}';
+            var checkStatus = table.checkStatus('chargeTable');
+            data=checkStatus.data;
+            delList=[];
+            data.forEach(function(n,i){
+                if (n.adminId==nowId){
+                    alert("当前登录的账号不能删除的哦(*￣︶￣)");
+                }else {
+                    delList.push(n.adminId);
+                }
+            });
+            switch(obj.event){
+                case 'add':
+                    openAddCharge();
+                    break;
+                case 'batchDelete':
+                    if (delList.length > 0) {
+                        layer.confirm('真的要删除这么多吗？',{icon:5},function (index) {
+                            layer.close(index);
+                            // 向服务端发送删除指令
+                            $.post("${pageContext.request.contextPath}/deleteAdmin?delList="+delList,null,function (msg) {
+                                if (msg == 'true') {
+                                    layer.alert('删除成功',{icon:6},function (index) {
+                                        window.location.reload();
+                                    });
+                                }else {
+                                    layer.alert('删除失败',{icon:2});
+                                }
+                            });
+                        });
+                    }else {
+                        layer.alert("至少选一个删除吧",{icon:4},function (index) {
+                            layer.close(index);
+                        });
+                    }
+                    break;
+            }
+        });
+        //打开添加页面
+        function openAddCharge(){
+            layer.open({
+                type: 1,
+                title: '添加收费员',
+                content: $('#addCharge'),
+                area: ['600px','400px'],
+                shade: [0.5,'#fff'], //0.5透明度的白色背景
+                // shadeClose: true, //开启遮罩关闭
+                skin: 'layui-layer-molv',//墨绿皮肤
+                offset: '50px',//上边距
+                shift: 1 //动画类型
+            });
+            //提交添加表单
+            form.on('submit(addCharge)', function(data){
+                if ($(".adminPass").val() != $(".surePass").val()) {
+                    layer.alert("确认密码有误",{icon:2},function (index) {
+                        layer.close(index);
+                    });
+                }else {
+                    var msg=JSON.stringify(data.field);
+                    $.post("${pageContext.request.contextPath}/insertNewCharge?msg="+encodeURI(msg),function (msg) {
+                        if (msg=='true'){
+                            layer.alert('收费员添加成功',{icon:6},function () {
+                                location.reload(true);
+                            });
+                        } else {
+                            layer.alert(msg,{icon:2});
+                        }
+                    })
+                }
+                return false;//阻止页面刷新
+
+            });
+        }
+        //打开编辑页面
+        function openUpdateAdmin(obj){
+            layer.open({
+                type: 1,
+                title: '更新收费员',
+                content: $('#updateCharge'),
+                area: ['600px','350px'],
+                shade: [0.5,'#fff'], //0.5透明度的白色背景
+                // shadeClose: true, //开启遮罩关闭
+                skin: 'layui-layer-molv',//墨绿皮肤
+                offset: '50px',//上边距
+                shift: 2, //动画类型
+                success:function (index) {
+                    form.val("formUpdateAdmin",obj.data);
+                }
+            });
+            //上传头像点击事件
+            layui.use('upload', function(){
+                var upload = layui.upload;
+                //执行实例
+                var uploadInst = upload.render({
+                    elem: '#upload' //绑定元素
+                    ,url: '/upload/' //上传接口
+                    ,done: function(res){
+                        layer.alert(res,{icon:6},null);
+                    }
+                    ,error: function(){
+                        //请求异常回调
+                    }
+                    ,accept: 'images'
+                    ,size: 5120 //限制文件大小，单位 KB
+                    ,progress: function(n, elem){
+                        var percent = n + '%';//获取进度百分比
+                        element.progress('.layui-progress-bar', percent); //可配合 layui 进度条元素使用
+                        //以下系 layui 2.5.6 新增
+                        console.log(elem); //得到当前触发的元素 DOM 对象。可通过该元素定义的属性值匹配到对应的进度条。
+                    }
+                });
+            });
+            //提交修改表单
+            form.on('submit(formUpdateAdmin)', function(data){
+                var msg=JSON.stringify(data.field);
+                alert(msg);
+                $.post("${pageContext.request.contextPath}/updateAdmin?msg="+encodeURI(msg),function (msg) {
+                    msg=msg+"";
+                    if (msg=='true'){
+                        layer.alert('修改成功',{icon:6},function (index) {
+                            window.location.reload();
+                        });
+                    } else {
+                        layer.alert("修改失败",{icon:2});
+                    }
+                });
+                return false;//阻止页面刷新
+            });
+        }
+        //提交条件查询表单
+        form.on('submit(formSearch)', function(data){
+            var msg=JSON.stringify(data.field);
+            //表格重载之后就会根据条件参数进行分页
+            table.reload('chargeTable',{
+                page:{
+                    curr:1//从第一页开始
+                },
+                where:{
+                    msg:msg//条件
+
+                },
+                method:'post',
+                url:'${pageContext.request.contextPath}/getChargeList'
+
+            })
+        });
+        //监听行工具条事件
+        table.on('tool(chargeTable)', function(obj){ //注：tool 是工具条事件名，test 是 table 原始容器的属性 lay-filter="对应的值"
+            var data = obj.data; //获得当前行数据
+            var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
+            var tr = obj.tr; //获得当前行 tr 的 DOM 对象（如果有的话）
+            var loginId='${admin.adminId}';
+            <%--if(layEvent === 'delete'){ //删除--%>
+            <%--if (loginId==data.adminId){--%>
+            <%--layer.alert("当前登录账号不可删除！",{icon:2},function (index) {--%>
+            <%--layer.close(index);--%>
+            <%--});--%>
+            <%--}else {--%>
+            <%--layer.confirm('确定删除这一行吗？',{icon: 7},function(index){--%>
+            <%--layer.close(index);--%>
+            <%--//向服务端发送删除指令--%>
+            <%--$.post("${pageContext.request.contextPath}/deleteCharge?adminId="+data.adminId,null,function (msg) {--%>
+            <%--msg=msg+'';--%>
+            <%--if (msg == 'true') {--%>
+            <%--obj.del(); //删除对应行（tr）的DOM结构，并更新缓存--%>
+            <%--layer.alert('删除成功',{icon:6});--%>
+            <%--}else {--%>
+            <%--layer.alert('删除失败',{icon:2});--%>
+            <%--}--%>
+            <%--});--%>
+            <%--});--%>
+            <%--}--%>
+            <%--} else --%>
+            if(layEvent === 'edit'){ //编辑
+                openUpdateAdmin(obj);
+            } else if(layEvent === 'modifyState'){//更新状态
+                console.log(data);
+                var state = data.adminState;
+                var newState;
+                if (state==='启用'){
+                    newState = "禁用";
+                }else{
+                    newState = "启用";
+                }
+                layer.confirm('是否'+newState+'？',{icon:7},function (index) {
+                    layer.close(index);
+                    $.post("${pageContext.request.contextPath}/updateState?adminName="+data.adminName+"&adminState="+newState,null,function (msg) {
+                        msg=msg+'';
+                        if (msg == 'true') {
+                            layer.alert('更新成功',{icon:6},function () {
+                                location.reload(true);
+                            });
+                        }else {
+                            layer.alert('更新失败',{icon:2});
+                        }
+                    });
+                });
+            }else if (layEvent==='logOff'){//离职
+                layer.confirm('是否离职？',null,function (index) {
+                    layer.close(index);
+                    $.post("${pageContext.request.contextPath}/logOff?adminName="+data.adminName,null,function (msg) {
+                        if (msg==='true'){
+                            layer.alert('离职成功',{icon:6},function () {
+                                location.reload(true);
+                            });
+                        }else{
+                            layer.alert('离职失败',{icon:2});
+                        }
+                    });
+                });
+            }else if (layEvent==='resetPass'){
+                layer.confirm('是否重置密码？',null,function (index) {
+                    layer.close(index);
+                    $.post("${pageContext.request.contextPath}/resetPass?adminName="+data.adminName,null,function (msg) {
+                        if (msg==='true'){
+                            layer.alert('密码重置成功',{icon:6});
+                        }else{
+                            layer.alert('密码重置失败',{icon:2});
+                        }
+                    });
+                });
+            }else if (layEvent==='showHead') {
+                //页面层-图片
+                layer.open({
+                    type: 1,
+                    title: false,
+                    closeBtn: 0,
+                    area: ['auto'],
+                    skin: 'layui-layer-nobg', //没有背景色
+                    shadeClose: true,
+                    // content: $('#headImg')
+                    content:'/${pageContext.request.contextPath}/'+data.headImg
+                });
+            }
+
+        });
+        //	自定义验证规则
+        form.verify({
+            adminName: function(value){
+                if(value.length < 2){
+                    return '管理员名称至少得2个字符啊';
+                }
+            }
+            ,adminPass: [
+                /^[\S]{6,12}$/
+                ,'密码必须6到12位，且不能出现空格'
+            ]
+        });
+    });
+</script>
 </body>
 </html>

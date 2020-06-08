@@ -1,6 +1,7 @@
 package com.cnzk.controller;
 
 import com.alibaba.fastjson.JSON;
+import com.cnzk.aoplog.Log;
 import com.cnzk.pojo.Charge;
 import com.cnzk.pojo.LayuiData;
 import com.cnzk.service.ChargeService;
@@ -37,6 +38,7 @@ public class ChargeController {
 
     @ResponseBody
     @RequestMapping("updateState")
+    @Log(operationThing = "更新收费员状态",operationType = "更新")
     public void updateState(HttpServletRequest request, HttpServletResponse response) throws Exception{
         response.setCharacterEncoding("UTF-8");
         response.setContentType("text/html;charset=UTF-8");
@@ -57,6 +59,7 @@ public class ChargeController {
 
     @ResponseBody
     @RequestMapping("insertNewCharge")
+    @Log(operationThing = "添加新收费员",operationType = "添加")
     public Object insertNewCharge(String msg){
         System.out.println("添加收费员");
         Charge charge = JSON.parseObject(msg,Charge.class);
@@ -78,6 +81,7 @@ public class ChargeController {
 
     @ResponseBody
     @RequestMapping("logOff")
+    @Log(operationThing = "收费员离职",operationType = "删除")
     public Object logOff(HttpServletRequest request){
         System.out.println("收费员离职");
         int i = chargeService.logOff(request.getParameter("adminName"));
@@ -90,6 +94,7 @@ public class ChargeController {
 
     @ResponseBody
     @RequestMapping("resetPass")
+    @Log(operationThing = "重置收费员密码",operationType = "更新")
     public Object insertNewCharge(HttpServletRequest request){
         System.out.println("重置密码");
         int i = chargeService.resetPass(request.getParameter("adminName"));
