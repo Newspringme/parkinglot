@@ -17,6 +17,9 @@
 <%--		<script src="${pageContext.request.contextPath}/js/jquery-3.4.1.js" charset="utf-8"></script>--%>
 <%--		<script src="${pageContext.request.contextPath}/js/packaging.js" charset="utf-8"></script>--%>
 		<script src="${pageContext.request.contextPath}/static/layui/layui.js" charset="utf-8"></script>
+<%--		<link rel="stylesheet" href="${pageContext.request.contextPath}/static/cropper/cropper.css">--%>
+<%--		<script src="${pageContext.request.contextPath}/static/cropper/cropper.js"></script>--%>
+<%--		<script src="${pageContext.request.contextPath}/static/cropper/croppers.js"></script>--%>
 		<style>
 			.layui-table-cell .layui-form-checkbox[lay-skin=primary] {
 				top: 10px;
@@ -25,6 +28,7 @@
 		</style>
 	</head>
 	<body>
+<%--		<input type="hidden" class="path" value="${pageContext.request.contextPath}">--%>
 		<!--搜索条件开始-->
 		<fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
 			<legend>搜索条件</legend>
@@ -55,7 +59,6 @@
 				</div>
 			</div>
 		</form>
-		<!--        搜索条件结束-->
 		<!--        表格开始-->
 		<!--        头部工具栏-->
 		<div style="display: none" id="adminToolbar">
@@ -65,7 +68,9 @@
 		<!--        行工具栏-->
 		<div style="display: none" id="adminBar">
 			<button type="button" class="layui-btn layui-btn-sm layui-icon layui-icon-edit" lay-event="edit">编辑</button>
-			<button type="button" class="layui-btn layui-btn-sm  layui-btn-danger layui-icon layui-icon-delete" lay-event="delete">删除</button>
+			<button type="button"  id="uploadImg" class="layui-btn layui-btn-sm layui-icon layui-icon-upload-circle" lay-event="uploadImg">上传头像</button>
+			<button type="button" class="layui-btn layui-btn-sm layui-icon layui-icon-download-circle" lay-event="queryImg">查看头像</button>
+<%--			<button type="button" class="layui-btn layui-btn-sm  layui-btn-danger layui-icon layui-icon-delete" lay-event="delete">删除</button>--%>
 		</div>
 		<!--        表格主体-->
 		<table class="layui-hide" id="adminTable" lay-filter="adminTable"></table>
@@ -147,6 +152,8 @@
 						<button type="reset" class="layui-btn layui-btn-warm layui-icon layui-icon-refresh">重置</button>
 					</div>
 				</div>
+				</form>
+		</div>
 				<script type="text/javascript">
 					layui.use(['jquery','layer','form','table','laydate'],function () {
 						var $ = layui.jquery;
@@ -154,6 +161,7 @@
 						var form = layui.form;
 						var table = layui.table;
 						var laydate=layui.laydate;
+						// var croppers=layui.croppers;
 						//给开始时间和结束时间绑定时间选择器
 						laydate.render({
 							elem:'#startTime'
@@ -165,7 +173,7 @@
 						table.render({
 							id: 'aTable'
 							,elem: '#adminTable'
-							, url: '${pageContext.request.contextPath}/queryAdmin'
+							, url: '${pageContext.request.contextPath}/AdminController/queryAdmin'
 							, title: '管理员数据表'
 							, limit: 5//每页多少条数据
 							, limits: [5,10,20,40,80,100]
@@ -188,11 +196,14 @@
 							, cols: [[
 								{type: 'numbers',align:'center',width:100, fixed: 'left',totalRowText:'合计：'}
 								,{field:'checkbox' ,type: 'checkbox'}
-								,{field:'adminId', title:'ID',align:'center',width:100, sort: true}
-								,{field:'adminName', title:'管理员账号',align:'center', width:120}
+								,{field:'adminId',hide:true, title:'ID',align:'center',width:100, sort: true}
+								,{field:'adminName', title:'管理员账号',align:'center', width:120,templet:'#nameTpl'}
+								,{field:'adminSex', title:'性别',align:'center', width:80,templet: '#sexTpl'}
+								,{field:'adminTel', title:'手机号码',align:'center', width:120}
+								,{field:'adminState', title:'状态',align:'center', width:120}
 								,{field:'roleName', title:'角色',align:'center', width:120}
-								,{field:'roleId', title:'角色id',hide:true}
-								,{field:'regTime', title:'注册时间',align:'center', width:200}
+								,{field:'roleId', title:'角色id',hide:true,width:100}
+								,{field:'regTime', title:'添加时间',align:'center', width:200}
 								,{fixed: 'right', title:'操作',align:'center',width:220, toolbar: '#adminBar'}
 							]]
 						})
@@ -213,7 +224,6 @@
 							switch(obj.event){
 								case 'add':
 									openAddAdmin();
-
 									break;
 								case 'batchDelete':
 									if (delList.length > 0) {
@@ -259,7 +269,7 @@
 									});
 								}else {
 									var msg=JSON.stringify(data.field);
-									$.post("${pageContext.request.contextPath}/addAdmin?msg="+encodeURI(msg),function (msg) {
+									$.post("${pageContext.request.contextPath}/AdminController/addAdmin?msg="+encodeURI(msg),function (msg) {
 										if (msg=='true'){
 											layer.alert('管理员添加成功',{icon:6},function (index) {
 												window.location.reload();
@@ -293,7 +303,7 @@
 							form.on('submit(formUpdateAdmin)', function(data){
 								var msg=JSON.stringify(data.field);
 								alert(msg);
-								$.post("${pageContext.request.contextPath}/updateAdmin?msg="+encodeURI(msg),function (msg) {
+								$.post("${pageContext.request.contextPath}/AdminController/updateAdmin?msg="+encodeURI(msg),function (msg) {
 									msg=msg+"";
 									if (msg=='true'){
 										layer.alert('修改成功',{icon:6},function (index) {
@@ -319,7 +329,7 @@
 
 								},
 								method:'post',
-								url:'${pageContext.request.contextPath}/queryAdmin'
+								url:'${pageContext.request.contextPath}/AdminController/queryAdmin'
 
 							})
 						})
@@ -329,26 +339,31 @@
 							var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
 							var tr = obj.tr; //获得当前行 tr 的 DOM 对象（如果有的话）
 							var loginId='${admin.adminId}';
-							if(layEvent === 'delete'){ //删除
-								if (loginId==data.adminId){
-									layer.alert("当前登录账号不可删除！",{icon:2},function (index) {
-										layer.close(index);
-									})
-								}else {
-									layer.confirm('确定删除这一行吗？',{icon: 7},function(index){
-										layer.close(index);
-										//向服务端发送删除指令
-										$.post("${pageContext.request.contextPath}/deleteAdmin?adminId="+data.adminId,null,function (msg) {
-											msg=msg+'';
-											if (msg == 'true') {
-												obj.del(); //删除对应行（tr）的DOM结构，并更新缓存
-												layer.alert('删除成功',{icon:6});
-											}else {
-												layer.alert('删除失败',{icon:2});
-											}
-										})
-									});
-								}
+							if(layEvent == 'uploadImg'){ //上传头像
+								<%--layui.config({--%>
+								<%--	base: '${pageContext.request.contextPath}/static/cropper/' //layui自定义layui组件目录--%>
+								<%--}).use(['form','croppers'], function () {--%>
+								<%--	var $ = layui.jquery--%>
+								<%--		,form = layui.form--%>
+								<%--		,croppers = layui.croppers--%>
+								<%--		,layer= layui.layer;--%>
+
+								<%--	// 创建一个头像上传组件--%>
+								<%--	croppers.render({--%>
+								<%--		elem: '#uploadImg'--%>
+								<%--		,saveW:150     //保存宽度--%>
+								<%--		,saveH:150--%>
+								<%--		,mark:1/1    //选取比例--%>
+								<%--		,area:'900px'  //弹窗宽度--%>
+								<%--		,url: "upload/uploadImg"  //图片上传接口返回和（layui 的upload 模块）返回的JOSN一样--%>
+								<%--		,done: function(url){ //上传完毕回调--%>
+								<%--			$("#inputimgurl").val(url);--%>
+								<%--			$("#srcimgurl").attr('src',url);--%>
+								<%--		}--%>
+								<%--	});--%>
+
+								<%--});--%>
+
 							} else if(layEvent === 'edit'){ //编辑
 								openUpdateAdmin(obj);
 							}
@@ -368,8 +383,17 @@
 						});
 					});
 				</script>
-			</form>
-		</div>
-		<!--        添加弹出层结束-->
+		<%--根据性别更改样式--%>
+		<script type="text/html" id="sexTpl">
+			{{#  if(d.adminSex === '女'){ }}
+			<span style="color: #F581B1;">{{ d.adminSex }}</span>
+			{{#  } else { }}
+			{{ d.adminSex }}
+			{{#  } }}
+		</script>
+		<!-- 姓名-->
+		<script type="text/html" id="nameTpl">
+			<a href="/?table-demo-id={{d.id}}" class="layui-table-link" target="_blank">{{ d.adminName }}</a>
+		</script>
 	</body>
 </html>
