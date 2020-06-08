@@ -6,6 +6,7 @@ import com.cnzk.pojo.LayuiData;
 import com.cnzk.pojo.TreeData;
 import com.cnzk.service.AdminService;
 import com.cnzk.service.AuthorityService;
+import com.cnzk.utils.ResponseUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
@@ -187,5 +188,19 @@ public class AdminController
 		System.out.println("layuiData = " + JSON.toJSONString(layuiData));
 		return layuiData;
 	}
+
+//    //  查权限
+//    @RequestMapping("/queryMenuTree")
+//    @ResponseBody
+//    public void queryMenuTree(HttpServletRequest request, HttpServletResponse response){
+//        Integer rolesid = Integer.valueOf(request.getParameter("rolesid"));
+//        System.out.println(rolesid);
+//        List<TreeData> treeDataList = adminService.findTree(rolesid);
+//        if(treeDataList.size() != 0){
+//            ResponseUtils.outJson(response, treeDataList);//这种也可以
+//        }else{
+//            ResponseUtils.outHtml(response,"error");
+//        }
+//    }
 
 }

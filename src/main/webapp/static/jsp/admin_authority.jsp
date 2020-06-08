@@ -93,12 +93,9 @@
         });
 
         //监听事件
-        table.on('tool(currentTableFilter)', function(obj){
+        table.on('tool(changeAuthority)', function(obj){
             var data = obj.data;
             //obj点击那行的所有字段属性
-            if (obj.event === 'changeAuthority') {
-
-            }
             var tr = obj.tr; //获得当前行 tr 的DOM对象
             var rolesid = tr.children("td").eq(0).text();
             console.log(rolesid);
@@ -113,7 +110,7 @@
                     anim: 1,
                     isOutAnim: true,
                     resize: false,
-                    area: ['400px', '450px'],
+                    area: ['100%', '100%'],
                     closeBtn: 2,//弹出层的类型
                     shade: 0.6,
                     move: false,
@@ -133,7 +130,7 @@
                 });
                 var path = $('#path').val();
                 $.ajax({
-                    url: path+"/AuthorityController/findAdminTree",
+                    url: path+"/AdminController/queryMenuTree",
                     async: true,
                     type: 'POST',
                     data:{'rolesid':rolesid},
