@@ -11,10 +11,10 @@
     <select id="queryLogCount" resultType="int">
         select count(*) as count from tb_log;
     </select>
-<!--    &lt;!&ndash;添加新的角色&ndash;&gt;-->
-<!--    <insert id="addRole" parameterType="String">-->
-<!--        insert into tb_role (role_name) values (#{roleName});-->
-<!--    </insert>-->
+<!--    &lt;!&ndash;添加新的日志&ndash;&gt;-->
+    <insert id="addLog" parameterType="com.cnzk.pojo.TbLog">
+        insert into tb_log (operate_name,operate_thing,operate_type,operate_ip) values (#{operateName},#{operateThing},#{operateType},#{operateIp});
+    </insert>
 <!--    &lt;!&ndash;    删除角色&ndash;&gt;-->
 <!--    <delete id="deleteRole" parameterType="com.cnzk.pojo.TbRole">-->
 <!--        delete from tb_role  where role_id=#{roleId};-->

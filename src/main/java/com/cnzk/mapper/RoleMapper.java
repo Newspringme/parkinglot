@@ -13,11 +13,11 @@ public interface RoleMapper {
     //	查询角色
     List<TbRole> queryRole(@Param("start") int start, @Param("pageSize") int pageSize);
 
-    void addRole(TbRole role);
+    int addRole(TbRole role);
 
-    void deleteRole(TbRole role);
+    int deleteRole(TbRole role);
 
-    void editRole(TbRole role);
+    int editRole(TbRole role);
 
     //根据角色id查角色等级
     public TbRole querySort(Integer roleId);

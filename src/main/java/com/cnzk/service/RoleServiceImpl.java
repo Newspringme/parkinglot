@@ -28,19 +28,18 @@ public class RoleServiceImpl implements RoleServeice{
     }
 
     @Override
-    public void addRole(TbRole role) {
-        roleMapper.addRole(role);
-
+    public int addRole(TbRole role) {
+        return roleMapper.addRole(role);
     }
 
     @Override
-    public void delecteRole(TbRole role) {
-        roleMapper.deleteRole(role);
+    public int delecteRole(TbRole role) {
+        return roleMapper.deleteRole(role);
     }
 
     @Override
-    public void editRole(TbRole role) {
-        roleMapper.editRole(role);
+    public int editRole(TbRole role) {
+        return roleMapper.editRole(role);
     }
 
     //  可修改的角色的权限列表

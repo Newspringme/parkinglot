@@ -24,4 +24,9 @@ public class LogServiceImpl  implements LogService{
         layuiData.setData(list);
         return layuiData;
     }
+
+    @Override
+    public int addLog(TbLog log) {
+        return logMapper.addLog(log);
+    }
 }
