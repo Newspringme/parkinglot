@@ -31,22 +31,41 @@ public class RoleController {
     @RequestMapping("addRole")
     @Log(operationThing = "添加角色",operationType = "添加")
     public Object addRole(TbRole role){
-        roleService.addRole(role);
+        if (roleService.addRole(role)!=0){
+            System.out.println("添加成功");
         return "true";
+    }else {
+            System.out.println("删除失败");
+        return "false";
     }
+
+}
 
 
     @ResponseBody
     @RequestMapping("deleteRole")
+    @Log(operationThing = "删除角色",operationType = "删除")
     public Object deleteRole(TbRole role){
-        roleService.delecteRole(role);
-        return "true";
+        if (roleService.delecteRole(role)!=0){
+            System.out.println("删除成功");
+            return "true";
+        }else {
+            System.out.println("删除失败");
+            return "false";
+        }
+
     }
     @ResponseBody
     @RequestMapping("editRole")
+    @Log(operationThing = "修改角色",operationType = "修改")
     public Object editRole(TbRole role){
-        roleService.editRole(role);
-        return "true";
+        if (roleService.editRole(role)!=0){
+            System.out.println("修改成功");
+            return "true";
+        }else {
+            System.out.println("修改失败");
+            return "false";
+        }
     }
 
 }

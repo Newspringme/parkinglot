@@ -68,7 +68,6 @@
                         var index = layer.alert("添加成功",  function () {
                             // 关闭弹出层
                             layer.close(index);
-                            $(".layui-laypage-btn").click();
                             var iframeIndex = parent.layer.getFrameIndex(window.name);
                             parent.layer.close(iframeIndex);
 

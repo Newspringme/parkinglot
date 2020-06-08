@@ -53,7 +53,7 @@ public class SystemLogAspect {
     }
     //配置controller环绕通知,使用在方法aspect()上注册的切入点
     @Around("controllerAspect()")
-    public void around(JoinPoint joinPoint){
+    public Object around(JoinPoint joinPoint){
         System.out.println("==========开始执行controller环绕通知===============");
         long start = System.currentTimeMillis();
         //(signature是信号,标识的意思):获取被增强的方法相关信息.其后续方法有两个
@@ -62,12 +62,13 @@ public class SystemLogAspect {
         String methodName = joinPoint.getSignature().getName();
         try {
             //ProceedingJoinPoint 执行proceed方法的作用是让目标方法执行
-            ((ProceedingJoinPoint) joinPoint).proceed();
+
             long end = System.currentTimeMillis();
             if(logger.isInfoEnabled()){
                 logger.info("around " + joinPoint + "\tUse time : " + (end - start) + " ms!");
             }
             System.out.println("==========结束执行controller环绕通知===============");
+          return  ((ProceedingJoinPoint) joinPoint).proceed();
         } catch (Throwable e) {
             System.out.println("环绕通知中的异常--------------------------------"+methodName+"-------"+e.getMessage());
             long end = System.currentTimeMillis();
@@ -75,6 +76,7 @@ public class SystemLogAspect {
                 logger.info("around " + joinPoint + "\tUse time : " + (end - start) + " ms with exception : " + e.getMessage());
             }
         }
+        return null;
     }
 
 

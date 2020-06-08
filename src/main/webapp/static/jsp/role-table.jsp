@@ -88,7 +88,7 @@
                     shade: 0.2,
                     maxmin:true,
                     shadeClose: true,
-                    area: ['50%', '30%'],
+                    area: ['100%', '100%'],
                     content: '/parkinglot/static/jsp/table/role-add.jsp',
                 });
                 $(window).on("resize", function () {
@@ -116,7 +116,7 @@
                     shade: 0.2,
                     maxmin:true,
                     shadeClose: true,
-                    area: ['50%', '30%'],
+                    area: ['100%', '100%'],
                     content: '/parkinglot/static/jsp/table/role-edit.jsp?roleId='+data.roleId+'&roleName='+data.roleName+'&roleSort='+data.roleSort,
                 });
                 $(window).on("resize", function () {
@@ -134,6 +134,7 @@
                         },
                         success:function (msg) {
                             msg=msg+"";
+                            alert(msg);
                             if (msg=='true'){
                                 layer.alert("删除成功");
                                 obj.del();

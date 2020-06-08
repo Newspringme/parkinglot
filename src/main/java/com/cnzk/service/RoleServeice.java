@@ -5,7 +5,7 @@ import com.cnzk.pojo.TbRole;
 
 public interface RoleServeice {
     LayuiData queryRole( int start, int pageSize);
-    void addRole(TbRole role);
-    void delecteRole(TbRole role);
-    void editRole(TbRole role);
+    int addRole(TbRole role);
+    int delecteRole(TbRole role);
+    int editRole(TbRole role);
 }

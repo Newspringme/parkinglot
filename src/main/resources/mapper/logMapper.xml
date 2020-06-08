@@ -13,7 +13,7 @@
     </select>
 <!--    &lt;!&ndash;添加新的日志&ndash;&gt;-->
     <insert id="addLog" parameterType="com.cnzk.pojo.TbLog">
-        insert into tb_log (operate_name,operate_thing) values (#{operateName},#{operateThing});
+        insert into tb_log (operate_name,operate_thing,operate_type,operate_ip) values (#{operateName},#{operateThing},#{operateType},#{operateIp});
     </insert>
 <!--    &lt;!&ndash;    删除角色&ndash;&gt;-->
 <!--    <delete id="deleteRole" parameterType="com.cnzk.pojo.TbRole">-->
