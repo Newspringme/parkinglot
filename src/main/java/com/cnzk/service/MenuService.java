@@ -12,6 +12,5 @@ import java.util.Map;
  */
 public interface MenuService {
 
-    public LinkedHashMap<String, List<TbMenu>> findMenus(Integer rolesid);
-    Map<String, Object> menu();
+    Map<String, Object> menu(Integer roleId);
 }

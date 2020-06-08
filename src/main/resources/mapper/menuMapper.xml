@@ -4,27 +4,9 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <!--命名空间，区别不同xml中，出现相同的id-->
 <mapper namespace="com.cnzk.mapper.MenuMapper">
-<!--二级菜单-->
-	<select id ="findMenu" parameterType="java.lang.Integer" resultType="TbMenu">
-		select A.* from tb_menu A join tb_role_menu B on A.menu_id = B.menu_id where B.role_id = #{rolesid}
-	</select>
-<!--一级菜单-->
-	<select id ="findMenuSon" parameterType="java.lang.Integer" resultType="TbMenu">
-		select * from tb_menu where menu_id in (
-		select DISTINCT menu_pid from tb_menu where menu_id in (
-		select tb_role_menu.menu_id from tb_role_menu where role_id = #{rolesid}))
-	</select>
 
-	<select id ="findAllMenus" resultType="TbMenu">
-		select * from tb_menu where MENUSONID not in (0)
-	</select>
-
-	<select id ="findAllMenuSon" resultType="TbMenu">
-		select * from tb_menu
-	</select>
-
-	<select id="findAllByStatusOrderBySort" resultType="MenuVo">
-		select * from  system_menu where STATUS = 1  ORDER BY  sort
+	<select id ="queryRoleAllMenu" resultType="TbMenu" parameterType="java.lang.Integer">
+		select * from tb_menu a ,tb_role_menu b where a.menu_id = b.menu_id and b.role_id = #{roleId};
 	</select>
 
     </mapper>
