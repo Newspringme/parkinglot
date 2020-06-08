@@ -10,7 +10,7 @@ public class Charge {
   private String headImg;
   private int roleId;
   private String adminTel;
-  private java.sql.Timestamp regTime;
+  private String regTime;
   private String adminFace;
   private String adminState;
   private String startTime;
@@ -80,11 +80,11 @@ public class Charge {
   }
 
 
-  public java.sql.Timestamp getRegTime() {
+  public String getRegTime() {
     return regTime;
   }
 
-  public void setRegTime(java.sql.Timestamp regTime) {
+  public void setRegTime(String regTime) {
     this.regTime = regTime;
   }
 
