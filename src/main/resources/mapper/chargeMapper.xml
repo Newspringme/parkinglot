@@ -14,8 +14,8 @@
             <if test="admin.adminName!=null and admin.adminName!=''">
                 and admin_name like concat('%',#{admin.adminName},'%')
             </if>
-            <if test="admin.startTime!=null and admin.startTime!=''">and reg_time &gt;=#{startTime}</if>
-            <if test="admin.endTime!=null and admin.endTime!=''">and reg_time &lt;= #{endTime}</if>
+            <if test="admin.startTime!=null and admin.startTime!=''">and reg_time &gt;=#{admin.startTime}</if>
+            <if test="admin.endTime!=null and admin.endTime!=''">and reg_time &lt;= #{admin.endTime}</if>
         </where>
         limit #{start},#{pageSize};
     </select>
@@ -44,4 +44,30 @@
             <if test="endTime!=null and endTime!=''">and reg_time &lt;= #{endTime}</if>
         </where>
     </select>
+
+    <!--更新状态-->
+    <update id="updateState" parameterType="com.cnzk.pojo.Charge">
+        update tb_admin set admin_state = #{adminState} where admin_name = #{adminName}
+    </update>
+
+    <!--添加收费员-->
+    <insert id="insertNewCharge" parameterType="com.cnzk.pojo.Charge">
+        insert into tb_admin (admin_name, admin_pass, admin_sex, role_id, admin_tel,  admin_state)
+        values (#{adminName},#{adminPass},#{adminSex},3,#{adminTel},'启用')
+    </insert>
+
+    <!--查询管理员-->
+    <select id="searchCharge" parameterType="java.lang.String" resultType="int">
+        select * from tb_admin where admin_name = #{adminName}
+    </select>
+
+    <!--收费员离职-->
+    <delete id="logOff" parameterType="java.lang.String">
+        delete from tb_admin where admin_name = #{adminName}
+    </delete>
+
+    <!--重置密码-->
+    <update id="resetPass" parameterType="java.lang.String">
+        update tb_admin set admin_pass = '12345678'  where admin_name = #{adminName}
+    </update>
 </mapper>
