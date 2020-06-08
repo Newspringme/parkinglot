@@ -19,4 +19,6 @@ public interface AdminService
 
 	//	查询管理员，包括带条件,分页,记录数
 	LayuiData queryAdmin(Admin admin, int start, int pageSize);
+
+
 }
