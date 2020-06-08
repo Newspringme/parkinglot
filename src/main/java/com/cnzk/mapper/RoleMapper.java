@@ -30,7 +30,7 @@ public interface RoleMapper {
     Integer queryCount(HashMap<String, Object> condition);
 
     //删除所选角色的角色菜单关联表里的所有菜单
-    Integer deleRolesMenu(Integer rolesid);
+    Integer deleRolesMenu(Integer roleId);
 
     //重新添加所选角色的角色菜单
     Integer addRolesMenu(List<TbMenu> menutblList);
