@@ -24,10 +24,12 @@
     <script charset="UTF-8" src="<%=path%>/static/js/json2.js" type="text/javascript" ></script>
 
     <script src="<%=path%>/static/lib/layui-v2.5.5/layui.js" charset="utf-8"></script>
+    <script src="<%=path%>/static/layui/layui.js" charset="UTF-8"></script>
 
 </head>
 <body>
-<div class="layuimini-container">
+
+<div class="layuimini-container authorityMsg">
     <input type="hidden" id="path" value="<%=path%>">
     <div class="layuimini-main">
         <fieldset class="table-search-fieldset">
@@ -42,7 +44,8 @@
                             </div>
                         </div>
                         <div class="layui-inline">
-                            <button type="submit" class="layui-btn layui-btn-primary search"  lay-submit lay-filter="data-search-btn" data-type="reload"><i class="layui-icon"></i> 搜 索</button>
+                            <%--    reload是表格重载--%>
+                            <button class= "layui-btn search" data-type="reload" style="margin-left: 26px">搜索</button>
                         </div>
                     </div>
                 </form>
@@ -51,6 +54,11 @@
 
         <table class="layui-hide" id="authorityMsgTbl" lay-filter="currentTableFilter"></table>
 
+        <%--    点击按钮弹出层的form--%>
+        <form class = "layui-form" action="" style="display: none" id="changeAForm">
+            <div id="test12" class="demo-tree-more"></div>
+        </form>
+
         <%--表格中按钮的模板--%>
         <script type="text/html" id="currentTableBar">
             <a class="layui-btn layui-btn-normal layui-btn-xs data-count-edit" lay-event="changeAuthority">修改权限</a>
@@ -58,22 +66,19 @@
     </div>
 </div>
 
-    <%--    点击按钮弹出层的form--%>
-    <form class = "layui-form" action="" style="display: none" id="changeAForm">
-        <div id="test12" class="demo-tree-more"></div>
-    </form>
+
 
 <%--    表格的js--%>
 <script>
     //layui.use加载模块
-    var load=layui.use(['form', 'table'], function () {
+    layui.use(['form', 'table'], function () {
         var table = layui.table,
             form = layui.form,
             $ = layui.jquery;
 
         var path = $('#path').val();
 
-        var getlist = table.render({
+        table.render({
             elem: '#authorityMsgTbl',   //表格的id
             url: path+'/AdminController/queryRolesList',
             defaultToolbar: ['filter', 'exports', 'print', {
@@ -92,13 +97,28 @@
             skin: 'line',
         });
 
+        $('.authorityMsg .search').on('click', function () {
+            var type = $(this).data('type');
+            if (type == 'reload') {
+                //执行重载
+                table.reload('authorityMsg', {
+                    page: {
+                        curr: 1 //重新从第 1 页开始
+                    }
+                    , where: {
+                        roleName: $("#roleName").val(),
+                    }
+                });
+            }
+        });
+
         //监听事件
-        table.on('tool(changeAuthority)', function(obj){
+        table.on('tool(currentTableFilter)', function(obj){
             var data = obj.data;
             //obj点击那行的所有字段属性
             var tr = obj.tr; //获得当前行 tr 的DOM对象
-            var rolesid = tr.children("td").eq(0).text();
-            console.log(rolesid);
+            var roleId = tr.children("td").eq(0).text();
+            console.log(roleId);
             if (obj.event === 'changeAuthority')
             {
                 var layer = layui.layer;
@@ -110,13 +130,13 @@
                     anim: 1,
                     isOutAnim: true,
                     resize: false,
-                    area: ['100%', '100%'],
+                    area: ['50%', '80%'],
                     closeBtn: 2,//弹出层的类型
                     shade: 0.6,
                     move: false,
                     btn: ['提交', '取消'],
                     btn1: function (index, layero) {
-                        updateAuthority(rolesid ,index);
+                        updateAuthority(roleId ,index);
                         return false;
                     },
                     btn2: function (index, layero) {
@@ -133,7 +153,9 @@
                     url: path+"/AdminController/queryMenuTree",
                     async: true,
                     type: 'POST',
-                    data:{'rolesid':rolesid},
+                    data:{
+                        'roleId':data.roleId
+                    },
                     dataType:'json',
                     success: function (msg) {
                         if (data=="error") {
@@ -144,17 +166,20 @@
                     },
                     error: function () {
                         layer.msg('网络繁忙');
-                        window.parent.location.href=path+"/PathJmpController/path/BackLogin";
+                        window.parent.location.href=path+"/url/login";
                     }
                 });
             }
         });
 
         function showTree(data) {
-            layui.use(['tree','util'],function () {
+            console.log(data);
+
+            layui.use(['tree','util','form'],function () {
                 var tree = layui.tree
                     ,layer = layui.layer
-                    ,util = layui.util;
+                    ,util = layui.util
+                    ,form = layui.form;;
                 tree.render({
                     elem: '#test12'
                     ,data: data
@@ -164,7 +189,7 @@
             });
         };
 
-        function updateAuthority(rolesid,index){
+        function updateAuthority(roleId,index){
             console.log("点击提交")
             var layer = layui.layer;
             layui.use(['tree','util'], function () {
@@ -175,10 +200,10 @@
                 var path = $('#path').val();
 
                 $.ajax({
-                    url: path+"/AuthorityController/updateAdminTree",
+                    url: path+"/AdminController/updateMenuTree",
                     async: true,
                     type: 'POST',
-                    data:{'checkData':checkData,'rolesid':rolesid},
+                    data:{'checkData':checkData,'roleId':roleId},
                     success: function (data) {
                         if (data=="success") {
                             layer.close(index);
@@ -189,7 +214,7 @@
                     },
                     error: function () {
                         layer.msg('网络繁忙',{icon:2});
-                        window.parent.location.href=path+"/PathJmpController/path/BackLogin";
+                        window.parent.location.href=path+"/url/login";
                     }
                 });
             });

@@ -64,4 +64,15 @@ public class TbMenu {
     this.meniTarget = meniTarget;
   }
 
+  @Override
+  public String toString() {
+    return "TbMenu{" +
+            "menuId=" + menuId +
+            ", menuName='" + menuName + '\'' +
+            ", menuUrl='" + menuUrl + '\'' +
+            ", menuPid=" + menuPid +
+            ", menuIcon='" + menuIcon + '\'' +
+            ", meniTarget='" + meniTarget + '\'' +
+            '}';
+  }
 }

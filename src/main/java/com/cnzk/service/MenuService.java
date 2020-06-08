@@ -11,6 +11,8 @@ import java.util.Map;
  * @author LQ
  */
 public interface MenuService {
-
-    Map<String, Object> menu(Integer roleId);
+//    登录菜单
+    Map<String, Object> menu();
+//    修改权限显示所有菜单
+    List<MenuVo> menuAuthority(Integer roleId);
 }

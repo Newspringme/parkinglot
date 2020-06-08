@@ -1,11 +1,12 @@
 package com.cnzk.controller;
 
 import com.alibaba.fastjson.JSON;
-import com.cnzk.pojo.Admin;
-import com.cnzk.pojo.LayuiData;
-import com.cnzk.pojo.TreeData;
+
+import com.cnzk.pojo.*;
 import com.cnzk.service.AdminService;
-import com.cnzk.service.AuthorityService;
+
+import com.cnzk.service.MenuService;
+import com.cnzk.service.RoleServeice;
 import com.cnzk.utils.ResponseUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -13,7 +14,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
 import javax.imageio.ImageIO;
@@ -37,8 +37,10 @@ public class AdminController
 {
 	@Autowired
 	private AdminService adminService;
-
-//	@Resource
+	@Resource
+	private MenuService menuService;
+	@Resource
+	private RoleServeice roleServeice;
 
 
 	private char[] codeSequence = { 'A', '1','B', 'C', '2','D','3', 'E','4', 'F', '5','G','6', 'H', '7','I', '8','J',
@@ -52,10 +54,10 @@ public class AdminController
 		System.out.println("===============================管理员登陆=============================");
 		String vcode = session.getAttribute("vcode").toString();//获取session上的验证码
 		System.out.println("验证码："+vcode);
-		if(vcode.equalsIgnoreCase(param.get("adminvcode").toString())){
+//		if(vcode.equalsIgnoreCase(param.get("adminvcode").toString())){
 			return adminService.adminlogin(param,session);//获取service层返回的信息
-		}
-		return "验证码错误";
+//		}
+//		return "验证码错误";
 	}
 	//验证码
 	/**
@@ -123,8 +125,7 @@ public class AdminController
 		return new Color(r,g,b);
 	}
 
-	@Resource
-	private AuthorityService authorityService;
+
 
 	@ResponseBody
 	@RequestMapping("queryAdmin")
@@ -134,9 +135,12 @@ public class AdminController
 		if(msg!=null&&!"".equals(msg.trim())){
 			admin= JSON.parseObject(msg,Admin.class);
 		}
-		int startPage=Integer.parseInt(page);//获取页码;
-		int pageSize=Integer.parseInt(limit);//每页数量
-		int start = (startPage-1)*pageSize;//计算出起始查询位置
+		//获取页码;
+		int startPage=Integer.parseInt(page);
+		//每页数量
+		int pageSize=Integer.parseInt(limit);
+		//计算出起始查询位置
+		int start = (startPage-1)*pageSize;
 		LayuiData layuiData=adminService.queryAdmin(admin,start,pageSize);
 		System.out.println("layuiData = " + JSON.toJSONString(layuiData));
 		return layuiData;
@@ -146,12 +150,8 @@ public class AdminController
 	//查角色列表
 	@ResponseBody
 	@RequestMapping("queryRolesList")
-	public Object queryRolesList(String page,String limit,String roleName){
-
-		Admin admin = new Admin();
-		admin.setAdminName("admin");
-		admin.setRoleId(1);
-		System.out.println("findRolesList-admin="+admin.toString());
+	public Object queryRolesList(String page,String limit,String roleName,HttpServletRequest request, HttpServletResponse response){
+		Admin admin = (Admin) request.getSession().getAttribute("tbAdmin");
 		Integer roleId = admin.getRoleId();
 
 		//存带有值得条件
@@ -182,25 +182,37 @@ public class AdminController
 		}
 
 		condition.put("roleName",roleName);
-		System.out.println("+++++++++"+condition);
 
-		LayuiData layuiData=authorityService.queryRolesList(condition);
+		LayuiData layuiData=roleServeice.queryRolesList(condition);
 		System.out.println("layuiData = " + JSON.toJSONString(layuiData));
 		return layuiData;
 	}
 
-//    //  查权限
-//    @RequestMapping("/queryMenuTree")
-//    @ResponseBody
-//    public void queryMenuTree(HttpServletRequest request, HttpServletResponse response){
-//        Integer rolesid = Integer.valueOf(request.getParameter("rolesid"));
-//        System.out.println(rolesid);
-//        List<TreeData> treeDataList = adminService.findTree(rolesid);
-//        if(treeDataList.size() != 0){
-//            ResponseUtils.outJson(response, treeDataList);//这种也可以
-//        }else{
-//            ResponseUtils.outHtml(response,"error");
-//        }
-//    }
+    //  查权限
+    @RequestMapping("/queryMenuTree")
+    @ResponseBody
+    public void queryMenuTree(TbRole tbRole,HttpServletRequest request, HttpServletResponse response){
+		List<MenuVo> treeDataList= menuService.menuAuthority(Integer.valueOf(tbRole.getRoleId()+""));
+		if(treeDataList.size() != 0){
+			ResponseUtils.outJson(response, treeDataList);
+		}else{
+			ResponseUtils.outHtml(response,"error");
+		}
+    }
+
+	//  修改权限
+	@RequestMapping("/updateMenuTree")
+	@Transactional
+	@ResponseBody
+	public void updateMenuTree(HttpServletRequest request, HttpServletResponse response){
+		Integer rolesid = Integer.valueOf(request.getParameter("rolesid"));
+		String treeStr = request.getParameter("checkData");
+		Integer row = roleServeice.updateMenuTree(treeStr,rolesid);
+		if (row != 0) {
+			ResponseUtils.outHtml(response,"success");
+		} else {
+			ResponseUtils.outHtml(response,"error");
+		}
+	}
 
 }

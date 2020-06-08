@@ -18,11 +18,11 @@ public class MenuServiceImpl implements MenuService {
     private MenuMapper menuMapper;
 
     @Override
-    public Map<String, Object> menu(Integer roleId) {
+    public Map<String, Object> menu() {
         Map<String, Object> map = new HashMap<>(16);
         Map<String,Object> home = new HashMap<>(16);
         Map<String,Object> logo = new HashMap<>(16);
-        List<TbMenu> menuList = menuMapper.queryRoleAllMenu(roleId);
+        List<TbMenu> menuList = menuMapper.queryAllMenu();
         List<MenuVo> menuInfo = new ArrayList<>();
         for (TbMenu e : menuList) {
             MenuVo menuVO = new MenuVo();
@@ -43,5 +43,30 @@ public class MenuServiceImpl implements MenuService {
         map.put("logoInfo", "{title: 'RUGE ADMIN',image: '/static/img/logo.png'}");
         System.out.println(JSON.toJSON(map));
         return map;
+    }
+
+    @Override
+    public List<MenuVo> menuAuthority(Integer roleId) {
+        List<TbMenu> menuList1 = menuMapper.queryAllMenu();
+        List<TbMenu> menuList = menuMapper.queryRoleAllMenu(roleId);
+        List<MenuVo> menuInfo = new ArrayList<>();
+        for (TbMenu e : menuList1) {
+            MenuVo menuVO = new MenuVo();
+            menuVO.setId(e.getMenuId());
+            menuVO.setPid(e.getMenuPid());
+            menuVO.setHref(e.getMenuUrl());
+            menuVO.setTitle(e.getMenuName());
+            menuVO.setIcon(e.getMenuIcon());
+            menuVO.setTarget(e.getMeniTarget());
+            menuVO.setSpread(true);
+            for (int i=0;i<menuList.size();i++){
+                if (e.getMenuId()==menuList.get(i).getMenuId()){
+                    menuVO.setChecked(true);
+                    break;
+                }
+            }
+            menuInfo.add(menuVO);
+        }
+        return TreeUtil.toAuthoryTree(menuInfo, 0L);
     }
 }
