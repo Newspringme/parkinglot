@@ -100,7 +100,7 @@
         <div class="layui-form-item">
             <label class="layui-form-label"style="margin-left: 120px;">联系方式：</label>
             <div class="layui-input-block"style="float: left; margin-left: 20px;width: 200px;">
-                <input type="password" name="adminTel"  lay-verify="adminPass"
+                <input type="password" name="adminTel"  lay-verify="adminTel"
                        autocomplete="off" class="layui-input surePass">
             </div>
         </div>
@@ -129,7 +129,7 @@
         <div class="layui-form-item">
             <label class="layui-form-label" style="margin-left: 120px;">账号名称：</label>
             <div class="layui-input-block" style="float: left; margin-left: 20px;width: 200px;">
-                <input  type="text" name="adminName" lay-verify="required" lay-reqtext="账号不能为空"
+                <input  type="text" name="adminName" lay-verify="adminName" lay-reqtext="账号不能为空"
                         autocomplete="off" class="layui-input adminName">
             </div>
         </div>
@@ -139,7 +139,7 @@
         <div class="layui-form-item">
             <label class="layui-form-label" style="margin-left: 120px;">联系方式：</label>
             <div class="layui-input-block" style="float: left; margin-left: 20px;width: 200px;">
-                <input  type="text" name="adminTel" lay-verify="required" lay-reqtext="联系方式不能为空"
+                <input  type="text" name="adminTel" lay-verify="adminTel" lay-reqtext="联系方式不能为空"
                         autocomplete="off" class="layui-input adminTel">
             </div>
         </div>
@@ -161,28 +161,28 @@
         <div class="layui-form-item">
             <label class="layui-form-label" style="margin-left: 100px;">账号名称：</label>
             <div class="layui-input-block" style="float: left; margin-left: 20px;width: 200px;">
-                <input  type="text" name="adminName" lay-verify="required"
+                <input  type="text" name="adminName"
                         autocomplete="off" class="layui-input" disabled="disabled">
             </div>
         </div>
         <div class="layui-form-item">
             <label class="layui-form-label" style="margin-left: 100px;">性别：</label>
             <div class="layui-input-block" style="float: left; margin-left: 20px;width: 200px;">
-                <input  type="text" name="adminSex" lay-verify="required"
+                <input  type="text" name="adminSex"
                         autocomplete="off" class="layui-input" disabled="disabled">
             </div>
         </div>
         <div class="layui-form-item">
             <label class="layui-form-label" style="margin-left: 100px;">注册时间：</label>
             <div class="layui-input-block" style="float: left; margin-left: 20px;width: 200px;">
-                <input  type="text" name="regTime" lay-verify="required"
+                <input  type="text" name="regTime"
                         autocomplete="off" class="layui-input" disabled="disabled">
             </div>
         </div>
         <div class="layui-form-item">
             <label class="layui-form-label" style="margin-left: 100px;">状态：</label>
             <div class="layui-input-block" style="float: left; margin-left: 20px;width: 200px;">
-                <input  type="text" name="adminState" lay-verify="required"
+                <input  type="text" name="adminState"
                         autocomplete="off" class="layui-input" disabled="disabled">
             </div>
         </div>
