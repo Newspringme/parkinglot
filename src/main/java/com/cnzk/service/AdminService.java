@@ -5,6 +5,7 @@ import com.cnzk.pojo.LayuiData;
 import org.apache.ibatis.annotations.Param;
 
 import javax.servlet.http.HttpSession;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -20,5 +21,10 @@ public interface AdminService
 	//	查询管理员，包括带条件,分页,记录数
 	LayuiData queryAdmin(Admin admin, int start, int pageSize);
 
+	//查计费规则列表
+	LayuiData queryRatesList(HashMap<String, Object> condition);
+
+	//查月缴产品列表
+	LayuiData queryComboList(HashMap<String, Object> condition);
 
 }

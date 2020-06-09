@@ -1,8 +1,12 @@
 package com.cnzk.service;
 
 import com.cnzk.mapper.AdminMapper;
+import com.cnzk.mapper.ComboMapper;
+import com.cnzk.mapper.RatesMapper;
 import com.cnzk.pojo.Admin;
 import com.cnzk.pojo.LayuiData;
+import com.cnzk.pojo.TbCombo;
+import com.cnzk.pojo.TbRates;
 import com.cnzk.utils.MD5;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,6 +26,10 @@ public class AdminServiceImpl implements AdminService
 {
 	@Resource
 	private AdminMapper adminMapper;
+	@Resource
+	private RatesMapper ratesMapper;
+	@Resource
+	private ComboMapper comboMapper;
     //登陆
 	/**
 	 * 将登陆账号密码拿去数据库验证
@@ -60,6 +68,31 @@ public class AdminServiceImpl implements AdminService
 		layuiData.setCode(0);
 		layuiData.setCount(count);
 		layuiData.setData(list);
+		return layuiData;
+	}
+
+
+	//查计费规则列表
+	@Override
+	public LayuiData queryRatesList(HashMap<String, Object> condition) {
+		List<TbRates> tbRoleList = ratesMapper.queryRatesList(condition);
+		int count = ratesMapper.queryCount(condition);
+		LayuiData layuiData=new LayuiData();
+		layuiData.setCode(0);
+		layuiData.setCount(count);
+		layuiData.setData(tbRoleList);
+		return layuiData;
+	}
+
+	//查月缴产品列表
+	@Override
+	public LayuiData queryComboList(HashMap<String, Object> condition) {
+		List<TbCombo> tbRoleList = comboMapper.queryComboList(condition);
+		int count = comboMapper.queryCount(condition);
+		LayuiData layuiData=new LayuiData();
+		layuiData.setCode(0);
+		layuiData.setCount(count);
+		layuiData.setData(tbRoleList);
 		return layuiData;
 	}
 }

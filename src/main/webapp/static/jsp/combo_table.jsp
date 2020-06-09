@@ -16,7 +16,7 @@
     <meta name="renderer" content="webkit">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <title>权限管理</title>
+    <title>月缴产品管理</title>
     <link rel="stylesheet" href="<%=path%>/static/lib/layui-v2.5.5/css/layui.css" media="all">
     <link rel="stylesheet" href="<%=path%>/static/css/public.css" media="all">
 
@@ -33,17 +33,24 @@
     <input type="hidden" id="path" value="<%=path%>">
     <div class="layuimini-main">
 
-        <table class="layui-hide" id="authorityMsgTbl" lay-filter="currentTableFilter"></table>
+        <script type="text/html" id="toolbarDemo">
+            <div class="layui-btn-container">
+                <button class="layui-btn layui-btn-normal layui-btn-sm data-add-btn" lay-event="add"> 添加 </button>
+            </div>
+        </script>
+
+        <table class="layui-hide" id="comboMsgTbl" lay-filter="currentTableFilter"></table>
+
+        <script type="text/html" id="currentTableBar">
+            <a class="layui-btn layui-btn-normal layui-btn-xs data-count-edit" lay-event="edit">编辑</a>
+            <a class="layui-btn layui-btn-xs layui-btn-danger data-count-delete" lay-event="delete">删除</a>
+        </script>
 
         <%--    点击按钮弹出层的form--%>
-        <form class = "layui-form" action="" style="display: none" id="changeAForm">
-            <div id="test12" class="demo-tree-more"></div>
-        </form>
+<%--        <form class = "layui-form" action="" style="display: none" id="changeAForm">--%>
+<%--            <div id="test12" class="demo-tree-more"></div>--%>
+<%--        </form>--%>
 
-        <%--表格中按钮的模板--%>
-        <script type="text/html" id="currentTableBar">
-            <a class="layui-btn layui-btn-normal layui-btn-xs data-count-edit" lay-event="changeAuthority">修改权限</a>
-        </script>
     </div>
 </div>
 
@@ -60,16 +67,18 @@
         var path = $('#path').val();
 
         table.render({
-            elem: '#authorityMsgTbl',   //表格的id
-            url: path+'/AdminController/queryRolesList',
+            elem: '#comboMsgTbl',   //表格的id
+            url: path+'/AdminController/queryComboList',
+            toolbar: '#toolbarDemo',
             defaultToolbar: ['filter', 'exports', 'print', {
                  title: '提示',
                  layEvent: 'LAYTABLE_TIPS',
                  icon: 'layui-icon-tips'
             }],
             cols: [[
-                 {field: 'roleId', width: 150, title: 'ID', sort: true},
-                 {field: 'roleName', maxwidth: 765,minWidth: 100, title: '用户名'},
+                 {field: 'comboId', width: 150, title: 'ID', sort: true},
+                 {field: 'comboName', maxwidth: 765,minWidth: 100, title: '类别'},
+                 {field: 'comboValue', maxwidth: 765,minWidth: 100, title: '金额'},
                  {title: '操作', minWidth: 150, toolbar: '#currentTableBar', align: "center"}
                 ]],
             limits: [10, 15, 20, 25, 50, 100],
@@ -79,65 +88,65 @@
         });
 
 
-        //监听事件
-        table.on('tool(currentTableFilter)', function(obj){
-            var data = obj.data;
-            //obj点击那行的所有字段属性
-            var tr = obj.tr; //获得当前行 tr 的DOM对象
-            var roleId = tr.children("td").eq(0).text();
-            console.log(roleId);
-            if (obj.event === 'changeAuthority')
-            {
-                var layer = layui.layer;
-                layer.open({
-                    type: 1,
-                    title: '权限菜单分配',
-                    content: $('#changeAForm'),
-                    offset: '50px',
-                    anim: 1,
-                    isOutAnim: true,
-                    resize: false,
-                    area: ['50%', '80%'],
-                    closeBtn: 2,//弹出层的类型
-                    shade: 0.6,
-                    move: false,
-                    btn: ['提交', '取消'],
-                    btn1: function (index, layero) {
-                        updateAuthority(roleId ,index);
-                        return false;
-                    },
-                    btn2: function (index, layero) {
-                        layer.close(index);
-                        return false;
-                    },
-                    cancel: function (index, layero) {
-                        layer.close(index);
-                        return false;
-                    }
-                });
-                var path = $('#path').val();
-                $.ajax({
-                    url: path+"/AdminController/queryMenuTree",
-                    async: true,
-                    type: 'POST',
-                    data:{
-                        'roleId':data.roleId
-                    },
-                    dataType:'json',
-                    success: function (msg) {
-                        if (data=="error") {
-                            layer.msg('网络繁忙');
-                        }else {
-                            showTree(msg);
-                        }
-                    },
-                    error: function () {
-                        layer.msg('网络繁忙');
-                        window.parent.location.href=path+"/url/login";
-                    }
-                });
-            }
-        });
+        // //监听事件
+        // table.on('tool(currentTableFilter)', function(obj){
+        //     var data = obj.data;
+        //     //obj点击那行的所有字段属性
+        //     var tr = obj.tr; //获得当前行 tr 的DOM对象
+        //     var roleId = tr.children("td").eq(0).text();
+        //     console.log(roleId);
+        //     if (obj.event === 'changeAuthority')
+        //     {
+        //         var layer = layui.layer;
+        //         layer.open({
+        //             type: 1,
+        //             title: '权限菜单分配',
+        //             content: $('#changeAForm'),
+        //             offset: '50px',
+        //             anim: 1,
+        //             isOutAnim: true,
+        //             resize: false,
+        //             area: ['50%', '80%'],
+        //             closeBtn: 2,//弹出层的类型
+        //             shade: 0.6,
+        //             move: false,
+        //             btn: ['提交', '取消'],
+        //             btn1: function (index, layero) {
+        //                 updateAuthority(roleId ,index);
+        //                 return false;
+        //             },
+        //             btn2: function (index, layero) {
+        //                 layer.close(index);
+        //                 return false;
+        //             },
+        //             cancel: function (index, layero) {
+        //                 layer.close(index);
+        //                 return false;
+        //             }
+        //         });
+        //         var path = $('#path').val();
+        //         $.ajax({
+        //             url: path+"/AdminController/queryMenuTree",
+        //             async: true,
+        //             type: 'POST',
+        //             data:{
+        //                 'roleId':data.roleId
+        //             },
+        //             dataType:'json',
+        //             success: function (msg) {
+        //                 if (data=="error") {
+        //                     layer.msg('网络繁忙');
+        //                 }else {
+        //                     showTree(msg);
+        //                 }
+        //             },
+        //             error: function () {
+        //                 layer.msg('网络繁忙');
+        //                 window.parent.location.href=path+"/url/login";
+        //             }
+        //         });
+        //     }
+        // });
 
         function showTree(data) {
             console.log(data);

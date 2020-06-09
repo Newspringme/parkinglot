@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--命名空间，区别不同xml中，出现相同的id-->
+<mapper namespace="com.cnzk.mapper.RatesMapper">
+    <!--规则集合-->
+    <select id="queryRatesList" parameterType="java.util.Map" resultType="TbRates">
+        select * from tb_rates limit #{start},#{pageSize};
+    </select>
+
+    <!--规则集合数量-->
+    <select id="queryCount" parameterType="java.util.Map" resultType="java.lang.Integer">
+        select COUNT(*) from tb_rates;
+    </select>
+</mapper>

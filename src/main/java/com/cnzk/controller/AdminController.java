@@ -44,6 +44,7 @@ public class AdminController
 	private RoleServeice roleServeice;
 
 
+
 	private char[] codeSequence = { 'A', '1','B', 'C', '2','D','3', 'E','4', 'F', '5','G','6', 'H', '7','I', '8','J',
 			'K',   '9' ,'L', '1','M',  '2','N',  'P', '3', 'Q', '4', 'R', 'S', 'T', 'U', 'V', 'W',
 			'X', 'Y', 'Z'};
@@ -151,38 +152,20 @@ public class AdminController
 	//查角色列表
 	@ResponseBody
 	@RequestMapping("queryRolesList")
-	public Object queryRolesList(String page,String limit,String roleName,HttpServletRequest request, HttpServletResponse response){
+	public Object queryRolesList(String page,String limit,HttpServletRequest request, HttpServletResponse response){
 		Admin admin = (Admin) request.getSession().getAttribute("tbAdmin");
 		Integer roleId = admin.getRoleId();
-
+		//获取页码
+		int startPage = Integer.parseInt(page);
+		//每页数量
+		int pageSize = Integer.valueOf(limit);;
+		//计算出起始查询位置
+		int start = (startPage - 1) * pageSize;
 		//存带有值得条件
 		HashMap<String, Object> condition = new HashMap<>();
 		condition.put("roleId",roleId);
-
-		//获取页码
-		int startPage;
-		//每页数量
-		int pageSize;
-		//计算出起始查询位置
-		int start;
-
-		if (null != limit && !"".equals(limit.trim()) && !"0".equals(limit)) {
-			pageSize = Integer.valueOf(limit);
-			condition.put("pageSize", pageSize);
-		} else {
-			pageSize = 10;
-			condition.put("pageSize", pageSize);
-		}
-		if (null != page && !"".equals(page.trim()) && !"0".equals(page)) {
-			startPage=Integer.parseInt(page);
-			start = (startPage - 1) * pageSize;
-			condition.put("start", start);
-		} else {
-			start = 0;
-			condition.put("start", start);
-		}
-
-		condition.put("roleName",roleName);
+		condition.put("pageSize",pageSize);
+		condition.put("start",start);
 
 		LayuiData layuiData=roleServeice.queryRolesList(condition);
 		System.out.println("layuiData = " + JSON.toJSONString(layuiData));
@@ -215,6 +198,48 @@ public class AdminController
 		} else {
 			ResponseUtils.outHtml(response,"error");
 		}
+	}
+
+	//查计费规则列表
+	@ResponseBody
+	@RequestMapping("queryRatesList")
+	public Object queryRatesList(String page,String limit){
+		System.out.println("--------queryRatesList-------");
+		//获取页码
+		int startPage = Integer.parseInt(page);
+		//每页数量
+		int pageSize = Integer.valueOf(limit);;
+		//计算出起始查询位置
+		int start = (startPage - 1) * pageSize;
+		//存带有值得条件
+		HashMap<String, Object> condition = new HashMap<>();
+		condition.put("pageSize",pageSize);
+		condition.put("start",start);
+
+		LayuiData layuiData=adminService.queryRatesList(condition);
+		System.out.println("layuiData = " + JSON.toJSONString(layuiData));
+		return layuiData;
+	}
+
+	//查月缴产品列表
+	@ResponseBody
+	@RequestMapping("queryComboList")
+	public Object queryComboList(String page,String limit){
+		System.out.println("--------queryComboList-------");
+		//获取页码
+		int startPage = Integer.parseInt(page);
+		//每页数量
+		int pageSize = Integer.valueOf(limit);;
+		//计算出起始查询位置
+		int start = (startPage - 1) * pageSize;
+		//存带有值得条件
+		HashMap<String, Object> condition = new HashMap<>();
+		condition.put("pageSize",pageSize);
+		condition.put("start",start);
+
+		LayuiData layuiData=adminService.queryComboList(condition);
+		System.out.println("layuiData = " + JSON.toJSONString(layuiData));
+		return layuiData;
 	}
 
 }
