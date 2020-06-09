@@ -7,6 +7,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class ParkinglotApplication
 {
 
+	//dfdf
 	public static void main(String[] args)
 	{
 		SpringApplication.run(ParkinglotApplication.class, args);
