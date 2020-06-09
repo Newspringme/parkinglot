@@ -115,9 +115,14 @@ public class ChargeController {
     @ResponseBody
     @RequestMapping("resetPass")
     @Log(operationThing = "重置收费员密码",operationType = "更新")
-    public Object insertNewCharge(HttpServletRequest request){
+    public Object resetPass(HttpServletRequest request){
         System.out.println("重置密码");
-        int i = chargeService.resetPass(request.getParameter("adminName"));
+        Charge charge = new Charge();
+        charge.setAdminName(request.getParameter("adminName"));
+        charge.setAdminPass(MD5.machining("12345678"));
+        System.out.println(charge.getAdminPass());
+        int i = chargeService.resetPass(charge);
+        System.out.println(i);
         if (i>0){
             return "true";
         }else{

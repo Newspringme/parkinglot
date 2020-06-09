@@ -199,7 +199,7 @@
     <br>
     <div style="margin-top: 50px; width:300px;margin-left: -80px">
         <div class="layui-progress">
-            <div class="layui-progress-bar" lay-percent="70%"></div>
+            <div class="layui-progress-bar" id="prograss-bar"></div>
         </div>
     </div>
 </div>
@@ -222,7 +222,7 @@
         table.render({
             id: 'chargeTable'
             ,elem: '#chargeTable'
-            , url: '${pageContext.request.contextPath}/getChargeList'
+            , url: '${pageContext.request.contextPath}/ChargeController/getChargeList'
             , title: '收费员数据表'
             , limit: 5//每页多少条数据
             , limits: [5,10,20,40,80,100]
@@ -306,7 +306,7 @@
                     });
                 }else {
                     var msg=JSON.stringify(data.field);
-                    $.post("${pageContext.request.contextPath}/insertNewCharge?msg="+encodeURI(msg),function (msg) {
+                    $.post("${pageContext.request.contextPath}/ChargeController/insertNewCharge?msg="+encodeURI(msg),function (msg) {
                         if (msg=='true'){
                             layer.alert('收费员添加成功',{icon:6},function () {
                                 location.reload(true);
@@ -340,7 +340,7 @@
             form.on('submit(formUpdateAdmin)', function(data){
                 var msg=JSON.stringify(data.field);
                 alert(msg);
-                $.post("${pageContext.request.contextPath}/updateCharge?msg="+encodeURI(msg),function (msg) {
+                $.post("${pageContext.request.contextPath}/ChargeController/updateCharge?msg="+encodeURI(msg),function (msg) {
                     if (msg==="true"){
                         layer.alert('修改成功',{icon:6},function (index) {
                             window.location.reload(true);
@@ -390,7 +390,7 @@
                         //执行实例
                         var uploadInst = upload.render({
                             elem: '#upload' //绑定元素
-                            ,url: '${pageContext.request.contextPath}/uploadHeadImg' //上传接口
+                            ,url: '${pageContext.request.contextPath}/ChargeController/uploadHeadImg' //上传接口
                             ,data:{adminId:obj}
                             ,done: function(res){
                                 layer.alert(res);
@@ -402,7 +402,7 @@
                             ,size: 5120 //限制文件大小，单位 KB
                             ,progress: function(n, elem){
                                 var percent = n + '%';//获取进度百分比
-                                element.progress('.layui-progress-bar', percent); //可配合 layui 进度条元素使用
+                                element.progress('progress-bar', percent); //可配合 layui 进度条元素使用
                                 //以下系 layui 2.5.6 新增
                                 console.log(elem); //得到当前触发的元素 DOM 对象。可通过该元素定义的属性值匹配到对应的进度条。
                             }
@@ -423,7 +423,7 @@
                     msg:msg//条件
                 },
                 method:'post',
-                url:'${pageContext.request.contextPath}/getChargeList'
+                url:'${pageContext.request.contextPath}/ChargeController/getChargeList'
 
             })
         });
@@ -446,7 +446,7 @@
                 }
                 layer.confirm('是否'+newState+'？',{icon:7},function (index) {
                     layer.close(index);
-                    $.post("${pageContext.request.contextPath}/updateState?adminName="+data.adminName+"&adminState="+newState,null,function (msg) {
+                    $.post("${pageContext.request.contextPath}/ChargeController/updateState?adminName="+data.adminName+"&adminState="+newState,null,function (msg) {
                         msg=msg+'';
                         if (msg == 'true') {
                             layer.alert('更新成功',{icon:6},function () {
@@ -461,7 +461,7 @@
             else if (layEvent==='logOff'){//离职
                 layer.confirm('是否离职？',null,function (index) {
                     layer.close(index);
-                    $.post("${pageContext.request.contextPath}/logOff?adminName="+data.adminName,null,function (msg) {
+                    $.post("${pageContext.request.contextPath}/ChargeController/logOff?adminName="+data.adminName,null,function (msg) {
                         if (msg==='true'){
                             layer.alert('离职成功',{icon:6},function () {
                                 location.reload(true);
@@ -475,7 +475,7 @@
             else if (layEvent==='resetPass'){
                 layer.confirm('是否重置密码？',null,function (index) {
                     layer.close(index);
-                    $.post("${pageContext.request.contextPath}/resetPass?adminName="+data.adminName,null,function (msg) {
+                    $.post("${pageContext.request.contextPath}/ChargeController/resetPass?adminName="+data.adminName,null,function (msg) {
                         if (msg==='true'){
                             layer.alert('密码重置成功',{icon:6});
                         }else{
@@ -512,6 +512,11 @@
                 /^[\S]{6,12}$/
                 ,'密码必须6到12位，且不能出现空格'
             ]
+            ,adminTel: function (value) {
+                if (value.lenth != 11) {
+                    return '请输入11位手机号码';
+                }
+            }
         });
     });
 </script>
