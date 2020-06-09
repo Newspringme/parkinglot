@@ -36,11 +36,11 @@ public class MenuServiceImpl implements MenuService {
         }
         map.put("menuInfo", TreeUtil.toTree(menuInfo, 0L));
         home.put("title","首页");
-        home.put("href","/page/welcome-1");//控制器路由,自行定义
+        home.put("href","/parkinglot/static/jsp/welcome-3.html");//控制器路由,自行定义
         logo.put("title","后台管理系统");
-        logo.put("image","/static/img/back.jpg");//静态资源文件路径,可使用默认的logo.png
-        map.put("homeInfo", "{title: '首页',href: '/ruge-web-admin/page/welcome.html'}}");
-        map.put("logoInfo", "{title: 'RUGE ADMIN',image: '/static/img/logo.png'}");
+        logo.put("image","/static/img/logo.png");//静态资源文件路径,可使用默认的logo.png
+        map.put("homeInfo", home);
+        map.put("logoInfo", logo);
         System.out.println(JSON.toJSON(map));
         return map;
     }

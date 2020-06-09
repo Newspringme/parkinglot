@@ -88,7 +88,7 @@
                     shade: 0.2,
                     maxmin:true,
                     shadeClose: true,
-                    area: ['100%', '100%'],
+                    area: ['50%', '50%'],
                     content: '/parkinglot/static/jsp/table/role-add.jsp',
                 });
                 $(window).on("resize", function () {
