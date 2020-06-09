@@ -4,9 +4,13 @@ package com.cnzk.service;
 import com.cnzk.pojo.Charge;
 import com.cnzk.pojo.LayuiData;
 
+import javax.servlet.http.HttpSession;
+import java.util.Map;
+
 
 public interface ChargeService {
-
+    //	收费人员登录
+    String chargelogin(Map<String,Object> map, HttpSession session);
     //	收费员，包括带条件,分页,记录数
     LayuiData queryCharge(Charge charge, int start, int pageSize);
 

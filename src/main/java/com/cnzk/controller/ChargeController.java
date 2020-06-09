@@ -9,6 +9,7 @@ import com.cnzk.utils.MD5;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -18,13 +19,27 @@ import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.UUID;
+import javax.servlet.http.HttpSession;
+import java.util.Map;
 
 @Controller
-
+@RequestMapping("/ChargeController")
 public class ChargeController {
     @Autowired
     private ChargeService chargeService;
 
+    @ResponseBody
+    @RequestMapping(value = "/chargelogin",produces = { "application/json;charset=UTF-8"})
+    public String ChargeLogin(@RequestParam Map<String,Object> param, HttpSession session)  {
+        System.out.println("===============================收费人员登陆=============================");
+        String vcode = session.getAttribute("vcode").toString();//获取session上的验证码
+        System.out.println("验证码："+vcode);
+        System.out.println(param);
+        if(vcode.equalsIgnoreCase(param.get("chargevcode").toString())){
+            return chargeService.chargelogin(param,session);//获取service层返回的信息
+        }
+        return "验证码错误";
+    }
     @ResponseBody
     @RequestMapping("getChargeList")
     public Object queryCharge(String msg,String page,String limit){
@@ -100,7 +115,7 @@ public class ChargeController {
     @ResponseBody
     @RequestMapping("resetPass")
     @Log(operationThing = "重置收费员密码",operationType = "更新")
-    public Object resetPass(HttpServletRequest request){
+    public Object insertNewCharge(HttpServletRequest request){
         System.out.println("重置密码");
         int i = chargeService.resetPass(request.getParameter("adminName"));
         if (i>0){
@@ -108,63 +123,5 @@ public class ChargeController {
         }else{
             return "false";
         }
-    }
-
-    @ResponseBody
-    @RequestMapping(value = "/uploadHeadImg",produces = {"application/json;charset=UTF-8"})
-    @Log(operationThing = "上传收费员头像",operationType = "添加")
-    public Object upload(HttpServletRequest request, HttpServletResponse response, MultipartFile file, String fileName) throws Exception{
-        System.out.println("上传收费员头像");
-        System.out.println("adminId:"+request.getParameter("adminId"));
-        //获取文件名
-        String originalName = file.getOriginalFilename();
-        System.out.println("文件名："+originalName);
-        //扩展名
-        String prefix = originalName.substring(originalName.lastIndexOf(".") + 1);
-        //使用UUID+后缀名保存文件名，防止中文乱码问题
-        String uuid = UUID.randomUUID() + "";
-        String savePath = request.getSession().getServletContext().getRealPath("/static/img/head_upload");
-        //要保存的文件路径和名称
-        String projectPath = savePath + File.separator + uuid + "." + prefix;
-        System.out.println("文件名："+File.separator + uuid + "." + prefix);
-        System.out.println("要保存的文件路径和名称：" + projectPath);
-        File files = new File(projectPath);
-        //打印查看上传路径
-        System.out.println("文件保存路径："+ files.getParentFile());
-        file.transferTo(files); // 将接收的文件保存到指定文件中
-
-        LayuiData layuiData=new LayuiData();
-        layuiData.setCode(0);
-        layuiData.setMsg("上传成功");
-
-        Charge charge = new Charge();
-        charge.setAdminId(Integer.parseInt(request.getParameter("adminId")));
-        charge.setHeadImg("/static/img/head_upload"+File.separator + uuid + "." + prefix);
-        chargeService.uploadHeadImg(charge);
-
-        return JSON.toJSONString(layuiData);
-    }
-
-    @ResponseBody
-    @RequestMapping("updateCharge")
-    @Log(operationThing = "更新收费员信息",operationType = "更新")
-    public void updateCharge(HttpServletRequest request, HttpServletResponse response) throws Exception{
-        response.setCharacterEncoding("UTF-8");
-        response.setContentType("text/html;charset=UTF-8");
-        System.out.println("更新收费员信息");
-
-        Charge charge = JSON.parseObject(request.getParameter("msg"),Charge.class);
-
-        int i = chargeService.updateCharge(charge);
-
-        if (i!=1){
-            response.getWriter().write("false");
-        }else{
-            response.getWriter().write("true");
-        }
-
-
-
-
     }
 }

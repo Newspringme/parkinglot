@@ -17,9 +17,9 @@
 <%--		<script src="${pageContext.request.contextPath}/js/jquery-3.4.1.js" charset="utf-8"></script>--%>
 <%--		<script src="${pageContext.request.contextPath}/js/packaging.js" charset="utf-8"></script>--%>
 		<script src="${pageContext.request.contextPath}/static/layui/layui.js" charset="utf-8"></script>
-<%--		<link rel="stylesheet" href="${pageContext.request.contextPath}/static/cropper/cropper.css">--%>
-<%--		<script src="${pageContext.request.contextPath}/static/cropper/cropper.js"></script>--%>
-<%--		<script src="${pageContext.request.contextPath}/static/cropper/croppers.js"></script>--%>
+		<link rel="stylesheet" href="${pageContext.request.contextPath}/static/cropper/cropper.css">
+		<script src="${pageContext.request.contextPath}/static/cropper/cropper.js"></script>
+		<script src="${pageContext.request.contextPath}/static/cropper/croppers.js"></script>
 		<style>
 			.layui-table-cell .layui-form-checkbox[lay-skin=primary] {
 				top: 10px;
@@ -28,7 +28,7 @@
 		</style>
 	</head>
 	<body>
-<%--		<input type="hidden" class="path" value="${pageContext.request.contextPath}">--%>
+		<input type="hidden" class="path" value="${pageContext.request.contextPath}">
 		<!--搜索条件开始-->
 		<fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
 			<legend>搜索条件</legend>
@@ -155,13 +155,13 @@
 				</form>
 		</div>
 				<script type="text/javascript">
-					layui.use(['jquery','layer','form','table','laydate'],function () {
+					layui.use(['jquery','layer','form','table','laydate','croppers'],function () {
 						var $ = layui.jquery;
 						var layer = layui.layer;
 						var form = layui.form;
 						var table = layui.table;
 						var laydate=layui.laydate;
-						// var croppers=layui.croppers;
+						var croppers=layui.croppers;
 						//给开始时间和结束时间绑定时间选择器
 						laydate.render({
 							elem:'#startTime'
@@ -340,29 +340,29 @@
 							var tr = obj.tr; //获得当前行 tr 的 DOM 对象（如果有的话）
 							var loginId='${admin.adminId}';
 							if(layEvent == 'uploadImg'){ //上传头像
-								<%--layui.config({--%>
-								<%--	base: '${pageContext.request.contextPath}/static/cropper/' //layui自定义layui组件目录--%>
-								<%--}).use(['form','croppers'], function () {--%>
-								<%--	var $ = layui.jquery--%>
-								<%--		,form = layui.form--%>
-								<%--		,croppers = layui.croppers--%>
-								<%--		,layer= layui.layer;--%>
+								layui.config({
+									base: '${pageContext.request.contextPath}/static/cropper/' //layui自定义layui组件目录
+								}).use(['form','croppers'], function () {
+									var $ = layui.jquery
+										,form = layui.form
+										,croppers = layui.croppers
+										,layer= layui.layer;
 
-								<%--	// 创建一个头像上传组件--%>
-								<%--	croppers.render({--%>
-								<%--		elem: '#uploadImg'--%>
-								<%--		,saveW:150     //保存宽度--%>
-								<%--		,saveH:150--%>
-								<%--		,mark:1/1    //选取比例--%>
-								<%--		,area:'900px'  //弹窗宽度--%>
-								<%--		,url: "upload/uploadImg"  //图片上传接口返回和（layui 的upload 模块）返回的JOSN一样--%>
-								<%--		,done: function(url){ //上传完毕回调--%>
-								<%--			$("#inputimgurl").val(url);--%>
-								<%--			$("#srcimgurl").attr('src',url);--%>
-								<%--		}--%>
-								<%--	});--%>
+									// 创建一个头像上传组件
+									croppers.render({
+										elem: '#uploadImg'
+										,saveW:150     //保存宽度
+										,saveH:150
+										,mark:1/1    //选取比例
+										,area:'900px'  //弹窗宽度
+										,url: "upload/uploadImg"  //图片上传接口返回和（layui 的upload 模块）返回的JOSN一样
+										,done: function(url){ //上传完毕回调
+											$("#inputimgurl").val(url);
+											$("#srcimgurl").attr('src',url);
+										}
+									});
 
-								<%--});--%>
+								});
 
 							} else if(layEvent === 'edit'){ //编辑
 								openUpdateAdmin(obj);
