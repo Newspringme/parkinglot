@@ -11,6 +11,7 @@ import java.util.Map;
 public interface ChargeService {
     //	收费人员登录
     String chargelogin(Map<String,Object> map, HttpSession session);
+
     //	收费员，包括带条件,分页,记录数
     LayuiData queryCharge(Charge charge, int start, int pageSize);
 
@@ -27,7 +28,7 @@ public interface ChargeService {
     Integer logOff(String adminName);
 
     //重置密码
-    Integer resetPass(String adminName);
+    Integer resetPass(Charge charge);
 
     //上传头像
     Integer uploadHeadImg(Charge charge);

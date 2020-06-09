@@ -68,8 +68,8 @@ public class ChargeServiceImpl implements ChargeService {
     }
 
     @Override
-    public Integer resetPass(String adminName) {
-        return chargeMapper.resetPass(adminName);
+    public Integer resetPass(Charge charge) {
+        return chargeMapper.resetPass(charge);
     }
 
     @Override

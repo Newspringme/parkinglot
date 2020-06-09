@@ -13,6 +13,7 @@ public interface ChargeMapper {
 
     //	管理员登录
     Admin chargelogin(Map<String,Object> map);
+
     //查询收费员记录数
     Integer queryChargeCount(Charge charge);
 
@@ -32,7 +33,7 @@ public interface ChargeMapper {
     Integer logOff(String adminName);
 
     //重置密码
-    Integer resetPass(String adminName);
+    Integer resetPass(Charge charge);
 
     //上传头像
     Integer uploadHeadImg(Charge charge);
