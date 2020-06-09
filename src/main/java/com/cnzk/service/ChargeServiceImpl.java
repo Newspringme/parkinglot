@@ -49,4 +49,14 @@ public class ChargeServiceImpl implements ChargeService {
     public Integer resetPass(String adminName) {
         return chargeMapper.resetPass(adminName);
     }
+
+    @Override
+    public Integer uploadHeadImg(Charge charge) {
+        return chargeMapper.uploadHeadImg(charge);
+    }
+
+    @Override
+    public Integer updateCharge(Charge charge) {
+        return chargeMapper.updateCharge(charge);
+    }
 }

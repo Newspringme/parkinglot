@@ -7,6 +7,8 @@ public class TreeData {
     //节点唯一索引值，用于对指定节点进行各类操作 	String/Number 	任意唯一的字符或数字
     private Integer id;
 
+    private Integer pid;
+
     //节点标题 	String 	未命名
     private String title;
 
@@ -28,6 +30,14 @@ public class TreeData {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public Integer getPid() {
+        return pid;
+    }
+
+    public void setPid(Integer pid) {
+        this.pid = pid;
     }
 
     public String getTitle() {
@@ -67,10 +77,11 @@ public class TreeData {
     public String toString() {
         return "TreeData{" +
                 "id=" + id +
+                ", pid=" + pid +
                 ", title='" + title + '\'' +
-                ", children=" + children +
                 ", spread=" + spread +
                 ", checked=" + checked +
+                ", children=" + children +
                 '}';
     }
 }

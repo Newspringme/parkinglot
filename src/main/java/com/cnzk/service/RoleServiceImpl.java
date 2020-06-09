@@ -63,24 +63,26 @@ public class RoleServiceImpl implements RoleServeice{
     @Override
     public Integer updateMenuTree(String treeStr, Integer roleId) {
         Integer row = 0;
-//        Gson gson = new Gson();
-//        MenuVo[] treeData = gson.fromJson(treeStr, MenuVo[].class);
-//        System.out.println(treeData);
-//        //总的二级菜单
-//        List<TbMenu> menutblList = new ArrayList<>();
-//        for (int i=0;i<treeData.length;i++){
-//            for (int j=0;j<treeData[i].getChildren().size();j++){
-//                TbMenu tbMenu = new TbMenu();
-//                tbMenu.setMenuId(treeData[i].getChildren().get(j).getId());
-//                tbMenu.setRoleId(rolesid);
-//                menutblList.add(tbMenu);
-//            }
-//        }
-//        System.out.println("------------");
-//        System.out.println(menutblList.toString());
-//        System.out.println("------------");
-//        row += roleMapper.deleRolesMenu(rolesid);
-//        row += roleMapper.addRolesMenu(menutblList);
+        Gson gson = new Gson();
+        TreeData[] treeData = gson.fromJson(treeStr, TreeData[].class);
+        System.out.println("++++++++++++++");
+        System.out.println(treeData.toString());
+        List<TbMenu> menutblList = new ArrayList<>();
+        for (int i=0;i<treeData.length;i++){
+            for (int j=0;j<treeData[i].getChildren().size();j++){
+                for (int z=0;z<treeData[i].getChildren().get(j).getChildren().size();z++){
+                    TbMenu tbMenu = new TbMenu();
+                    tbMenu.setMenuId(treeData[i].getChildren().get(j).getChildren().get(z).getId());
+                    tbMenu.setRoleId(roleId);
+                    menutblList.add(tbMenu);
+                }
+            }
+        }
+        System.out.println("------------");
+        System.out.println(menutblList.toString());
+        System.out.println("------------");
+        row += roleMapper.deleRolesMenu(roleId);
+        row += roleMapper.addRolesMenu(menutblList);
         return row;
     }
 }

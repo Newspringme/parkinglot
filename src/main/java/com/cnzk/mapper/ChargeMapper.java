@@ -30,4 +30,10 @@ public interface ChargeMapper {
 
     //重置密码
     Integer resetPass(String adminName);
+
+    //上传头像
+    Integer uploadHeadImg(Charge charge);
+
+    //更新收费员
+    Integer updateCharge(Charge charge);
 }

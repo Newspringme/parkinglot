@@ -70,4 +70,14 @@
     <update id="resetPass" parameterType="java.lang.String">
         update tb_admin set admin_pass = '12345678'  where admin_name = #{adminName}
     </update>
+
+    <!--上传头像-->
+    <update id="uploadHeadImg" parameterType="com.cnzk.pojo.Charge">
+        update tb_admin set head_img = #{headImg} where admin_id = #{adminId}
+    </update>
+
+    <!--更新收费员-->
+    <update id="updateCharge" parameterType="com.cnzk.pojo.Charge">
+        update tb_admin set admin_name = #{adminName},admin_tel = #{adminTel} where admin_id = #{adminId}
+    </update>
 </mapper>
