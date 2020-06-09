@@ -8,6 +8,7 @@ import com.cnzk.pojo.TbRole;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.HashMap;
 import java.util.List;
 @Service
 public class LogServiceImpl  implements LogService{
@@ -15,8 +16,17 @@ public class LogServiceImpl  implements LogService{
     private LogMapper logMapper;
 
     @Override
-    public LayuiData queryLog(int start, int pageSize) {
-        List<TbLog> list=logMapper.queryLog(start, pageSize);
+    public LayuiData queryLog(String page,String limit,String username ,String startTime,String endTime) {
+        int startPage=Integer.parseInt(page);//获取页码;
+        int pageSize=Integer.parseInt(limit);//每页数量
+        int start = (startPage-1)*pageSize;//计算出起始查询位置
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("start",start);
+        map.put("pageSize",pageSize);
+        map.put("username",username);
+        map.put("startTime",startTime);
+        map.put("endTime",endTime);
+        List<TbLog> list=logMapper.queryLog(map);
         int count=logMapper.queryLogCount();
         LayuiData layuiData=new LayuiData();
         layuiData.setCode(0);
