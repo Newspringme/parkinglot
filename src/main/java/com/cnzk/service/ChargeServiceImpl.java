@@ -18,7 +18,7 @@ public class ChargeServiceImpl implements ChargeService {
 
     @Resource
     private ChargeMapper chargeMapper;
-//收费人员登陆
+    //收费人员登陆
     @Override
     public String chargelogin(Map<String,Object> map, HttpSession session) {
         map.put("chargepass", MD5.machining(map.get("chargepass").toString()));//将管理员输入的密码转成MD5加密
@@ -31,7 +31,6 @@ public class ChargeServiceImpl implements ChargeService {
                     return "success";
                 }
                 return "您已被禁止登陆！";
-
             }
             return "权限错误，请返回管理端登陆";
         }
