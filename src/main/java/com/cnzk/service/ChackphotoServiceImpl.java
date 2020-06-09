@@ -106,7 +106,11 @@ public class ChackphotoServiceImpl implements ChackphotoService
 			}
 
 			String res = EntityUtils.toString(response.getEntity());
-			String[] arr=res.split("txt");
+//			String[] arr=res.split("txt");
+			String[] arr=res.split("txt＇:＇");
+			String[] arr2=arr[1].split("＇,＇cls_prob＇");
+			System.out.println(arr[1]);
+			System.out.println(arr2[0]);
 			System.out.println(arr);
 			JSONObject res_obj = JSON.parseObject(res);
 			if(is_old_format) {

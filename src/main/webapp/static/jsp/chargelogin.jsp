@@ -37,7 +37,7 @@
 </head>
 
 
-<body style="background-image: url(https://i.loli.net/2020/06/07/bSNrAEl4FdQa7qs.jpg);background-repeat:no-repeat;
+<body style="background-image: url(https://i.loli.net/2020/06/09/JboPuV2t1UZKcRd.jpg);background-repeat:no-repeat;
         background-size:100% 100%;
         background-attachment: fixed;">
 <input type="hidden" id="path" value="<%=path%>">
