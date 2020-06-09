@@ -18,11 +18,11 @@ public class MenuServiceImpl implements MenuService {
     private MenuMapper menuMapper;
 
     @Override
-    public Map<String, Object> menu() {
+    public Map<String, Object> menu(Integer roleId) {
         Map<String, Object> map = new HashMap<>(16);
         Map<String,Object> home = new HashMap<>(16);
         Map<String,Object> logo = new HashMap<>(16);
-        List<TbMenu> menuList = menuMapper.queryAllMenu();
+        List<TbMenu> menuList = menuMapper.queryRoleAllMenu(roleId);
         List<MenuVo> menuInfo = new ArrayList<>();
         for (TbMenu e : menuList) {
             MenuVo menuVO = new MenuVo();
@@ -48,7 +48,7 @@ public class MenuServiceImpl implements MenuService {
     @Override
     public List<MenuVo> menuAuthority(Integer roleId) {
         List<TbMenu> menuList1 = menuMapper.queryAllMenu();
-        List<TbMenu> menuList = menuMapper.queryRoleAllMenu(roleId);
+        List<TbMenu> menuList = menuMapper.queryHaveMenu(roleId);
         List<MenuVo> menuInfo = new ArrayList<>();
         for (TbMenu e : menuList1) {
             MenuVo menuVO = new MenuVo();

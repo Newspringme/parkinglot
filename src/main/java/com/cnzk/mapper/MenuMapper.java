@@ -14,10 +14,13 @@ import java.util.Map;
 @Mapper
 public interface MenuMapper {
 
-    //分角色查对应的所有的菜单
+//    //分角色查对应的所有的菜单
     List<TbMenu> queryRoleAllMenu(Integer roleId);
+//
+//    //查角色所拥有的菜单
+    List<TbMenu> queryHaveMenu(Integer roleId);
 
-    //    修改权限显示所有菜单
+//    //    修改权限显示所有菜单
     List<TbMenu> queryAllMenu();
 
 }

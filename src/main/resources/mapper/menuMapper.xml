@@ -13,4 +13,8 @@
 		select * from tb_menu;
 	</select>
 
+	<select id ="queryHaveMenu" resultType="TbMenu" parameterType="java.lang.Integer">
+		select * from tb_menu a ,tb_role_menu b where a.menu_id = b.menu_id and b.role_id = #{roleId} and isthree_menu = 0;
+	</select>
+
     </mapper>
