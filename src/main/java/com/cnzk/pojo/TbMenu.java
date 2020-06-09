@@ -10,6 +10,8 @@ public class TbMenu {
   private String menuIcon;
   private String meniTarget;
 
+  //为权限修改mapper批量插入角色菜单关系表所加
+  private Integer roleId;
 
   public long getMenuId() {
     return menuId;
@@ -64,6 +66,14 @@ public class TbMenu {
     this.meniTarget = meniTarget;
   }
 
+  public Integer getRoleId() {
+    return roleId;
+  }
+
+  public void setRoleId(Integer roleId) {
+    this.roleId = roleId;
+  }
+
   @Override
   public String toString() {
     return "TbMenu{" +
@@ -73,6 +83,7 @@ public class TbMenu {
             ", menuPid=" + menuPid +
             ", menuIcon='" + menuIcon + '\'' +
             ", meniTarget='" + meniTarget + '\'' +
+            ", roleId=" + roleId +
             '}';
   }
 }
