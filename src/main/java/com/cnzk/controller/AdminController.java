@@ -2,6 +2,7 @@ package com.cnzk.controller;
 
 import com.alibaba.fastjson.JSON;
 
+import com.cnzk.aoplog.Log;
 import com.cnzk.pojo.*;
 import com.cnzk.service.AdminService;
 
@@ -204,6 +205,7 @@ public class AdminController
 	@RequestMapping("/updateMenuTree")
 	@Transactional
 	@ResponseBody
+	@Log(operationThing = "修改权限",operationType = "修改")
 	public void updateMenuTree(HttpServletRequest request, HttpServletResponse response){
 		Integer rolesid = Integer.valueOf(request.getParameter("roleId"));
 		String treeStr = request.getParameter("checkData");

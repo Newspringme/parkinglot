@@ -32,25 +32,6 @@
 <div class="layuimini-container authorityMsg">
     <input type="hidden" id="path" value="<%=path%>">
     <div class="layuimini-main">
-        <fieldset class="table-search-fieldset">
-            <legend>搜索信息</legend>
-            <div style="margin: 10px 10px 10px 10px">
-                <form class="layui-form layui-form-pane" action="">
-                    <div class="layui-form-item">
-                        <div class="layui-inline">
-                            <label class="layui-form-label">角色名称：</label>
-                            <div class="layui-input-inline">
-                                <input class="layui-input" id="roleName" name="roleName" placeholder="请输入角色名称" autocomplete="off" />
-                            </div>
-                        </div>
-                        <div class="layui-inline">
-                            <%--    reload是表格重载--%>
-                            <button class= "layui-btn search" data-type="reload" style="margin-left: 26px">搜索</button>
-                        </div>
-                    </div>
-                </form>
-            </div>
-        </fieldset>
 
         <table class="layui-hide" id="authorityMsgTbl" lay-filter="currentTableFilter"></table>
 
