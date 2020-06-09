@@ -6,11 +6,13 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
+import java.util.Map;
+
 @Mapper
 public interface LogMapper {
     int queryLogCount();
     //	查询角色，
-    List<TbLog> queryLog(@Param("start") int start, @Param("pageSize") int pageSize);
+    List<TbLog> queryLog(Map map);
 
     int addLog(TbLog log);
 }

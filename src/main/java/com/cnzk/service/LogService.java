@@ -5,7 +5,7 @@ import com.cnzk.pojo.TbLog;
 
 public interface LogService {
 
-    LayuiData queryLog(int start, int pageSize);
+    LayuiData queryLog(String page,String limit,String username ,String startTime,String endTime);
 
     int addLog(TbLog log);
 }

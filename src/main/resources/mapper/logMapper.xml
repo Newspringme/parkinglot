@@ -5,7 +5,15 @@
 <mapper namespace="com.cnzk.mapper.LogMapper">
     <!--    查询所有日志-->
     <select id="queryLog" resultType="com.cnzk.pojo.TbLog" >
-        select * from  tb_log limit #{start},#{pageSize};
+        select * from  tb_log
+        <where>
+            <if test="username!=null and username!=''">
+                operate_name like concat('%',#{username},'%')
+            </if>
+            <if test="startTime!=null and startTime!=''">and operate_time &gt;=#{startTime}</if>
+            <if test="endTime!=null and endTime!=''">and operate_time &lt;= #{endTime}</if>
+        </where>
+         order by operate_time desc limit #{start},#{pageSize} ;
     </select>
     <!--查询所有日志数量-->
     <select id="queryLogCount" resultType="int">
