@@ -1,0 +1,14 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="parkinglot2:war">
+    <output-path>$PROJECT_DIR$/target</output-path>
+    <properties id="maven-jee-properties">
+      <options>
+        <module>parkinglot2</module>
+        <packaging>war</packaging>
+      </options>
+    </properties>
+    <root id="archive" name="parkinglot-0.0.1-SNAPSHOT.war">
+      <element id="artifact" artifact-name="parkinglot2:war exploded" />
+    </root>
+  </artifact>
+</component>

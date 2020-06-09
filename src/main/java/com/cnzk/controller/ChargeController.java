@@ -9,6 +9,7 @@ import com.cnzk.utils.MD5;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -18,13 +19,27 @@ import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.UUID;
+import javax.servlet.http.HttpSession;
+import java.util.Map;
 
 @Controller
-
+@RequestMapping("/ChargeController")
 public class ChargeController {
     @Autowired
     private ChargeService chargeService;
 
+    @ResponseBody
+    @RequestMapping(value = "/chargelogin",produces = { "application/json;charset=UTF-8"})
+    public String ChargeLogin(@RequestParam Map<String,Object> param, HttpSession session)  {
+        System.out.println("===============================收费人员登陆=============================");
+        String vcode = session.getAttribute("vcode").toString();//获取session上的验证码
+        System.out.println("验证码："+vcode);
+        System.out.println(param);
+        if(vcode.equalsIgnoreCase(param.get("chargevcode").toString())){
+            return chargeService.chargelogin(param,session);//获取service层返回的信息
+        }
+        return "验证码错误";
+    }
     @ResponseBody
     @RequestMapping("getChargeList")
     public Object queryCharge(String msg,String page,String limit){
@@ -100,7 +115,7 @@ public class ChargeController {
     @ResponseBody
     @RequestMapping("resetPass")
     @Log(operationThing = "重置收费员密码",operationType = "更新")
-    public Object resetPass(HttpServletRequest request){
+    public Object insertNewCharge(HttpServletRequest request){
         System.out.println("重置密码");
         int i = chargeService.resetPass(request.getParameter("adminName"));
         if (i>0){

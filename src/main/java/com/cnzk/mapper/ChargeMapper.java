@@ -1,15 +1,18 @@
 package com.cnzk.mapper;
 
+import com.cnzk.pojo.Admin;
 import com.cnzk.pojo.Charge;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
+import java.util.Map;
 
 @Mapper
 public interface ChargeMapper {
 
-
+    //	管理员登录
+    Admin chargelogin(Map<String,Object> map);
     //查询收费员记录数
     Integer queryChargeCount(Charge charge);
 

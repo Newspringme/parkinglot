@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 @Controller
+@RequestMapping("/ChackphotoController")
 public class ChackphotoController
 {
 	@Autowired
@@ -20,6 +21,7 @@ public class ChackphotoController
 
 
 		return chackphotoService.file(file);
+
 	}
 
 }

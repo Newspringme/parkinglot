@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONException;
 import com.alibaba.fastjson.JSONObject;
+import com.cnzk.utils.ChangeBase64;
 import com.cnzk.utils.HttpUtils;
 import org.apache.http.HttpResponse;
 import org.apache.http.util.EntityUtils;
@@ -27,28 +28,13 @@ public class ChackphotoServiceImpl implements ChackphotoService
 	public String file(MultipartFile file)
 	{
 
-		return null;
-	}
-	/*
-	 * 获取参数的json对象
-	 */
-	public static JSONObject getParam(int type, String dataValue) {
-		JSONObject obj = new JSONObject();
-		try {
-			obj.put("dataType", type);
-			obj.put("dataValue", dataValue);
-		} catch (JSONException e) {
-			e.printStackTrace();
-		}
-		return obj;
-	}
-
-	public static void main(String[] args){
-
+		String change64=ChangeBase64.multipartFileToBASE64(file);
+		System.out.println("change64==============================================================");
+		System.out.println("change64:"+change64);
 		String host = "https://ocrcp.market.alicloudapi.com";
 		String path = "/rest/160601/ocr/ocr_vehicle_plate.json";
 		String appcode = "d6e1bf69d34f4891b0e5ec5ff91089c5";
-		String imgFile = "E:\\Desktop\\u0.jpg";
+//		String imgFile = "E:\\Desktop\\u0.jpg";
 		Boolean is_old_format = false;//如果文档的输入中含有inputs字段，设置为True， 否则设置为False
 		//请根据线上文档修改configure字段
 		JSONObject configObj = new JSONObject();
@@ -65,18 +51,18 @@ public class ChackphotoServiceImpl implements ChackphotoService
 		Map<String, String> querys = new HashMap<String, String>();
 
 		// 对图像进行base64编码
-		String imgBase64 = "";
-		try {
-			File file = new File(imgFile);
-			byte[] content = new byte[(int) file.length()];
-			FileInputStream finputstream = new FileInputStream(file);
-			finputstream.read(content);
-			finputstream.close();
-			imgBase64 = new String(encodeBase64(content));
-		} catch (IOException e) {
-			e.printStackTrace();
-			return;
-		}
+		String imgBase64 = change64;
+//		try {
+//			File file1 = new File(imgFile);
+//			byte[] content = new byte[(int) file1.length()];
+//			FileInputStream finputstream = new FileInputStream(file1);
+//			finputstream.read(content);
+//			finputstream.close();
+//			imgBase64 = new String(encodeBase64(content));
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//			return null;
+//		}
 		// 拼装请求body的json字符串
 		JSONObject requestObj = new JSONObject();
 		try {
@@ -116,10 +102,12 @@ public class ChackphotoServiceImpl implements ChackphotoService
 				System.out.println("Http code: " + stat);
 				System.out.println("http header error msg: "+ response.getFirstHeader("X-Ca-Error-Message"));
 				System.out.println("Http body error msg:" + EntityUtils.toString(response.getEntity()));
-				return;
+				return null;
 			}
 
 			String res = EntityUtils.toString(response.getEntity());
+			String[] arr=res.split("txt");
+			System.out.println(arr);
 			JSONObject res_obj = JSON.parseObject(res);
 			if(is_old_format) {
 				JSONArray outputArray = res_obj.getJSONArray("outputs");
@@ -132,5 +120,27 @@ public class ChackphotoServiceImpl implements ChackphotoService
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		return null;
+	}
+	/*
+	 * 获取参数的json对象
+	 */
+	public static JSONObject getParam(int type, String dataValue) {
+		JSONObject obj = new JSONObject();
+		try {
+			obj.put("dataType", type);
+			obj.put("dataValue", dataValue);
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		return obj;
+	}
+
+	public static void main(String[] args){
+String res = "{＇config_str＇:＇{\\＇multi_crop\\＇:false}＇,＇plates＇:[{＇cls_name＇:＇小型汽车＇,＇prob＇:0.99838340282440186,＇txt＇:＇苏DS0000＇,＇cls_prob＇:1,＇detail＇:＇＇,＇roi＇:{＇w＇:201,＇h＇:64,＇x＇:185,＇y＇:76}}],＇success＇:true,＇request_id＇:＇20200608235402_350234ed7be5aeb18de012f31539fce7＇}";
+		String[] arr=res.split("txt＇:＇");
+		String[] arr2=arr[1].split("＇,＇cls_prob＇");
+	    System.out.println(arr[1]);
+		System.out.println(arr2[0]);
 	}
 }
