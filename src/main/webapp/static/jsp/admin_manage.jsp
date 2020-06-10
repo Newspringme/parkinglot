@@ -14,12 +14,12 @@
 		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 		<link rel="stylesheet" href="${pageContext.request.contextPath}/static/layui/css/layui.css"  media="all">
-<%--		<script src="${pageContext.request.contextPath}/js/jquery-3.4.1.js" charset="utf-8"></script>--%>
+<%--		<script src="${pageContext.request.contextPath}/static/js/jquery-3.4.1.js" charset="utf-8"></script>--%>
 <%--		<script src="${pageContext.request.contextPath}/js/packaging.js" charset="utf-8"></script>--%>
 		<script src="${pageContext.request.contextPath}/static/layui/layui.js" charset="utf-8"></script>
-		<link rel="stylesheet" href="${pageContext.request.contextPath}/static/cropper/cropper.css">
-		<script src="${pageContext.request.contextPath}/static/cropper/cropper.js"></script>
-		<script src="${pageContext.request.contextPath}/static/cropper/croppers.js"></script>
+<%--		<link rel="stylesheet" href="${pageContext.request.contextPath}/static/cropper/cropper.css">--%>
+<%--		<script src="${pageContext.request.contextPath}/static/cropper/cropper.js"></script>--%>
+<%--		<script src="${pageContext.request.contextPath}/static/cropper/croppers.js"></script>--%>
 		<style>
 			.layui-table-cell .layui-form-checkbox[lay-skin=primary] {
 				top: 10px;
@@ -74,8 +74,7 @@
 		</div>
 		<!--        表格主体-->
 		<table class="layui-hide" id="adminTable" lay-filter="adminTable"></table>
-		<!--        表格结束-->
-		<!--        添加弹出层开始-->
+		<!--        添加弹出层-->
 		<div id="addAdmin" onsubmit="return false;" style="display: none">
 			<form class="layui-form" id="addForm" action="" style="margin-top: 30px" >
 				<div class="layui-form-item">
@@ -100,6 +99,19 @@
 						       autocomplete="off" class="layui-input surePass">
 					</div>
 				</div>
+				<div class="layui-form-item">
+					<label class="layui-form-label"style="margin-left: 120px;">性&emsp;&emsp;别：</label>
+					<div class="layui-input-block"style="float: left; margin-left: 20px;width: 200px;">
+						<input type="radio" checked name="adminSex" value="男" title="男" autocomplete="off" class="layui-input">
+						<input type="radio" name="adminSex" value="女" title="女" autocomplete="off" class="layui-input">
+					</div>
+				</div>
+				<div class="layui-form-item">
+					<label class="layui-form-label"style="margin-left: 120px;">手机号码：</label>
+					<div class="layui-input-block"style="float: left; margin-left: 20px;width: 200px;">
+						<input type="tel" name="adminTel"  autocomplete="off" class="layui-input ">
+					</div>
+				</div>
 
 				<div class="layui-form-item">
 					<label class="layui-form-label"style="margin-left: 120px;">所属角色：</label>
@@ -120,7 +132,7 @@
 				</div>
 			</form>
 		</div>
-		<!--        编辑弹出层开始-->
+		<!--        编辑弹出层-->
 		<div id="updateAdmin" onsubmit="return false;" style="display: none">
 			<form class="layui-form" lay-filter="formUpdateAdmin" id="updateForm" action="" style="margin-top: 30px" >
 				<div class="layui-form-item">
@@ -131,9 +143,8 @@
 					</div>
 				</div>
 
-						<input type="hidden" name="adminId"
-						       autocomplete="off" class="layui-input layui-form-item adminId">
-
+				<input type="hidden" name="adminId"
+				       autocomplete="off" class="layui-input layui-form-item adminId">
 
 				<div class="layui-form-item">
 					<label class="layui-form-label"style="margin-left: 120px;">所属角色：</label>
@@ -152,16 +163,37 @@
 						<button type="reset" class="layui-btn layui-btn-warm layui-icon layui-icon-refresh">重置</button>
 					</div>
 				</div>
-				</form>
+			</form>
+		</div>
+		<!--        上传弹出层-->
+		<div id="upload"  style="display: none;margin: 100px 145px">
+<%--			<form  action="${pageContext.request.contextPath}/AdminController/upload" method="post" enctype="multipart/form-data"style="margin-top: 50px" >--%>
+<%--				<div class="layui-form-item">--%>
+<%--					<label class="layui-form-label" >选择图片：</label>--%>
+<%--					<div class="layui-input-block" >--%>
+<%--						<input style="height: 30px"  type="file" name="file" accept="image/*" autocomplete="off" class="layui-input">--%>
+<%--					</div>--%>
+<%--				</div>--%>
+<%--				<div class="layui-form-item">--%>
+<%--					<div class="layui-input-block" style="width: 150px;margin-top: 40px;margin-left: 160px">--%>
+<%--						<input type="submit" class="layui-btn layui-icon layui-icon-release" lay-submit lay-filter="formUpload"></input>--%>
+<%--					</div>--%>
+<%--				</div>--%>
+<%--			<form/>--%>
+		<button type="button" class="layui-btn" id="test1">选择并提交</button>
+		<div class="layui-upload-list">
+			<img class="layui-upload-img" id="demo1">
+			<p id="demoText"></p>
+	</div>
 		</div>
 				<script type="text/javascript">
-					layui.use(['jquery','layer','form','table','laydate','croppers'],function () {
+					layui.use(['jquery','layer','form','table','laydate','upload'],function () {
 						var $ = layui.jquery;
 						var layer = layui.layer;
 						var form = layui.form;
 						var table = layui.table;
 						var laydate=layui.laydate;
-						var croppers=layui.croppers;
+						var upload=layui.upload;
 						//给开始时间和结束时间绑定时间选择器
 						laydate.render({
 							elem:'#startTime'
@@ -204,7 +236,7 @@
 								,{field:'roleName', title:'角色',align:'center', width:120}
 								,{field:'roleId', title:'角色id',hide:true,width:100}
 								,{field:'regTime', title:'添加时间',align:'center', width:200}
-								,{fixed: 'right', title:'操作',align:'center',width:220, toolbar: '#adminBar'}
+								,{fixed: 'right', title:'操作',align:'center',width:300, toolbar: '#adminBar'}
 							]]
 						})
 
@@ -230,7 +262,8 @@
 										layer.confirm('真的要删除这么多吗？',{icon:5},function (index) {
 											layer.close(index);
 											// 向服务端发送删除指令
-											$.post("${pageContext.request.contextPath}/deleteAdmin?delList="+delList,null,function (msg) {
+											$.post("${pageContext.request.contextPath}/AdminController/deleteAdmin?delList="+delList,null,function (msg) {
+												msg=msg+'';
 												if (msg == 'true') {
 													layer.alert('删除成功',{icon:6},function (index) {
 														window.location.reload();
@@ -254,7 +287,7 @@
 								type: 1,
 								title: '添加管理员',
 								content: $('#addAdmin'),
-								area: ['600px','400px'],
+								area: ['600px','600px'],
 								shade: [0.5,'#fff'], //0.5透明度的白色背景
 								// shadeClose: true, //开启遮罩关闭
 								skin: 'layui-layer-molv',//墨绿皮肤
@@ -270,6 +303,7 @@
 								}else {
 									var msg=JSON.stringify(data.field);
 									$.post("${pageContext.request.contextPath}/AdminController/addAdmin?msg="+encodeURI(msg),function (msg) {
+										msg=msg+'';
 										if (msg=='true'){
 											layer.alert('管理员添加成功',{icon:6},function (index) {
 												window.location.reload();
@@ -302,7 +336,6 @@
 							//提交修改表单
 							form.on('submit(formUpdateAdmin)', function(data){
 								var msg=JSON.stringify(data.field);
-								alert(msg);
 								$.post("${pageContext.request.contextPath}/AdminController/updateAdmin?msg="+encodeURI(msg),function (msg) {
 									msg=msg+"";
 									if (msg=='true'){
@@ -315,6 +348,44 @@
 								})
 								return false;//阻止页面刷新
 							});
+						}
+						//打开上传页面
+						function openUpload(obj){
+							layer.open({
+								type: 1,
+								title: '上传头像',
+								content: $('#upload'),
+								area: ['400px','300px'],
+								shade: [0.5,'#fff'], //0.5透明度的白色背景
+								skin: 'layui-layer-molv',//墨绿皮肤
+								offset: '50px',//上边距
+								shift: 2, //动画类型
+							})
+								var uploadInst = upload.render({
+									elem: '#test1'
+									,url: '${pageContext.request.contextPath}/AdminController/upload?msg='+obj.data.adminName
+									,before: function(obj){
+										//预读本地文件示例，不支持ie8
+										obj.preview(function(index, file, result){
+											$('#demo1').attr('src', result); //图片链接（base64）
+										});
+									}
+									,done: function(res){
+										//如果上传失败
+										if(res.code > 0){
+											return layer.msg('上传失败');
+										}
+										//上传成功
+									}
+									,error: function(){
+										//演示失败状态，并实现重传
+										var demoText = $('#demoText');
+										demoText.html('<span style="color: #FF5722;">上传失败</span> <a class="layui-btn layui-btn-xs demo-reload">重试</a>');
+										demoText.find('.demo-reload').on('click', function(){
+											uploadInst.upload();
+										});
+									}
+								});
 						}
 						//提交条件查询表单
 						form.on('submit(formSearch)', function(data){
@@ -340,29 +411,7 @@
 							var tr = obj.tr; //获得当前行 tr 的 DOM 对象（如果有的话）
 							var loginId='${admin.adminId}';
 							if(layEvent == 'uploadImg'){ //上传头像
-								layui.config({
-									base: '${pageContext.request.contextPath}/static/cropper/' //layui自定义layui组件目录
-								}).use(['form','croppers'], function () {
-									var $ = layui.jquery
-										,form = layui.form
-										,croppers = layui.croppers
-										,layer= layui.layer;
-
-									// 创建一个头像上传组件
-									croppers.render({
-										elem: '#uploadImg'
-										,saveW:150     //保存宽度
-										,saveH:150
-										,mark:1/1    //选取比例
-										,area:'900px'  //弹窗宽度
-										,url: "upload/uploadImg"  //图片上传接口返回和（layui 的upload 模块）返回的JOSN一样
-										,done: function(url){ //上传完毕回调
-											$("#inputimgurl").val(url);
-											$("#srcimgurl").attr('src',url);
-										}
-									});
-
-								});
+								openUpload(obj);
 
 							} else if(layEvent === 'edit'){ //编辑
 								openUpdateAdmin(obj);

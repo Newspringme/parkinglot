@@ -31,24 +31,31 @@ public class AdminServiceImpl implements AdminService
 	@Resource
 	private ComboMapper comboMapper;
     //登陆
+	//登陆
+
 	/**
 	 * 将登陆账号密码拿去数据库验证
+	 *
 	 * @param map
 	 * @param session
 	 * @return
 	 */
 	@Override
 
-	public String adminlogin(Map<String,Object> map, HttpSession session) {
-		map.put("adminpass",MD5.machining(map.get("adminpass").toString()));//将管理员输入的密码转成MD5加密
+	public String adminlogin(Map<String, Object> map, HttpSession session)
+	{
+		map.put("adminpass", MD5.machining(map.get("adminpass").toString()));//将管理员输入的密码转成MD5加密
 		System.out.println(map);
 		Admin tbAdmin2 = adminMapper.adminlogin(map);
-		if(tbAdmin2 != null){
-			if (tbAdmin2.getRoleId()==3){
+		if (tbAdmin2 != null)
+		{
+			if (tbAdmin2.getRoleId() == 3)
+			{
 				return "您的权限不足，请返回收费端登陆";
 			}
-			if("启用".equals(tbAdmin2.getAdminState())){
-				session.setAttribute("tbAdmin",tbAdmin2);//将管理员信息放到session
+			if ("启用".equals(tbAdmin2.getAdminState()))
+			{
+				session.setAttribute("tbAdmin", tbAdmin2);//将管理员信息放到session
 				return "success";
 			}
 			return "您已被禁止登陆！";
@@ -57,18 +64,40 @@ public class AdminServiceImpl implements AdminService
 	}
 
 
-
 	//	查询管理员，包括带条件,分页,记录数
 	@Override
 	public LayuiData queryAdmin(Admin admin, int start, int pageSize)
 	{
-		List<Admin> list=adminMapper.queryAdmin(admin, start, pageSize);
-		int count=adminMapper.queryAdminCount(admin);
-		LayuiData layuiData=new LayuiData();
+		List<Admin> list = adminMapper.queryAdmin(admin, start, pageSize);
+		int count = adminMapper.queryAdminCount(admin);
+		LayuiData layuiData = new LayuiData();
 		layuiData.setCode(0);
 		layuiData.setCount(count);
 		layuiData.setData(list);
 		return layuiData;
+	}
+
+	//  添加管理员
+	@Override
+	public int addAdmin(Admin admin)
+	{
+		return adminMapper.addAdmin(admin);
+	}
+
+	//删除管理员
+	@Override
+	public int deleteAdmin(int[] array)
+	{
+		int num = adminMapper.deleteAdmin(array);
+		return num;
+	}
+
+	//更新管理员信息
+	@Override
+	public int updateAdmin(Admin admin)
+	{
+		int num = adminMapper.updateAdmin(admin);
+		return num;
 	}
 
 

@@ -16,10 +16,19 @@ import java.util.Map;
 public interface AdminService
 {
 	//	登录
-	String adminlogin(Map<String,Object> map, HttpSession session);
+	String adminlogin(Map<String, Object> map, HttpSession session);
 
 	//	查询管理员，包括带条件,分页,记录数
 	LayuiData queryAdmin(Admin admin, int start, int pageSize);
+
+	//  添加管理员
+	int addAdmin(Admin admin);
+
+	//	删除管理员
+	int deleteAdmin(int[] array);
+
+	//	更新管理员信息
+	int updateAdmin(Admin admin);
 
 	//查计费规则列表
 	LayuiData queryRatesList(HashMap<String, Object> condition);

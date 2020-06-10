@@ -14,14 +14,23 @@ import java.util.Map;
 @Mapper
 public interface AdminMapper
 {
-    //	管理员登录
-    Admin adminlogin(Map<String,Object> map);
+	//	管理员登录
+	Admin adminlogin(Map<String, Object> map);
 
-    //	查询管理员记录数，包括带条件
-    int queryAdminCount(Admin admin);
+	//	查询管理员记录数，包括带条件
+	int queryAdminCount(Admin admin);
 
-    //	查询管理员，包括带条件及分页
-    List<Admin> queryAdmin(@Param("admin") Admin admin, @Param("start") int start, @Param("pageSize") int pageSize);
+	//	查询管理员，包括带条件及分页
+	List<Admin> queryAdmin(@Param("admin") Admin admin, @Param("start") int start, @Param("pageSize") int pageSize);
+
+	//  添加管理员
+	int addAdmin(Admin admin);
+
+	//	删除管理员
+	int deleteAdmin(int[] array);
+
+	//	更新管理员信息
+	int updateAdmin(Admin admin);
 
 
 }

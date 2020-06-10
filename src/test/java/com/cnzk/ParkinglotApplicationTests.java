@@ -5,6 +5,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import javax.annotation.Resource;
 import javax.sql.DataSource;
+import javax.xml.crypto.Data;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 @SpringBootTest
 class ParkinglotApplicationTests
@@ -15,7 +18,8 @@ class ParkinglotApplicationTests
 	@Test
 	void contextLoads()
 	{
-		System.out.println("dataSource.getClass() ====== " + dataSource.getClass());
+//		System.out.println("dataSource.getClass() ====== " + dataSource.getClass());
+
 	}
 
 }
