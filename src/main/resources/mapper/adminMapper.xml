@@ -49,9 +49,9 @@
     <update id="updateAdmin" parameterType="com.cnzk.pojo.Admin">
         update tb_admin
         <set>
-            <if test="adminName!=null and adminName!=''">admin_name=#{adminName}</if>
-            <if test="adminSex!=null and adminSex!=''">admin_sex=#{adminSex}</if>
-            <if test="roleId!=null and roleId!=''">role_id=#{roleId}</if>
+            <if test="adminName!=null and adminName!=''">admin_name=#{adminName},</if>
+            <if test="adminSex!=null and adminSex!=''">admin_sex=#{adminSex},</if>
+            <if test="roleId!=null and roleId!=''">role_id=#{roleId},</if>
             <if test="adminTel!=null and adminTel!=''">admin_tel=#{adminTel}</if>
         </set>
         where admin_id=#{adminId}

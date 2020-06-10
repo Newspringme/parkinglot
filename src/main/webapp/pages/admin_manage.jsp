@@ -17,9 +17,6 @@
 <%--		<script src="${pageContext.request.contextPath}/static/js/jquery-3.4.1.js" charset="utf-8"></script>--%>
 <%--		<script src="${pageContext.request.contextPath}/js/packaging.js" charset="utf-8"></script>--%>
 		<script src="${pageContext.request.contextPath}/static/layui/layui.js" charset="utf-8"></script>
-<%--		<link rel="stylesheet" href="${pageContext.request.contextPath}/static/cropper/cropper.css">--%>
-<%--		<script src="${pageContext.request.contextPath}/static/cropper/cropper.js"></script>--%>
-<%--		<script src="${pageContext.request.contextPath}/static/cropper/croppers.js"></script>--%>
 		<style>
 			.layui-table-cell .layui-form-checkbox[lay-skin=primary] {
 				top: 10px;
@@ -138,8 +135,22 @@
 				<div class="layui-form-item">
 					<label class="layui-form-label" style="margin-left: 120px;">账号名称：</label>
 					<div class="layui-input-block" style="float: left; margin-left: 20px;width: 200px;">
-						<input  type="text" name="adminName" lay-verify="required" lay-reqtext="管理员账号岂能为空？"
-						        autocomplete="off" class="layui-input adminName">
+						<input  type="text" name="adminName" lay-verify="adminName"
+						        autocomplete="off" class="layui-input">
+					</div>
+				</div>
+
+				<div class="layui-form-item">
+					<label class="layui-form-label"style="margin-left: 120px;">性&emsp;&emsp;别：</label>
+					<div class="layui-input-block"style="float: left; margin-left: 20px;width: 200px;">
+						<input type="radio" name="adminSex" value="男" title="男" autocomplete="off" class="layui-input">
+						<input type="radio" name="adminSex" value="女" title="女" autocomplete="off" class="layui-input">
+					</div>
+				</div>
+				<div class="layui-form-item">
+					<label class="layui-form-label"style="margin-left: 120px;">手机号码：</label>
+					<div class="layui-input-block"style="float: left; margin-left: 20px;width: 200px;">
+						<input type="tel" name="adminTel"  autocomplete="off" class="layui-input ">
 					</div>
 				</div>
 
@@ -156,7 +167,6 @@
 						</select>
 					</div>
 				</div>
-
 				<div class="layui-form-item">
 					<div class="layui-input-block" style="margin-left: 220px;">
 						<button type="submit" class="layui-btn layui-icon layui-icon-release" lay-submit lay-filter="formUpdateAdmin">提交</button>
@@ -203,7 +213,7 @@
 						})
 						// 渲染数据表格
 						table.render({
-							id: 'aTable'
+							id: 'adminTable'
 							,elem: '#adminTable'
 							, url: '${pageContext.request.contextPath}/AdminController/queryAdmin'
 							, title: '管理员数据表'
@@ -224,7 +234,7 @@
 							, text: {
 								none: '数据被小小苏吃了' //默认：无数据。注：该属性为 layui 2.2.5 开始新增
 							}
-							, height: 'full-280'//总高-空白280
+							// , height: 'full-280'//总高-空白280//火狐不兼容，使用会导致数据错误
 							, cols: [[
 								{type: 'numbers',align:'center',width:100, fixed: 'left',totalRowText:'合计：'}
 								,{field:'checkbox' ,type: 'checkbox'}
@@ -238,12 +248,12 @@
 								,{field:'regTime', title:'添加时间',align:'center', width:200}
 								,{fixed: 'right', title:'操作',align:'center',width:300, toolbar: '#adminBar'}
 							]]
-						})
+						});
 
 						//头部工具栏监听事件
 						table.on('toolbar(adminTable)', function(obj){
-							var nowId='${admin.adminId}';
-							var checkStatus = table.checkStatus('aTable');
+							var nowId='${tbAdmin.adminId}';
+							var checkStatus = table.checkStatus('adminTable');
 							data=checkStatus.data;
 							delList=[];
 							data.forEach(function(n,i){
@@ -323,7 +333,7 @@
 								type: 1,
 								title: '更新管理员',
 								content: $('#updateAdmin'),
-								area: ['600px','300px'],
+								area: ['600px','400px'],
 								shade: [0.5,'#fff'], //0.5透明度的白色背景
 								// shadeClose: true, //开启遮罩关闭
 								skin: 'layui-layer-molv',//墨绿皮肤
@@ -391,7 +401,7 @@
 						form.on('submit(formSearch)', function(data){
 							var msg=JSON.stringify(data.field);
 							//表格重载之后就会根据条件参数进行分页
-							table.reload('aTable',{
+							table.reload('adminTable',{
 								page:{
 									curr:1//从第一页开始
 								},
