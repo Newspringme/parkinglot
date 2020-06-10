@@ -148,5 +148,29 @@
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
         </plugins>
+        <!--过滤.esmap .theme  .bin文件，保证地图文件和样式里面内容不被替换-->
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <excludes>
+                    <exclude>**/*.esmap</exclude>
+                    <exclude>**/*.theme</exclude>
+                    <!--gltf模型bin文件-->
+                    <exclude>**/*.bin</exclude>
+                </excludes>
+                <filtering>true</filtering>
+            </resource>
+
+            <resource>
+                <directory>src/main/resources</directory>
+                <includes>
+                    <include>**/*.esmap</include>
+                    <include>**/*.theme</include>
+                    <!--gltf模型bin文件-->
+                    <include>**/*.bin</include>
+                </includes>
+                <filtering>false</filtering>
+            </resource>
+        </resources>
     </build>
 </project>
