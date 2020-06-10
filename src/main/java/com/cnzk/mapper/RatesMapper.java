@@ -14,4 +14,7 @@ public interface RatesMapper {
 
     //规则集合数量
     Integer queryCount(HashMap<String, Object> condition);
+
+//    修改规则金额
+    Integer editRates(TbRates tbRates);
 }

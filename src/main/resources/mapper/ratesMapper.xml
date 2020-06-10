@@ -13,4 +13,10 @@
     <select id="queryCount" parameterType="java.util.Map" resultType="java.lang.Integer">
         select COUNT(*) from tb_rates;
     </select>
+
+<!--    修改规则金额-->
+    <update id="editRates" parameterType="TbRates">
+       update tb_rates set rates_uprice=#{ratesUprice},rates_maxprice=#{ratesMaxprice} where rates_id=#{ratesId};
+    </update>
+
 </mapper>

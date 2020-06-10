@@ -114,7 +114,7 @@
 					success: function (res) {
 						if(res === 'success'){
 							layer.msg('验证成功，两秒后自动跳转',{icon:6, time:2000},function () {
-								window.location.href = path+'/static/jsp/index.html';
+								window.location.href = path+'/pages/index.html';
 							})
 						}else {
 							layer.msg(res);

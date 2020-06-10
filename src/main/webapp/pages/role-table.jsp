@@ -117,7 +117,7 @@
                     maxmin:true,
                     shadeClose: true,
                     area: ['100%', '100%'],
-                    content: '/parkinglot/static/jsp/table/role-edit.jsp?roleId='+data.roleId+'&roleName='+data.roleName+'&roleSort='+data.roleSort,
+                    content: '/parkinglot/pages/table/role-edit.jsp?roleId='+data.roleId+'&roleName='+data.roleName+'&roleSort='+data.roleSort,
                 });
                 $(window).on("resize", function () {
                     layer.full(index);

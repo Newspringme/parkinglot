@@ -38,7 +38,7 @@ spring:
   mvc:
     view:
       suffix: .jsp
-      prefix: /static/jsp/
+      prefix: /pages/
 
 mybatis:
   config-location: classpath:mybatis-config.xml
