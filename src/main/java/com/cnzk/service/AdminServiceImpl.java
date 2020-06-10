@@ -124,4 +124,15 @@ public class AdminServiceImpl implements AdminService
 		layuiData.setData(tbRoleList);
 		return layuiData;
 	}
+
+	@Override
+	public Integer editRates(TbRates tbRates) {
+		return ratesMapper.editRates(tbRates);
+	}
+
+	@Override
+	public TbRates queryPrice() {
+		TbRates tbRates = ratesMapper.queryPrice();
+		return tbRates;
+	}
 }

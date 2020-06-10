@@ -390,4 +390,30 @@ public class AdminController
 		return layuiData;
 	}
 
+	//  修改权限
+	@RequestMapping("/editRates")
+	@Transactional
+	@ResponseBody
+//	@Log(operationThing = "修改收费金额", operationType = "修改")
+	public void editRates(HttpServletRequest request, HttpServletResponse response,TbRates tbRates)
+	{
+        System.out.println("--------editRates-------");
+        System.out.println(tbRates);
+		Integer row = adminService.editRates(tbRates);
+		if (row != 0) {
+			ResponseUtils.outHtml(response, "success");
+		} else {
+			ResponseUtils.outHtml(response, "error");
+		}
+	}
+
+    @ResponseBody
+    @RequestMapping("queryPrice")
+    public Object queryPrice(){
+        System.out.println("--------queryRatesList-------");
+        TbRates tbRates = adminService.queryPrice();
+        System.out.println("tbRates = " + JSON.toJSONString(tbRates));
+        return tbRates;
+    }
+
 }

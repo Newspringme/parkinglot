@@ -17,179 +17,182 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <title>计费规则管理</title>
+
     <link rel="stylesheet" href="<%=path%>/static/lib/layui-v2.5.5/css/layui.css" media="all">
+    <link rel="stylesheet" href="<%=path%>/static/lib/font-awesome-4.7.0/css/font-awesome.min.css" media="all">
     <link rel="stylesheet" href="<%=path%>/static/css/public.css" media="all">
 
     <script charset="UTF-8" src="<%=path%>/static/js/jquery-3.4.1.js" charset="utf-8"></script>
     <script charset="UTF-8" src="<%=path%>/static/js/json2.js" type="text/javascript" ></script>
 
-    <script src="<%=path%>/static/lib/layui-v2.5.5/layui.js" charset="utf-8"></script>
-    <script src="<%=path%>/static/layui/layui.js" charset="UTF-8"></script>
-
+    <style>
+        .main_btn > p {height:40px;}
+        .main_btn > label {height:20px;}
+    </style>
 </head>
 <body>
 
+
+<input type="hidden" id="path" value="<%=path%>">
 <div class="layuimini-container">
-    <input type="hidden" id="path" value="<%=path%>">
-    <div class="layuimini-main">
+    <div class="layuimini-main layui-top-box">
+        <div class="layui-box">
+            <div class="layui-row layui-col-space10">
+                <div class="layui-col-md12">
+                    <blockquote class="layui-elem-quote main_btn">
+                        <p>菜鸡停车收费规则：</p>
+                        <p>半小时以内：免费</p>
+                        <label style="display: block;">以后每小时：<div id="uprice" style="display: inline"></div>元</label><br>
+                        <label style="display: block;">每天最高收费：<div id="maxprice" style="display: inline"></div>元</label>
+                        <p>备注：</p>
+                        <p>1、停车收费标注可通过下方进行修改。</p>
+                        <p>2、停车不足一小时按一小时计价。</p>
+                    </blockquote>
+                </div>
+            </div>
+        </div>
 
-        <table class="layui-hide" id="ratesMsgTbl" lay-filter="currentTableFilter"></table>
+        <div class="layui-box">
+            <div class="layui-row layui-col-space10">
+                <div class="layui-col-md6">
+                    <table class="layui-hide" id="ratesMsgTbl" lay-filter="currentTableFilter"></table>
+                </div>
+                <div class="layui-col-md6">
+                    <div class="layui-timeline-content layui-text">
+                        <div class="layui-timeline-title">修改计费规则</div>
+                    </div>
 
-        <%--    点击按钮弹出层的form--%>
-<%--        <form class = "layui-form" action="" style="display: none" id="changeAForm">--%>
-<%--            <div id="test12" class="demo-tree-more"></div>--%>
-<%--        </form>--%>
+                    <div class="layui-timeline-content layui-text">
+                        <h3 class="layui-timeline-title">小时/单价：</h3>
+                        <div class="layui-input-block" style="margin-left: 20px;width: 200px;">
+                            <input  type="text" name="ratesUprice" lay-verify="ratesUprice" lay-reqtext="金额不能为空"
+                                    autocomplete="off" class="layui-input ratesUprice">
+                        </div>
+                    </div>
 
-        <%--表格中按钮的模板--%>
-        <script type="text/html" id="currentTableBar">
-            <a class="layui-btn layui-btn-normal layui-btn-xs data-count-edit" lay-event="changeAuthority">修改计费价格</a>
-        </script>
+                    <div class="layui-timeline-content layui-text">
+                        <h3 class="layui-timeline-title">天/最高金额：</h3>
+                        <div class="layui-input-block" style="margin-left: 20px;width: 200px;">
+                            <input  type="text" name="ratesMaxprice" lay-verify="ratesMaxprice" lay-reqtext="最高金额不能为空"
+                                    autocomplete="off" class="layui-input ratesMaxprice">
+                        </div>
+                    </div>
+                    <br>
+                    <div class="layui-timeline-content layui-text">
+                        <div class="layui-timeline-title">
+                            <button type="button" class="layui-btn" onclick="updataPrice()">提交</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 
+<script src="<%=path%>/static/lib/layui-v2.5.5/layui.js" charset="utf-8"></script>
 
 
-<%--    表格的js--%>
 <script>
-    //layui.use加载模块
-    layui.use(['form', 'table'], function () {
-        var table = layui.table,
-            form = layui.form,
-            $ = layui.jquery;
 
-        var path = $('#path').val();
+    var tableIns;
+    var ratesId;
+    var uprice;
+    var maxprice;
+    window.onload = function () {
+        var path = $("#path").val();
+        uprice = document.getElementById("uprice");
+        maxprice = document.getElementById("maxprice");
 
-        table.render({
-            elem: '#ratesMsgTbl',   //表格的id
-            url: path+'/AdminController/queryRatesList',
-            defaultToolbar: ['filter', 'exports', 'print', {
-                 title: '提示',
-                 layEvent: 'LAYTABLE_TIPS',
-                 icon: 'layui-icon-tips'
-            }],
-            cols: [[
-                 {field: 'ratesId', width: 150, title: 'ID', sort: true},
-                 {field: 'ratesUprice', maxwidth: 765,minWidth: 100, title: '小时/单价'},
-                 {field: 'ratesMaxprice', maxwidth: 765,minWidth: 100, title: '天/最高金额'},
-                 {title: '操作', minWidth: 150, toolbar: '#currentTableBar', align: "center"}
+        $.ajax({
+            url: path+"/AdminController/queryPrice",
+            async: true,
+            type: "POST",
+            success: function (data) {
+                if (data != "error") {
+                    console.log(data);
+                    uprice.innerHTML = data.ratesUprice;
+                    maxprice.innerHTML = data.ratesMaxprice;
+                } else {
+                    layer.msg("暂无计费规则",{icon:5});
+                }
+            },
+            error: function () {
+                layer.msg('当前网络繁忙',{icon:2});
+                window.parent.location.href=path+"/url/login";
+                }
+            });
+
+        //layui.use加载模块
+        layui.use(['form', 'table'], function () {
+
+            var table = layui.table,
+                form = layui.form,
+                $ = layui.jquery;
+
+            var path = $('#path').val();
+
+            tableIns = table.render({
+                elem: '#ratesMsgTbl',   //表格的id
+                url: path+'/AdminController/queryRatesList',
+                defaultToolbar: ['filter', 'exports', 'print', {
+                    title: '提示',
+                    layEvent: 'LAYTABLE_TIPS',
+                    icon: 'layui-icon-tips'
+                }],
+                cols: [[
+                    {field: 'ratesId', width: 150, title: 'ID', sort: true},
+                    {field: 'ratesUprice', maxwidth: 765,minWidth: 100, title: '小时/单价'},
+                    {field: 'ratesMaxprice', maxwidth: 765,minWidth: 100, title: '天/最高金额'},
                 ]],
-            limits: [10, 15, 20, 25, 50, 100],
-            limit: 10,
-            page: true,
-            skin: 'line',
+                limits: [10, 15, 20, 25, 50, 100],
+                limit: 10,
+                page: true,
+                skin: 'line',
+            });
+            table.on('tool(currentTableFilter)', function(obj) {
+                var data = obj.data;
+                //obj点击那行的所有字段属性
+                var tr = obj.tr; //获得当前行 tr 的DOM对象
+                ratesId = tr.children("td").eq(0).text();
+                console.log("++++"+ratesId);
+            });
+
         });
+    }
 
 
-        // //监听事件
-        // table.on('tool(currentTableFilter)', function(obj){
-        //     var data = obj.data;
-        //     //obj点击那行的所有字段属性
-        //     var tr = obj.tr; //获得当前行 tr 的DOM对象
-        //     var roleId = tr.children("td").eq(0).text();
-        //     console.log(roleId);
-        //     if (obj.event === 'changeAuthority')
-        //     {
-        //         var layer = layui.layer;
-        //         layer.open({
-        //             type: 1,
-        //             title: '权限菜单分配',
-        //             content: $('#changeAForm'),
-        //             offset: '50px',
-        //             anim: 1,
-        //             isOutAnim: true,
-        //             resize: false,
-        //             area: ['50%', '80%'],
-        //             closeBtn: 2,//弹出层的类型
-        //             shade: 0.6,
-        //             move: false,
-        //             btn: ['提交', '取消'],
-        //             btn1: function (index, layero) {
-        //                 updateAuthority(roleId ,index);
-        //                 return false;
-        //             },
-        //             btn2: function (index, layero) {
-        //                 layer.close(index);
-        //                 return false;
-        //             },
-        //             cancel: function (index, layero) {
-        //                 layer.close(index);
-        //                 return false;
-        //             }
-        //         });
-        //         var path = $('#path').val();
-        //         $.ajax({
-        //             url: path+"/AdminController/queryMenuTree",
-        //             async: true,
-        //             type: 'POST',
-        //             data:{
-        //                 'roleId':data.roleId
-        //             },
-        //             dataType:'json',
-        //             success: function (msg) {
-        //                 if (data=="error") {
-        //                     layer.msg('网络繁忙');
-        //                 }else {
-        //                     showTree(msg);
-        //                 }
-        //             },
-        //             error: function () {
-        //                 layer.msg('网络繁忙');
-        //                 window.parent.location.href=path+"/url/login";
-        //             }
-        //         });
-        //     }
-        // });
+    //刷新表格
+    function updata() {
+        tableIns.reload()
+    };
 
-        function showTree(data) {
-            console.log(data);
+    function updataPrice() {
+        var path = $('#path').val();
+        var ratesUprice = $('.ratesUprice').val();
+        var ratesMaxprice = $('.ratesMaxprice').val();
+        var ratesId = 1;
+        $.ajax({
+            url: path+"/AdminController/editRates",
+            async: true,
+            type: 'POST',
+            data: {"ratesId":ratesId,"ratesUprice": ratesUprice, "ratesMaxprice": ratesMaxprice},
+            success: function (data) {
+                if (data=="success") {
+                    layer.msg('修改成功',{icon:6})
+                    uprice.innerHTML = ratesUprice;
+                    maxprice.innerHTML = ratesMaxprice;
+                    updata();
+                }else{
+                    layer.msg('修改失败，请重试',{icon:5})
+                }
+            },
+            error: function () {
+                layer.msg('网络繁忙',{icon:2});
+                window.parent.location.href=path+"/url/login";
+            }
+        });
+    }
 
-            layui.use(['tree','util','form'],function () {
-                var tree = layui.tree
-                    ,layer = layui.layer
-                    ,util = layui.util
-                    ,form = layui.form;;
-                tree.render({
-                    elem: '#test12'
-                    ,data: data
-                    ,showCheckbox: true  //是否显示复选框
-                    ,id: 'demoId1'
-                });
-            });
-        };
-
-        function updateAuthority(roleId,index){
-            console.log("点击提交")
-            var layer = layui.layer;
-            layui.use(['tree','util'], function () {
-                var tree = layui.tree;
-                var checkData = tree.getChecked('demoId1');
-                checkData = JSON.stringify(checkData);
-                console.log(checkData);
-                var path = $('#path').val();
-
-                $.ajax({
-                    url: path+"/AdminController/updateMenuTree",
-                    async: true,
-                    type: 'POST',
-                    data:{'checkData':checkData,'roleId':roleId},
-                    success: function (data) {
-                        if (data=="success") {
-                            layer.close(index);
-                            layer.msg('修改成功，更新网页显示最新权限',{icon:6})
-                        }else{
-                            layer.msg('修改失败，请重试',{icon:5})
-                        }
-                    },
-                    error: function () {
-                        layer.msg('网络繁忙',{icon:2});
-                        window.parent.location.href=path+"/url/login";
-                    }
-                });
-            });
-        };
-
-    });
-    </script>
-
+</script>
 </body>
 </html>

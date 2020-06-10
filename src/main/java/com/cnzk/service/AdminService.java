@@ -2,6 +2,7 @@ package com.cnzk.service;
 
 import com.cnzk.pojo.Admin;
 import com.cnzk.pojo.LayuiData;
+import com.cnzk.pojo.TbRates;
 import org.apache.ibatis.annotations.Param;
 
 import javax.servlet.http.HttpSession;
@@ -35,5 +36,11 @@ public interface AdminService
 
 	//查月缴产品列表
 	LayuiData queryComboList(HashMap<String, Object> condition);
+
+	//    修改规则金额
+	Integer editRates(TbRates tbRates);
+
+	//    查金额规则
+	TbRates queryPrice();
 
 }

@@ -19,4 +19,9 @@
        update tb_rates set rates_uprice=#{ratesUprice},rates_maxprice=#{ratesMaxprice} where rates_id=#{ratesId};
     </update>
 
+    <!--查金额规则-->
+    <select id="queryPrice" resultType="TbRates">
+        select * from tb_rates;
+    </select>
+
 </mapper>

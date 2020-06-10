@@ -17,4 +17,8 @@ public interface RatesMapper {
 
 //    修改规则金额
     Integer editRates(TbRates tbRates);
+
+//    查金额规则
+    TbRates queryPrice();
+
 }
