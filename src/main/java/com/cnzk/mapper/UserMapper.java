@@ -10,6 +10,7 @@ import javax.websocket.server.PathParam;
 @Mapper
 public interface UserMapper
 {
-	TbUser carfinduser(@PathParam("carnum") String carnum);
+	String carfinduser(@PathParam("carnum") String carnum);
 	void caraddenter(@PathParam("carnum") String carnum,@PathParam("starttime") String starttime);
+	String findcarvip(@PathParam("carnum") String carnum);
 }

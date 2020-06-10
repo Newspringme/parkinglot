@@ -138,16 +138,14 @@ public class ChackphotoServiceImpl implements ChackphotoService
 	@Override
 	public String finduser(String carnum)
 	{
-		TbUser tbuser = userMapper.carfinduser(carnum);
-		System.out.println("tbuser"+tbuser);
-		String tbuser1= tbuser.getUserName();
+		String userName = userMapper.carfinduser(carnum);
+		System.out.println("service层获取用户名"+userName);
+      if ("".equals(userName)||userName==null){
 
-      if (tbuser1==null){
-
-      	return null; }
+	      return "临时用户" ; }
       else {
 
-      	return tbuser1 ;}
+	      return userName;	}
 
 
 	}
@@ -158,6 +156,18 @@ public class ChackphotoServiceImpl implements ChackphotoService
 		userMapper.caraddenter(carnum,starttime);
 
 
+	}
+
+	@Override
+	public String findcarvip(String carnum)
+	{     //查VIP ，如果为空返回临时车，如果有。返回数据
+		String carvip = userMapper.findcarvip(carnum);
+		if ("1".equals(carvip)){
+
+			return "特殊车辆"; }
+		else {
+
+			return "月卡车辆" ;}
 	}
 
 	/*

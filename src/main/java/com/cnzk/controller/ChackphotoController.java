@@ -24,17 +24,28 @@ public class ChackphotoController
 	public String file(@RequestParam("file")MultipartFile file){
 
 		String carnum = chackphotoService.file(file);
-		System.out.println("carnum:"+carnum);
+		System.out.println("车牌-----------:"+carnum);
+
 		SimpleDateFormat sdf =   new SimpleDateFormat( " yyyy-MM-dd HH:mm:ss " );
 		String starttime = sdf.format(new Date());
 		//查车找人
 		String username=chackphotoService.finduser(carnum);
-
-		chackphotoService.caraddenter(carnum,starttime);
-
 		System.out.println("入场用户-----------"+username);
-        String state=null;
-        String ps=null;
+        //入场插入数据
+		chackphotoService.caraddenter(carnum,starttime);
+		String state;
+		//车辆情况查询 是临时还是有身份
+		if ("临时用户".equals(username)){
+			state = "临时车";
+		} else {
+			state=chackphotoService.findcarvip(carnum);
+		}
+		System.out.println("车辆情况---------"+state);
+		//车位查询
+		String ps=null;
+
+
+
 		//		Object obj = new Gson().toJson()
 		return carnum+","+username+","+state+","+starttime+","+ps;
 

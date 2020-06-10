@@ -4,12 +4,14 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.cnzk.mapper.UserMapper">
     <!--    根据车牌查用户-->
-    <select id="carfinduser" resultType="com.cnzk.pojo.TbUser">
+    <select id="carfinduser" resultType="java.lang.String">
        select tu.user_name from tb_user tu left join tb_car tc on tu.car_id = tc.car_id where tc.car_num = #{carnum}
     </select>
 
     <select id="caraddenter" >
        insert into tb_enter (enter_time,car_num) values (#{starttime},#{carnum})
     </select>
-
+    <select id="findcarvip"  resultType="java.lang.String">
+       select vip_id from  tb_car where car_num = #{carnum}
+    </select>
 </mapper>

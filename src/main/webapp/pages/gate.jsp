@@ -132,7 +132,7 @@
 	                document.getElementById("carnumber").innerHTML = "车牌号 :  " + carnum;
 	                document.getElementById("state").innerHTML = "车辆情况 :  " + state;
 	                document.getElementById("time").innerHTML = "入库时间 :  " + time1;
-	                document.getElementById("ps").innerHTML = "停车位:  " + ps;
+	                document.getElementById("ps").innerHTML = "当前剩余停车位:  " + ps;
                 }
             }
         })
