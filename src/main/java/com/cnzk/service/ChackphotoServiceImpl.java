@@ -4,6 +4,10 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONException;
 import com.alibaba.fastjson.JSONObject;
+import com.cnzk.mapper.AdminMapper;
+import com.cnzk.mapper.UserMapper;
+import com.cnzk.pojo.Admin;
+import com.cnzk.pojo.TbUser;
 import com.cnzk.utils.ChangeBase64;
 import com.cnzk.utils.HttpUtils;
 import org.apache.http.HttpResponse;
@@ -11,6 +15,7 @@ import org.apache.http.util.EntityUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.annotation.Resource;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -23,6 +28,8 @@ import static org.apache.tomcat.util.codec.binary.Base64.encodeBase64;
 @Service
 public class ChackphotoServiceImpl implements ChackphotoService
 {
+	@Resource
+	private UserMapper userMapper;
 
 	@Override
 	public String file(MultipartFile file)
@@ -107,8 +114,8 @@ public class ChackphotoServiceImpl implements ChackphotoService
 
 			String res = EntityUtils.toString(response.getEntity());
 //			String[] arr=res.split("txt");
-			String[] arr=res.split("txt＇:＇");
-			String[] arr2=arr[1].split("＇,＇cls_prob＇");
+			String[] arr=res.split("txt\":\"");
+			String[] arr2=arr[1].split("\"");
 			System.out.println(arr[1]);
 			System.out.println(arr2[0]);
 			System.out.println(arr);
@@ -121,11 +128,38 @@ public class ChackphotoServiceImpl implements ChackphotoService
 			}else{
 				System.out.println(res_obj.toJSONString());
 			}
+			return arr2[0];
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return null;
 	}
+
+	@Override
+	public String finduser(String carnum)
+	{
+		TbUser tbuser = userMapper.carfinduser(carnum);
+		System.out.println("tbuser"+tbuser);
+		String tbuser1= tbuser.getUserName();
+
+      if (tbuser1==null){
+
+      	return null; }
+      else {
+
+      	return tbuser1 ;}
+
+
+	}
+
+	@Override
+	public void caraddenter(String carnum, String starttime)
+	{
+		userMapper.caraddenter(carnum,starttime);
+
+
+	}
+
 	/*
 	 * 获取参数的json对象
 	 */
@@ -140,11 +174,5 @@ public class ChackphotoServiceImpl implements ChackphotoService
 		return obj;
 	}
 
-	public static void main(String[] args){
-String res = "{＇config_str＇:＇{\\＇multi_crop\\＇:false}＇,＇plates＇:[{＇cls_name＇:＇小型汽车＇,＇prob＇:0.99838340282440186,＇txt＇:＇苏DS0000＇,＇cls_prob＇:1,＇detail＇:＇＇,＇roi＇:{＇w＇:201,＇h＇:64,＇x＇:185,＇y＇:76}}],＇success＇:true,＇request_id＇:＇20200608235402_350234ed7be5aeb18de012f31539fce7＇}";
-		String[] arr=res.split("txt＇:＇");
-		String[] arr2=arr[1].split("＇,＇cls_prob＇");
-	    System.out.println(arr[1]);
-		System.out.println(arr2[0]);
-	}
+
 }
