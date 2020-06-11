@@ -14,7 +14,7 @@
 
 </style>
 <head>
-    <title>入库显示界面</title>
+    <title>出库显示界面</title>
     <%String path = request.getContextPath();%>
     <script rel="script" src=<%=path + "/static/js/jquery-3.4.1.js"%>></script>
 </head>
