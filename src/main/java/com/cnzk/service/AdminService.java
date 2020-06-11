@@ -2,6 +2,7 @@ package com.cnzk.service;
 
 import com.cnzk.pojo.Admin;
 import com.cnzk.pojo.LayuiData;
+import com.cnzk.pojo.TbCombo;
 import com.cnzk.pojo.TbRates;
 import org.apache.ibatis.annotations.Param;
 
@@ -42,5 +43,14 @@ public interface AdminService
 
 	//    查金额规则
 	TbRates queryPrice();
+
+	//    新增月缴状态
+	Integer addCombo(TbCombo tbCombo);
+
+	//    修改月缴状态
+	Integer updataCombo(TbCombo tbCombo);
+
+	//    修改月缴产品
+	Integer editCombo(TbCombo tbCombo);
 
 }

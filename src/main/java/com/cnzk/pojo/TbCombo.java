@@ -5,6 +5,7 @@ public class TbCombo {
   private long comboId;
   private String comboName;
   private String comboValue;
+  private String comboState;
 
 
   public long getComboId() {
@@ -33,12 +34,21 @@ public class TbCombo {
     this.comboValue = comboValue;
   }
 
+  public String getComboState() {
+    return comboState;
+  }
+
+  public void setComboState(String comboState) {
+    this.comboState = comboState;
+  }
+
   @Override
   public String toString() {
     return "TbCombo{" +
             "comboId=" + comboId +
             ", comboName='" + comboName + '\'' +
             ", comboValue='" + comboValue + '\'' +
+            ", comboState='" + comboState + '\'' +
             '}';
   }
 }

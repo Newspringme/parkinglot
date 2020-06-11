@@ -13,4 +13,17 @@
     <select id="queryCount" parameterType="java.util.Map" resultType="java.lang.Integer">
         select COUNT(*) from tb_combo;
     </select>
+
+    <!--添加新的套餐-->
+    <insert id="addCombo" parameterType="TbCombo">
+        insert into tb_combo (combo_name,combo_value,combo_state) values (#{comboName},#{comboValue},#{comboState});
+    </insert>
+    <!-- 套餐状态修改-->
+    <update id="updataCombo" parameterType="TbCombo">
+       update tb_combo set combo_state=#{comboState} where combo_id=#{comboId};
+    </update>
+<!--    套餐修改-->
+    <update id="editCombo" parameterType="TbCombo">
+       update tb_combo set combo_name=#{comboName},combo_value=#{comboValue} where combo_id=#{comboId};
+    </update>
 </mapper>

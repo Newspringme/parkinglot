@@ -26,6 +26,20 @@
     <script src="<%=path%>/static/lib/layui-v2.5.5/layui.js" charset="utf-8"></script>
     <script src="<%=path%>/static/layui/layui.js" charset="UTF-8"></script>
 
+    <style>
+        .layui-input, .layui-textarea {
+            display: block;
+            width: 80%;
+            padding-left: 10px;
+        }
+
+        .layui-form-item {
+            margin: 32px 0;
+            clear: both;
+            *zoom: 1;
+        }
+
+    </style>
 </head>
 <body>
 
@@ -41,163 +55,135 @@
 
         <table class="layui-hide" id="comboMsgTbl" lay-filter="currentTableFilter"></table>
 
-        <script type="text/html" id="currentTableBar">
-            <a class="layui-btn layui-btn-normal layui-btn-xs data-count-edit" lay-event="edit">编辑</a>
-            <a class="layui-btn layui-btn-xs layui-btn-danger data-count-delete" lay-event="delete">删除</a>
-        </script>
 
-        <%--    点击按钮弹出层的form--%>
-<%--        <form class = "layui-form" action="" style="display: none" id="changeAForm">--%>
-<%--            <div id="test12" class="demo-tree-more"></div>--%>
-<%--        </form>--%>
+        <script type="text/html" id="currentTableBar">
+            {{#  if(d.comboState=="启用"){ }}
+            <%--   这里的d是固定的，它代表数据表格在渲染数据的一个迭代对象。 --%>
+            <a class="layui-btn layui-btn-xs layui-btn-danger data-count-update" lay-event="updata">禁用</a>
+            <a class="layui-btn layui-btn-normal layui-btn-xs data-count-edit" lay-event="edit">编辑</a>
+            {{#  } }}
+
+            {{#  if(d.comboState=="禁用"){ }}
+            <a class="layui-btn layui-btn-xs layui-btn-danger data-count-update" lay-event="updata">启用</a>
+            <a class="layui-btn layui-btn-normal layui-btn-xs data-count-edit" lay-event="edit">编辑</a>
+            {{#  } }}
+        </script>
 
     </div>
 </div>
 
-
-
 <%--    表格的js--%>
 <script>
-    //layui.use加载模块
-    layui.use(['form', 'table'], function () {
-        var table = layui.table,
+    var load=layui.use(['form', 'table'], function () {
+        var $ = layui.jquery,
             form = layui.form,
-            $ = layui.jquery;
-
+            table = layui.table;
         var path = $('#path').val();
-
-        table.render({
-            elem: '#comboMsgTbl',   //表格的id
+        tableIns = table.render({
+            elem: '#comboMsgTbl',
             url: path+'/AdminController/queryComboList',
             toolbar: '#toolbarDemo',
             defaultToolbar: ['filter', 'exports', 'print', {
-                 title: '提示',
-                 layEvent: 'LAYTABLE_TIPS',
-                 icon: 'layui-icon-tips'
+                title: '提示',
+                layEvent: 'LAYTABLE_TIPS',
+                icon: 'layui-icon-tips'
             }],
             cols: [[
-                 {field: 'comboId', width: 150, title: 'ID', sort: true},
-                 {field: 'comboName', maxwidth: 765,minWidth: 100, title: '类别'},
-                 {field: 'comboValue', maxwidth: 765,minWidth: 100, title: '金额'},
-                 {title: '操作', minWidth: 150, toolbar: '#currentTableBar', align: "center"}
-                ]],
+                {field: 'comboId', width: 150, title: 'ID', sort: true},
+                {field: 'comboName', maxwidth: 765,minWidth: 100, title: '类别'},
+                {field: 'comboValue', maxwidth: 765,minWidth: 100, title: '金额'},
+                {field: 'comboState', maxwidth: 765,minWidth: 100, title: '状态'},
+                {title: '操作', minWidth: 150, toolbar: '#currentTableBar', align: "center"}
+            ]],
             limits: [10, 15, 20, 25, 50, 100],
             limit: 10,
             page: true,
-            skin: 'line',
+            skin: 'line'
         });
 
 
-        // //监听事件
-        // table.on('tool(currentTableFilter)', function(obj){
-        //     var data = obj.data;
-        //     //obj点击那行的所有字段属性
-        //     var tr = obj.tr; //获得当前行 tr 的DOM对象
-        //     var roleId = tr.children("td").eq(0).text();
-        //     console.log(roleId);
-        //     if (obj.event === 'changeAuthority')
-        //     {
-        //         var layer = layui.layer;
-        //         layer.open({
-        //             type: 1,
-        //             title: '权限菜单分配',
-        //             content: $('#changeAForm'),
-        //             offset: '50px',
-        //             anim: 1,
-        //             isOutAnim: true,
-        //             resize: false,
-        //             area: ['50%', '80%'],
-        //             closeBtn: 2,//弹出层的类型
-        //             shade: 0.6,
-        //             move: false,
-        //             btn: ['提交', '取消'],
-        //             btn1: function (index, layero) {
-        //                 updateAuthority(roleId ,index);
-        //                 return false;
-        //             },
-        //             btn2: function (index, layero) {
-        //                 layer.close(index);
-        //                 return false;
-        //             },
-        //             cancel: function (index, layero) {
-        //                 layer.close(index);
-        //                 return false;
-        //             }
-        //         });
-        //         var path = $('#path').val();
-        //         $.ajax({
-        //             url: path+"/AdminController/queryMenuTree",
-        //             async: true,
-        //             type: 'POST',
-        //             data:{
-        //                 'roleId':data.roleId
-        //             },
-        //             dataType:'json',
-        //             success: function (msg) {
-        //                 if (data=="error") {
-        //                     layer.msg('网络繁忙');
-        //                 }else {
-        //                     showTree(msg);
-        //                 }
-        //             },
-        //             error: function () {
-        //                 layer.msg('网络繁忙');
-        //                 window.parent.location.href=path+"/url/login";
-        //             }
-        //         });
-        //     }
-        // });
 
-        function showTree(data) {
-            console.log(data);
 
-            layui.use(['tree','util','form'],function () {
-                var tree = layui.tree
-                    ,layer = layui.layer
-                    ,util = layui.util
-                    ,form = layui.form;;
-                tree.render({
-                    elem: '#test12'
-                    ,data: data
-                    ,showCheckbox: true  //是否显示复选框
-                    ,id: 'demoId1'
+        /**
+         * toolbar监听事件
+         */
+        table.on('toolbar(currentTableFilter)', function (obj) {
+            if (obj.event === 'add') {  // 监听添加操作
+                var index = layer.open({
+                    title: '添加套餐',
+                    type: 2,
+                    shade: 0.2,
+                    maxmin:true,
+                    shadeClose: true,
+                    area: ['50%', '50%'],
+                    content: '/parkinglot/pages/table/combo-add.jsp',
                 });
-            });
-        };
+                $(window).on("resize", function () {
+                    layer.full(index);
+                });
+            }
+        });
 
-        function updateAuthority(roleId,index){
-            console.log("点击提交")
-            var layer = layui.layer;
-            layui.use(['tree','util'], function () {
-                var tree = layui.tree;
-                var checkData = tree.getChecked('demoId1');
-                checkData = JSON.stringify(checkData);
-                console.log(checkData);
-                var path = $('#path').val();
-
-                $.ajax({
-                    url: path+"/AdminController/updateMenuTree",
-                    async: true,
-                    type: 'POST',
-                    data:{'checkData':checkData,'roleId':roleId},
-                    success: function (data) {
-                        if (data=="success") {
-                            layer.close(index);
-                            layer.msg('修改成功，更新网页显示最新权限',{icon:6})
-                        }else{
-                            layer.msg('修改失败，请重试',{icon:5})
+        table.on('tool(currentTableFilter)', function (obj) {
+            var data = obj.data;
+            if (obj.event === 'edit') {
+                var index = layer.open({
+                    title: '编辑套餐',
+                    type: 2,
+                    shade: 0.2,
+                    maxmin:true,
+                    shadeClose: true,
+                    area: ['50%', '50%'],
+                    content: '/parkinglot/pages/table/combo-edit.jsp?comboId='+data.comboId+'&comboName='+data.comboName+'&comboValue='+data.comboValue,
+                });
+                $(window).on("resize", function () {
+                    layer.full(index);
+                });
+                return false;
+            } else if (obj.event === 'updata') {
+                layer.confirm('是否要禁止套餐：'+obj.data.comboName, function (index) {
+                    $.ajax({
+                        url:path+'/AdminController/updataCombo'
+                        ,type:"POST"
+                        ,dataType:"text"
+                        ,data:{
+                            comboId:data.comboId,
+                            comboState:data.comboState
+                        },
+                        success:function (msg) {
+                            if (msg=='true'){
+                                layer.alert("操作成功");
+                                updata();
+                            }else {
+                                layer.alert("操作失败");
+                            }
                         }
-                    },
-                    error: function () {
-                        layer.msg('网络繁忙',{icon:2});
-                        window.parent.location.href=path+"/url/login";
-                    }
+                    })
+                    layer.close(index);
                 });
-            });
+            }
+        });
+
+        form.verify({
+            comboName: function(value){
+                if(value.length < 2){
+                    return '月缴名称至少得2个字符';
+                }
+            }
+            ,comboValue: [
+                /^([1-9][0-9]*)$/
+                ,'金额为数字'
+            ]
+        });
+
+        //刷新表格
+        function updata() {
+            tableIns.reload()
         };
 
     });
     </script>
+
 
 </body>
 </html>

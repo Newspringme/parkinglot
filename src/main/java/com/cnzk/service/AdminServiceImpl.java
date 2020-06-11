@@ -124,15 +124,30 @@ public class AdminServiceImpl implements AdminService
 		layuiData.setData(tbRoleList);
 		return layuiData;
 	}
-
+	//    修改规则金额
 	@Override
 	public Integer editRates(TbRates tbRates) {
 		return ratesMapper.editRates(tbRates);
 	}
-
+	//    查金额规则
 	@Override
 	public TbRates queryPrice() {
 		TbRates tbRates = ratesMapper.queryPrice();
 		return tbRates;
+	}
+	//    新增月缴状态
+	@Override
+	public Integer addCombo(TbCombo tbCombo) {
+		return comboMapper.addCombo(tbCombo);
+	}
+	//    修改月缴状态
+	@Override
+	public Integer updataCombo(TbCombo tbCombo) {
+		return comboMapper.updataCombo(tbCombo);
+	}
+	//    修改月缴产品
+	@Override
+	public Integer editCombo(TbCombo tbCombo) {
+		return comboMapper.editCombo(tbCombo);
 	}
 }

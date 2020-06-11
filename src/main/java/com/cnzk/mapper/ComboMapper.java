@@ -13,4 +13,13 @@ public interface ComboMapper {
 
     //规则集合数量
     Integer queryCount(HashMap<String, Object> condition);
+
+    //    新增月缴状态
+    Integer addCombo(TbCombo tbCombo);
+
+    //    修改月缴状态
+    Integer updataCombo(TbCombo tbCombo);
+
+    //    修改月缴产品
+    Integer editCombo(TbCombo tbCombo);
 }
