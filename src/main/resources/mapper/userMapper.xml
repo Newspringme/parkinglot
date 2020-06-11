@@ -7,11 +7,16 @@
     <select id="carfinduser" resultType="java.lang.String">
        select tu.user_name from tb_user tu left join tb_car tc on tu.car_id = tc.car_id where tc.car_num = #{carnum}
     </select>
-
+    <select id="carfindentertime" resultType="java.lang.String">
+       select enter_time from tb_enter where car_num = #{carnum}order by  enter_time DESC limit 0,1
+    </select>
     <select id="caraddenter" >
        insert into tb_enter (enter_time,car_num) values (#{starttime},#{carnum})
     </select>
     <select id="findcarvip"  resultType="java.lang.String">
        select vip_id from  tb_car where car_num = #{carnum}
+    </select>
+    <select id="caraddexit" >
+       insert into tb_exit (exit_time,car_num) values (#{exittime},#{carnum})
     </select>
 </mapper>

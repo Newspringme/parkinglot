@@ -13,4 +13,6 @@ public interface UserMapper
 	String carfinduser(@PathParam("carnum") String carnum);
 	void caraddenter(@PathParam("carnum") String carnum,@PathParam("starttime") String starttime);
 	String findcarvip(@PathParam("carnum") String carnum);
+	void caraddexit(@PathParam("carnum") String carnum,@PathParam("exittime") String exittime);
+	String carfindentertime(@PathParam("carnum") String carnum);
 }

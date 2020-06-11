@@ -5,8 +5,11 @@ import com.cnzk.pojo.TbRates;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
-public class test {
+public class Test1
+{
     public static void main(String[] args) throws ParseException {
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
@@ -57,7 +60,9 @@ public class test {
         System.out.println(min);
     }
 
-    public static int getBill(String start, String end, TbRates rates) throws ParseException {
+    public static Map<String,Object> getBill(String start, String end, TbRates rates) throws ParseException {
+        HashMap map = new HashMap();
+
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date d2 = df.parse(start);
 
@@ -92,6 +97,8 @@ public class test {
             }
         }
 
-        return bill;
+        map.put("bill", bill);
+        map.put("time", ""+day+"天"+hour+"小时"+min+"分");
+        return map;
     }
 }
