@@ -35,10 +35,10 @@ public class ChargeController {
         String vcode = session.getAttribute("vcode").toString();//获取session上的验证码
         System.out.println("验证码："+vcode);
         System.out.println(param);
-        if(vcode.equalsIgnoreCase(param.get("chargevcode").toString())){
+//        if(vcode.equalsIgnoreCase(param.get("chargevcode").toString())){
             return chargeService.chargelogin(param,session);//获取service层返回的信息
-        }
-        return "验证码错误";
+//        }
+//        return "验证码错误";
     }
     @ResponseBody
     @RequestMapping("getChargeList")
