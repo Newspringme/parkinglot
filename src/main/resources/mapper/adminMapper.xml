@@ -56,6 +56,10 @@
         </set>
         where admin_id=#{adminId}
     </update>
+<!-- 上传头像-->
+    <update id="uploadAdminImg">
+        update tb_admin set head_img=#{headImg} where admin_name=#{adminName};
+    </update>
 
 
 </mapper>

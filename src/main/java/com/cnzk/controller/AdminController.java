@@ -164,6 +164,7 @@ public class AdminController
 	//	添加管理员
 	@RequestMapping("/addAdmin")
 	@ResponseBody
+	@Log(operationThing = "添加管理员",operationType = "添加")
 	public Object addAdmin(String msg)
 	{
 		Admin admin = JSON.parseObject(msg, Admin.class);
@@ -181,6 +182,7 @@ public class AdminController
 	//	删除管理员
 	@RequestMapping("/deleteAdmin")
 	@ResponseBody
+	@Log(operationThing = "删除管理员信息",operationType = "删除")
 	public Object deleteAdmin(String delList, String adminId)
 	{
 		int num = 0;
@@ -213,8 +215,8 @@ public class AdminController
 
 	//	更新管理员信息
 	@RequestMapping("/updateAdmin")
-	public @ResponseBody
-	String updateAdmin(String msg)
+	@Log(operationThing = "更新管理员信息",operationType = "修改")
+	public @ResponseBody String updateAdmin(String msg)
 	{
 		Admin admin = null;
 		boolean bool = false;
@@ -235,6 +237,7 @@ public class AdminController
 	//	上传头像
 	@RequestMapping("/upload")
 	@ResponseBody
+	@Log(operationThing = "上传管理员头像",operationType = "添加")
 	public Object fileUpload(String msg, MultipartFile file, HttpServletRequest request) throws IOException
 	{
 		//获取上传文件名 : file.getOriginalFilename();
@@ -255,7 +258,8 @@ public class AdminController
 		System.out.println("文件保存路径================" + projectPath);
 
 		LayuiData layuiData = new LayuiData();
-//		if (num > 0)
+		int num=adminService.uploadAdminImg(projectPath,msg);
+		if (num > 0)
 		{
 			layuiData.setCode(0);
 			layuiData.setMsg("上传成功");

@@ -32,5 +32,8 @@ public interface AdminMapper
 	//	更新管理员信息
 	int updateAdmin(Admin admin);
 
+	//	上传头像
+	int uploadAdminImg(@Param("headImg")String headImg,@Param("adminName")String adminName);
+
 
 }
