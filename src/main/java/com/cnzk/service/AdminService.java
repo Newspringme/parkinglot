@@ -53,4 +53,7 @@ public interface AdminService
 	//    修改月缴产品
 	Integer editCombo(TbCombo tbCombo);
 
+//	查收支明细
+	LayuiData queryBill(String page,String limit,String billNum ,String billTime);
+
 }

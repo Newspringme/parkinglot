@@ -1,12 +1,10 @@
 package com.cnzk.service;
 
 import com.cnzk.mapper.AdminMapper;
+import com.cnzk.mapper.BillMapper;
 import com.cnzk.mapper.ComboMapper;
 import com.cnzk.mapper.RatesMapper;
-import com.cnzk.pojo.Admin;
-import com.cnzk.pojo.LayuiData;
-import com.cnzk.pojo.TbCombo;
-import com.cnzk.pojo.TbRates;
+import com.cnzk.pojo.*;
 import com.cnzk.utils.MD5;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -30,6 +28,8 @@ public class AdminServiceImpl implements AdminService
 	private RatesMapper ratesMapper;
 	@Resource
 	private ComboMapper comboMapper;
+	@Resource
+	private BillMapper billMapper;
     //登陆
 	//登陆
 
@@ -150,4 +150,35 @@ public class AdminServiceImpl implements AdminService
 	public Integer editCombo(TbCombo tbCombo) {
 		return comboMapper.editCombo(tbCombo);
 	}
+	//	查收支明细
+	@Override
+	public LayuiData queryBill(String page, String limit, String billNum, String billTime) {
+		int startPage=Integer.parseInt(page);//获取页码;
+		int pageSize=Integer.parseInt(limit);//每页数量
+		int start = (startPage-1)*pageSize;//计算出起始查询位置
+		HashMap<String, Object> map = new HashMap<>();
+		map.put("start",start);
+		map.put("pageSize",pageSize);
+		if (null != billNum && !"".equals(billNum.trim()) && !"0".equals(billNum)) {
+			map.put("billNum",billNum);
+		}
+		if (null != billTime && !"".equals(billTime.trim()) && !"0".equals(billTime)) {
+			map.put("billTime",billTime);
+		}
+		List<TbBill> list=billMapper.queryBill(map);
+		for (TbBill tbBill : list) {
+			if (null==tbBill.getComboName()) {
+				tbBill.setComboName("临时停车");
+			}else{
+				tbBill.setComboName("购买"+tbBill.getComboName());
+			}
+		}
+		int count=billMapper.queryBillCount(map);
+		LayuiData layuiData = new LayuiData();
+		layuiData.setCode(0);
+		layuiData.setCount(count);
+		layuiData.setData(list);
+		return layuiData;
+	}
+
 }

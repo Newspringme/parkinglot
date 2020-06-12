@@ -14,7 +14,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <title>Insert title here</title>
+    <title>收支明细</title>
     <meta name="renderer" content="webkit">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -24,29 +24,23 @@
 </head>
 <body>
 <div class="layuimini-container">
+    <input type="hidden" id="path" value="<%=path%>">
     <div class="layuimini-main">
-
         <fieldset class="table-search-fieldset">
             <legend>搜索信息</legend>
             <div style="margin: 10px 10px 10px 10px">
                 <form class="layui-form layui-form-pane" action="">
                     <div class="layui-form-item">
                         <div class="layui-inline">
-                            <label class="layui-form-label">操作人</label>
+                            <label class="layui-form-label">订单编号</label>
                             <div class="layui-input-inline">
-                                <input type="text" name="username" autocomplete="off" class="layui-input">
+                                <input type="text" name="billNum" autocomplete="off" class="layui-input">
                             </div>
                         </div>
                         <div class="layui-inline">
                             <label class="layui-form-label">操作日期</label>
                             <div class="layui-input-inline">
-                                <input type="text" name="startTime" id="startTime"  placeholder="请输入开始日期" autocomplete="off" class="layui-input">
-                            </div>
-                        </div>
-                        <div class="layui-inline">
-                            <label class="layui-form-label">至</label>
-                            <div class="layui-input-inline">
-                                <input type="text" name="endTime" id="endTime"  placeholder="请输入结束日期" autocomplete="off" class="layui-input">
+                                <input type="text" name="startTime" id="startTime"  placeholder="开始日期" autocomplete="off" class="layui-input">
                             </div>
                         </div>
 
@@ -70,18 +64,15 @@
             form = layui.form,
             table = layui.table,
             laydate = layui.laydate;
-
+        var path = $("#path").val();
         //日期
         laydate.render({
             elem: '#startTime'
         });
-        laydate.render({
-            elem: '#endTime'
-        });
 
-        var getlist=table.render({
+        table.render({
             elem: '#currentTableId',
-            url: '/parkinglot/queryLog',
+            url: path+'/AdminController/queryBill',
             toolbar: '#toolbarDemo',
             defaultToolbar: ['filter', 'exports', 'print', {
                 title: '提示',
@@ -89,12 +80,11 @@
                 icon: 'layui-icon-tips'
             }],
             cols: [[
-                {field: 'logId', width: 150, title: 'ID', sort: true},
-                {field: 'operateName', maxwidth: 150,minWidth: 100, title: '操作人'},
-                {field: 'operateThing', maxwidth: 200,minWidth: 100, title: '操作事项'},
-                {field: 'operateType', minWidth: 80, title: '操作类型'},
-                {field: 'operateTime', minWidth: 100, title: '操作时间'},
-                {field: 'operateIp', maxwidth: 150,minWidth: 100, title: '操作ip'}
+                {field: 'billNum', maxwidth: 150,minWidth: 100, title: '订单编号'},
+                {field: 'billTime', maxwidth: 200,minWidth: 100, title: '账单时间'},
+                {field: 'billMoney', minWidth: 80, title: '金额'},
+                {field: 'comboName', minWidth: 100, title: '消费事项'},
+                {field: 'userName', minWidth: 100, title: '用户名'}
             ]],
             limits: [10, 15, 20, 25, 50, 100],
             limit: 10,
@@ -110,23 +100,13 @@
                     curr: 1
                 }
                 , where: {
-                    username: data.field.username,
-                    startTime:data.field.startTime,
-                    endTime:data.field.endTime
-
+                    billNum: data.field.billNum,
+                    billTime:data.field.billTime,
                 }
             }, 'data');
 
             return false;
         });
-   
-
-       
-
-
-
-
-
 
 
     });
