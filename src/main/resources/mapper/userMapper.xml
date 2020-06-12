@@ -5,7 +5,7 @@
 <mapper namespace="com.cnzk.mapper.UserMapper">
     <!--    根据车牌查用户-->
     <select id="carfinduser" resultType="java.lang.String">
-       select tu.user_name from tb_user tu left join tb_car tc on tu.car_id = tc.car_id where tc.car_num = #{carnum}
+       select u.user_name from tb_user u left join tb_user_car uc on uc.user_id=u.user_id left join tb_car c on c.car_id=uc.car_id where c.car_num= #{carnum}
     </select>
     <select id="carfindentertime" resultType="java.lang.String">
        select enter_time from tb_enter where car_num = #{carnum}order by  enter_time DESC limit 0,1

@@ -122,7 +122,7 @@ public class ChackphotoController
 
 		//车位查询
 		String ps=chackphotoService.carfindps(carNum);
-		Integer money= Integer.valueOf(map.get("bill")+"");
+		Double money= Double.valueOf(map.get("bill")+"");
 		String time=map.get("time").toString();;
 		String date= carNum+","+username+","+state+","+ps+","+entertime+","+exittime+","+time+","+money;
 		System.out.println("车牌："+carNum+"用户名："+username+"车状态："+state+"车位："+ps+"进场时间："+entertime+"出场时间："+exittime+"总时长："+time+"收费："+money);
