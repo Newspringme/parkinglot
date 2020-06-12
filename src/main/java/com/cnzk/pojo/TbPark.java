@@ -38,9 +38,9 @@ public class TbPark {
   }
 
 
-    public String getParkName() {
-        return parkName;
-    }
+  public String getParkName() {
+    return parkName;
+  }
 
     public void setParkName(String parkName) {
         this.parkName = parkName;
@@ -60,9 +60,9 @@ public class TbPark {
         return carNum;
     }
 
-    public void setCarNum(String carNum) {
-        this.carNum = carNum;
-    }
+  public void setCarNum(String carNum) {
+    this.carNum = carNum;
+  }
 
 
   public long getCoordinateId() {

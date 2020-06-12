@@ -271,42 +271,31 @@ public class AdminController
 	{
 		Admin admin = (Admin) request.getSession().getAttribute("tbAdmin");
 		Integer roleId = admin.getRoleId();
-
 		//存带有值得条件
 		HashMap<String, Object> condition = new HashMap<>();
 		condition.put("roleId", roleId);
-
 		//获取页码
 		int startPage;
 		//每页数量
 		int pageSize;
 		//计算出起始查询位置
 		int start;
-
-		if (null != limit && !"".equals(limit.trim()) && !"0".equals(limit))
-		{
+		if (null != limit && !"".equals(limit.trim()) && !"0".equals(limit)) {
 			pageSize = Integer.valueOf(limit);
 			condition.put("pageSize", pageSize);
-		}
-		else
-		{
+		} else {
 			pageSize = 10;
 			condition.put("pageSize", pageSize);
 		}
-		if (null != page && !"".equals(page.trim()) && !"0".equals(page))
-		{
+		if (null != page && !"".equals(page.trim()) && !"0".equals(page)) {
 			startPage = Integer.parseInt(page);
 			start = (startPage - 1) * pageSize;
 			condition.put("start", start);
-		}
-		else
-		{
+		} else {
 			start = 0;
 			condition.put("start", start);
 		}
-
 		condition.put("roleName", roleName);
-
 		LayuiData layuiData = roleServeice.queryRolesList(condition);
 		System.out.println("layuiData = " + JSON.toJSONString(layuiData));
 		return layuiData;
@@ -466,6 +455,15 @@ public Object addCombo(TbCombo tbCombo){
 			System.out.println("修改失败");
 			return "false";
 		}
+	}
+
+//	查收支明细
+	@ResponseBody
+	@RequestMapping("queryBill")
+	public Object queryBill(String page,String limit,String billNum ,String billTime){
+		LayuiData layuiData=adminService.queryBill(page,limit,billNum,billTime);
+		System.out.println("layuiData = " + JSON.toJSONString(layuiData));
+		return layuiData;
 	}
 
 

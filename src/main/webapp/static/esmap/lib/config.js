@@ -1,8 +1,8 @@
 ﻿var defaultOpt = {
-  mapDataUrl: "../data",
-  mapThemeUrl: "../data/theme",
-  mapID: "test666",
-  themeID: 1004
+  mapDataUrl: "../../data",
+  mapThemeUrl: "../../data/theme",
+  mapID: "cai_niao_parkinglot",
+  themeID: 2001
 };
 function getQueryString(name) {
   var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
