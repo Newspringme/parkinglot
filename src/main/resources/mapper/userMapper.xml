@@ -10,13 +10,31 @@
     <select id="carfindentertime" resultType="java.lang.String">
        select enter_time from tb_enter where car_num = #{carnum}order by  enter_time DESC limit 0,1
     </select>
-    <select id="caraddenter" >
+    <insert id="caraddenter" >
        insert into tb_enter (enter_time,car_num) values (#{starttime},#{carnum})
-    </select>
+    </insert>
     <select id="findcarvip"  resultType="java.lang.String">
        select vip_id from  tb_car where car_num = #{carnum}
     </select>
-    <select id="caraddexit" >
+    <insert id="caraddexit" >
        insert into tb_exit (exit_time,car_num) values (#{exittime},#{carnum})
+    </insert>
+    <select id="parkspacemsg" resultType="java.lang.String">
+       select park_name from tb_park  where car_num = #{carnum}
+    </select>
+    <!--    查空车位-->
+    <select id="findParkSpace" resultType="TbPark" >
+       select * from tb_park where park_state=#{state};
+    </select>
+    <!--    查空车位数量-->
+    <select id="findParkSpacenum" resultType="java.lang.String">
+       select COUNT(*) from tb_park WHERE park_state =#{state};
+    </select>
+    <!--    车库更新数据-->
+    <update id="updatatoPark">
+        update tb_park set car_num = #{carNum},park_state = #{parkState}  where park_id = #{parkId};
+    </update>
+    <select id="carfindps" resultType="java.lang.String">
+         select park_name from tb_park where car_num=#{carNum};
     </select>
 </mapper>

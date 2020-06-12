@@ -7,6 +7,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.cnzk.mapper.AdminMapper;
 import com.cnzk.mapper.UserMapper;
 import com.cnzk.pojo.Admin;
+import com.cnzk.pojo.TbPark;
 import com.cnzk.pojo.TbUser;
 import com.cnzk.utils.ChangeBase64;
 import com.cnzk.utils.HttpUtils;
@@ -20,6 +21,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static org.apache.tomcat.util.codec.binary.Base64.encodeBase64;
@@ -109,7 +111,7 @@ public class ChackphotoServiceImpl implements ChackphotoService
 				System.out.println("Http code: " + stat);
 				System.out.println("http header error msg: "+ response.getFirstHeader("X-Ca-Error-Message"));
 				System.out.println("Http body error msg:" + EntityUtils.toString(response.getEntity()));
-				return null;
+				return "NO";
 			}
 
 			String res = EntityUtils.toString(response.getEntity());
@@ -282,6 +284,40 @@ public class ChackphotoServiceImpl implements ChackphotoService
 
 			return "月卡车辆" ;}
 	}
+
+	@Override
+	public String parkspacemsg(String carnum)
+	{
+		String parkspacemsg = userMapper.parkspacemsg(carnum);
+		return parkspacemsg;
+	}
+    //查空车位
+	@Override
+	public List<TbPark> findParkSpace(String state){
+		List<TbPark> carps=userMapper.findParkSpace(state);
+		return carps;
+	}
+	//查空车位数量
+	@Override
+	public String findParkSpacenum(String state)
+	{
+		String spacenum=userMapper.findParkSpacenum(state);
+		return spacenum;
+	}
+
+	@Override
+	public void updatetoPark(TbPark tbPark)
+	{
+		userMapper.updatatoPark(tbPark);
+	}
+
+	@Override
+	public String carfindps(String carNum)
+	{
+		String carps=userMapper.carfindps(carNum);
+		return carps;
+	}
+
 
 	/*
 	 * 获取参数的json对象
