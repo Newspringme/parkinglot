@@ -197,11 +197,6 @@
         </button>
     </div>
     <br>
-    <div style="margin-top: 50px; width:300px;margin-left: -80px">
-        <div class="layui-progress">
-            <div class="layui-progress-bar" id="prograss-bar"></div>
-        </div>
-    </div>
 </div>
 <%--        上传头像弹出层结束--%>
 <script type="text/javascript">
@@ -400,12 +395,6 @@
                             }
                             ,accept: 'images'
                             ,size: 5120 //限制文件大小，单位 KB
-                            ,progress: function(n, elem){
-                                var percent = n + '%';//获取进度百分比
-                                element.progress('progress-bar', percent); //可配合 layui 进度条元素使用
-                                //以下系 layui 2.5.6 新增
-                                console.log(elem); //得到当前触发的元素 DOM 对象。可通过该元素定义的属性值匹配到对应的进度条。
-                            }
                         });
                     });
                 }
@@ -513,7 +502,7 @@
                 ,'密码必须6到12位，且不能出现空格'
             ]
             ,adminTel: function (value) {
-                if (value.lenth != 11) {
+                if (value.lenth > 11) {
                     return '请输入11位手机号码';
                 }
             }
