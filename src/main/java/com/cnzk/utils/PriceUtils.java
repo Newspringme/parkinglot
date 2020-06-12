@@ -1,4 +1,4 @@
-package com.cnzk.test;
+package com.cnzk.utils;
 
 import com.cnzk.pojo.TbRates;
 
