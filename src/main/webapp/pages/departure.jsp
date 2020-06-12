@@ -1,121 +1,157 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: junlong
-  Date: 2019-11-16
-  Time: 16:22
-  To change this template use File | Settings | File Templates.
---%>
+
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>车辆出场</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/layui/css/layui.css">
-    <script src="${pageContext.request.contextPath}/js/jquery-3.4.1.js"></script>
-    <script src="${pageContext.request.contextPath}/layui/layui.js"></script>
-    <%
-        String path = request.getContextPath();
-    %>
-</head>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<html>
 <style>
     a {
-        font-size: 19px;
-        margin-left: 20px;
+        font-size: 30px;
+        margin-left: 80px;
     }
 
     h1 {
         color: white;
     }
+
 </style>
-<body>
-<input type="hidden" id="path" value="<%=path%>">
-<form class="layui-form" action="" lay-filter="example">
-    <div style="height: 100%;width: 19%;float: left;border: 1px solid #92B8B1">
-        <img src="https://i.loli.net/2020/04/09/2SBdcZ6i1GIgDMT.png" style="width: 100%;" >
-        <div style="width: 100%;text-align:center;">
-            <br><br>
-            <br><br>
-            <a>XXX智能停车场</a><br><br>
-            <a>欢迎您下次光临</a>
-        </div>
+<head>
+    <title>出库显示界面</title>
+    <%String path = request.getContextPath();%>
+    <script rel="script" src=<%=path + "/static/js/jquery-3.4.1.js"%>></script>
+</head>
+<body style="margin: 0">
+<div style="height: 100%;width: 19%;float: left;border: 1px solid #92B8B1">
+    <img src="https://i.loli.net/2020/06/09/dPjLE2aeGVKhADT.jpg" style="width: 100%;">
+    <div style="width: 100%;height: 57%;background-color: black">
+        <br><br>
+        <br><br>
+        <a style="font-size:35px;font-family: '微软雅黑 Light';font-weight: bold ;color: yellow">菜鸟停车场</a>
+        <br>
+        <a style="font-size:50px;font-family: '微软雅黑 Light';font-weight: bold ;color: white">&nbsp&nbsp&nbsp出口</a>
+        <br>
+        <a style="font-size:50px;font-family: '微软雅黑 Light';font-weight: bold ;color: white">&nbspEXIT</a>
+        <br>
+        <a style="font-size:75px;font-family: 方正舒体;color: dodgerblue">欢&nbsp迎&nbsp</a>
+        <a style="font-size:75px;font-family: 方正舒体;color: dodgerblue">&nbsp光临</a>
+    </div>
+</div>
+
+
+
+<div  style="height: 100%;width: 80%;float:right;background-color: gray;background-image: url('${pageContext.request.contextPath}/static/img/bg.jpg')">
+
+    <div id="img" style="margin: 4% auto;width: 60%;height: 40%;background-repeat:no-repeat ;background-size:100% 100%;background-image: url('${pageContext.request.contextPath}/static/img/CAINIAOLOG.jpg')">
+        <input type="file" name="fileaot" id="fileaot"  onchange="preImg('fileaot','imgPre')"
+               style="margin-top: -50px">
+        <input type="button" value="确定" onclick="add()" id="btn"
+               style="margin-top: -50px">
+        <img src="" id="imgPre" style="width: 100%;height: 100%;margin-top:-20px">
     </div>
 
-
-    <div class="layadmin-user-login-box layadmin-user-login-header" style="height: 100%;width: 80%;float:right;background:white">
-        <div style="padding-bottom: 10px;margin: 0 auto;width: 70%;height: 40%;background:white;margin-top: 30px">
-            <div class="layui-upload">
-                <button type="button" class="layui-btn layui-btn-normal" name="fileaot" id="fileaot">选择图片</button>
-                <button type="button" class="layui-btn" id="test9">确定</button>
-                <img src="" id="imgPre" style="width: 100%;height: 400px;margin-top: 10px">
+    <div id="msg" style="margin: 0 auto;width: 70%;height: 40%;background:wheat;border:1px solid cornflowerblue">
+        <div style="width: 20%;height: 100%;background: chocolate;float: left">
+            <div style="margin: 0 auto;width: 30%;height: 100%">
+                <h1>用</h1>
+                <h1>户</h1>
+                <h1>信</h1>
+                <h1>息</h1>
             </div>
         </div>
-        <div id="msg" style="margin: 0 auto;width: 70%;height: 40%;background:white;border:1px solid cornflowerblue" >
-            <div style="width: 20%;height: 100%;background: chocolate;float: left">
-                <div style="margin: 0 auto;width: 30%;height: 100%">
-                    <h1>用</h1>
-                    <h1>户</h1>
-                    <h1>信</h1>
-                    <h1>息</h1>
-                </div>
-            </div>
-            <a>车辆牌照：</a><a id="carnumber"></a><br>
-            <a>入场时间：</a><a id="timej"></a><br>
-            <a>出场时间：</a><a id="timeC"></a><br>
-            <a>停放时长：</a><a id="timeData"></a><br>
-            <a>应缴费用：</a><a id="money"></a><br>
-            <a>车辆情况：</a><a id="state"></a><br>
-        </div>
-        <div class="demoTable">
-            <div style="padding-bottom: 10px;">
-                <div class="layui-upload">
-
-                </div>
-            </div>
-        </div>
-
+        <a id="carnumber">车牌号：</a><br>
+        <a id="username">用户：</a><br>
+        <a id="state">车辆情况：</a><br>
+        <a id="ps">停车位：</a><br>
+        <a id="entertime">入库时间：</a><br>
+        <a id="exittime">出库时间：</a><br>
+        <a id="time">停放时长：</a>
+        <a id="money">应缴费：</a><br>
+        <a style="color:red;font-family: 华文琥珀">温馨提醒：道路千万条，安全第一条。</a><br>
+        <a style="color:red;font-family: 华文琥珀">&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp行车不规范，亲人两行泪。</a>
     </div>
-</form>
+</div>
 
-<script>
-    // function preImg(sourceId, targetId) {
-    //     alert("zhixig");
-    //     var url = getFileUrl(sourceId);
-    //     var imgPre = document.getElementById(targetId);
-    //     imgPre.src = url;
-    // }
-    layui.use(['upload', 'jquery'], function () {
-        var upload = layui.upload;
-        var path = $("#path").val();
-        //执行实例
-        var uploadInst = upload.render({
-            elem: '#fileaot' //绑定元素
-            , url: path + '/charge/uploadTrainPicture' //上传接口
-            , auto: false
-            , accept: 'file'
-            , bindAction: '#test9'
-            , done: function (res) {
 
-                console.log(res);
-                document.getElementById("carnumber").innerHTML = res.carnumber;
-                document.getElementById("timej").innerHTML = res.timej;
-                document.getElementById("timeC").innerHTML = res.timeC;
-                document.getElementById("timeData").innerHTML = res.timeData;
-                document.getElementById("money").innerHTML = res.money;
-                document.getElementById("state").innerHTML = res.state;
-
-                document.getElementById("imgPre").src = "data:image/png;base64," + res.departureUrl;
-
-            }
-            , error: function () {
-                //请求异常回调
-                layer.msg("上传失败！");
-            }
-
-        });
-    });
-</script>
 </body>
+<script>
+    /**
+     * 将本地图片 显示到浏览器上
+     */
+    function preImg(sourceId, targetId) {
+        <%--$.ajax({--%>
+        <%--            url:"${pageContext.request.contextPath}/gate/img",--%>
+        <%--            async: "true",--%>
+        <%--            type: "Post",--%>
+        <%--            data: "",--%>
+        <%--            dataType: "text",--%>
+        <%--            success: function (res) {--%>
+        <%--                var imgPre = document.getElementById('imgPre');--%>
+        <%--                imgPre.src ="data:image/png;base64,"+ res;--%>
+        <%--            },--%>
+        <%--            error: function () {--%>
+        <%--            }--%>
+        <%--        }--%>
+        <%--);--%>
+        var url = getFileUrl(sourceId);
+        var imgPre = document.getElementById(targetId);
+        imgPre.src = url;
+    }
+
+    //从 file 域获取 本地图片 url
+    function getFileUrl(sourceId) {
+        var url = '';
+        var img = document.getElementsByName('img').value;
+        if (navigator.userAgent.indexOf("MSIE") >= 1) { // IE
+            url = document.getElementById(sourceId).value;
+        } else if (navigator.userAgent.indexOf("Firefox") > 0) { // Firefox
+            url = window.URL.createObjectURL(document.getElementById(sourceId).files.item(0));
+        } else if (navigator.userAgent.indexOf("Chrome") > 0) { // Chrome
+            url = window.URL.createObjectURL(document.getElementById(sourceId).files.item(0));
+        }
+        console.log(document.getElementById(sourceId).files.item(0))
+        return url;
+    }
+
+    function add() {
+        var formData = new FormData();
+        formData.append('file2', $('#fileaot')[0].files[0]);  //添加图片信息的参数
+        $.ajax({
+            url: "${pageContext.request.contextPath}/ChackphotoController/File2",
+            type: "post",
+            cache: false,
+            data: formData,
+            processData: false,// 不处理数据
+            contentType: false, // 不设置内容类型
+            success: function (data) {
+                if (data == "NO") {
+                    // var file = document.getElementById("fileaot");
+                    // var btn = document.getElementById("btn");
+                    // file.style.display = "none";
+                    // btn.style.display = "none";
+                    alert("车位已满")
+                }else if(data=="NOCAR"){
+                    alert("无识别到车牌")
+                }else if (data=="HAVEING") {
+                    alert("车牌重复，车辆已入库")
+                }else {
+                    var carnumber = data.split(",")[0];
+                    var username = data.split(",")[1];
+                    var state = data.split(",")[2];
+                    var ps = data.split(",")[3];
+                    var entertime = data.split(",")[4];
+                    var exittime = data.split(",")[5];
+                    var time = data.split(",")[6];
+                    var money = data.split(",")[7];
+                    document.getElementById("carnumber").innerHTML = "车牌号 :  " + carnumber;
+                    document.getElementById("username").innerHTML = "用户名：  " + username;
+                    document.getElementById("state").innerHTML = "车辆情况 : " + state;
+                    document.getElementById("ps").innerHTML = "停车位: " + ps;
+                    document.getElementById("entertime").innerHTML = "入库时间: " + entertime;
+                    document.getElementById("exittime").innerHTML = "出库时间: " + exittime;
+                    document.getElementById("time").innerHTML = "停放时长 :  " + time;
+                    document.getElementById("money").innerHTML = "应缴费:  " + money;
+                }
+            }
+        })
+
+    }
+</script>
 </html>

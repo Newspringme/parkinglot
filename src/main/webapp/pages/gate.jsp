@@ -24,8 +24,14 @@
     <div style="width: 100%;height: 57%;background-color: black">
         <br><br>
         <br><br>
-        <a style="color: white;">菜鸟停车场</a><br><br>
-        <a style="color: white;">&nbsp;&nbsp;欢迎您</a>
+        <a style="font-size:35px;font-family: '微软雅黑 Light';font-weight: bold ;color: yellow">菜鸟停车场</a>
+        <br>
+        <a style="font-size:50px;font-family: '微软雅黑 Light';font-weight: bold ;color: white">&nbsp&nbsp&nbsp入口</a>
+        <br>
+        <a style="font-size:50px;font-family: '微软雅黑 Light';font-weight: bold ;color: white">&nbspENTER</a>
+        <br>
+        <a style="font-size:75px;font-family: 方正舒体;color: dodgerblue">欢&nbsp迎&nbsp</a>
+        <a style="font-size:75px;font-family: 方正舒体;color: dodgerblue">&nbsp光临</a>
     </div>
 </div>
 

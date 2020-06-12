@@ -270,7 +270,7 @@ public class AdminController
 
 	//查角色列表
 	@ResponseBody
-	@RequestMapping("queryRolesList")
+	@RequestMapping("/queryRolesList")
 	public Object queryRolesList(String page, String limit, String roleName, HttpServletRequest request, HttpServletResponse response)
 	{
 		Admin admin = (Admin) request.getSession().getAttribute("tbAdmin");
@@ -354,7 +354,7 @@ public class AdminController
 
 	//查计费规则列表
 	@ResponseBody
-	@RequestMapping("queryRatesList")
+	@RequestMapping("/queryRatesList")
 	public Object queryRatesList(String page,String limit){
 		System.out.println("--------queryRatesList-------");
 		//获取页码
@@ -375,7 +375,7 @@ public class AdminController
 
 	//查月缴产品列表
 	@ResponseBody
-	@RequestMapping("queryComboList")
+	@RequestMapping("/queryComboList")
 	public Object queryComboList(String page,String limit){
 		System.out.println("--------queryComboList-------");
 		//获取页码
@@ -398,7 +398,7 @@ public class AdminController
 	@RequestMapping("/editRates")
 	@Transactional
 	@ResponseBody
-//	@Log(operationThing = "修改收费金额", operationType = "修改")
+	@Log(operationThing = "修改收费金额", operationType = "修改")
 	public void editRates(HttpServletRequest request, HttpServletResponse response,TbRates tbRates)
 	{
         System.out.println("--------editRates-------");
@@ -410,14 +410,67 @@ public class AdminController
 			ResponseUtils.outHtml(response, "error");
 		}
 	}
-
+//	查询计费规则
     @ResponseBody
-    @RequestMapping("queryPrice")
+    @RequestMapping("/queryPrice")
     public Object queryPrice(){
         System.out.println("--------queryRatesList-------");
         TbRates tbRates = adminService.queryPrice();
         System.out.println("tbRates = " + JSON.toJSONString(tbRates));
         return tbRates;
     }
+
+//    新增月缴状态
+@ResponseBody
+@RequestMapping("/addCombo")
+@Log(operationThing = "添加月缴产品",operationType = "添加")
+public Object addCombo(TbCombo tbCombo){
+		tbCombo.setComboState("启用");
+	if (adminService.addCombo(tbCombo)!=0){
+		System.out.println("添加成功");
+		return "true";
+	}else {
+		System.out.println("删除失败");
+		return "false";
+	}
+
+}
+
+	//    修改月缴状态
+	@ResponseBody
+	@RequestMapping("/updataCombo")
+	@Log(operationThing = "修改月缴产品状态",operationType = "修改")
+	public Object updataCombo(TbCombo tbCombo){
+		System.out.println("+++++++++++++++");
+		System.out.println(tbCombo.toString());
+		if(tbCombo.getComboState().equals("启用")){
+			tbCombo.setComboState("禁用");
+		}else{
+			tbCombo.setComboState("启用");
+		}
+		if (adminService.updataCombo(tbCombo)!=0){
+			System.out.println("修改成功");
+			return "true";
+		}else {
+			System.out.println("修改失败");
+			return "false";
+		}
+
+	}
+
+	//    修改月缴产品
+	@ResponseBody
+	@RequestMapping("/editCombo")
+	@Log(operationThing = "修改月缴产品",operationType = "修改")
+	public Object editCombo(TbCombo tbCombo){
+		if (adminService.editCombo(tbCombo)!=0){
+			System.out.println("修改成功");
+			return "true";
+		}else {
+			System.out.println("修改失败");
+			return "false";
+		}
+	}
+
 
 }

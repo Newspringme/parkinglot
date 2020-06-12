@@ -36,7 +36,7 @@ public class MenuServiceImpl implements MenuService {
         }
         map.put("menuInfo", TreeUtil.toTree(menuInfo, 0L));
         home.put("title","首页");
-        home.put("href","/parkinglot/pages/snow.jsp");//控制器路由,自行定义
+        home.put("href","/parkinglot/pages/welcome01.jsp");//控制器路由,自行定义
         logo.put("title","后台管理系统");
         logo.put("image","/static/img/logo.png");//静态资源文件路径,可使用默认的logo.png
         map.put("homeInfo", home);
