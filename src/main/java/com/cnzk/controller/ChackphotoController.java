@@ -3,8 +3,7 @@ package com.cnzk.controller;
 import com.cnzk.pojo.TbRates;
 import com.cnzk.service.AdminService;
 import com.cnzk.service.ChackphotoService;
-import com.cnzk.test.Test1;
-import com.google.gson.Gson;
+import com.cnzk.test.PriceUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -91,7 +90,7 @@ public class ChackphotoController
 		Map map = new HashMap();
 		try
 		{
-			map = Test1.getBill(entertime,exittime,tbRates);
+			map = PriceUtils.getBill(entertime,exittime,tbRates);
 		} catch (ParseException e)
 		{
 			e.printStackTrace();
