@@ -1,5 +1,7 @@
 package com.cnzk.controller;
 
+import com.cnzk.pojo.TbCombo;
+import com.cnzk.pojo.TbPark;
 import com.cnzk.pojo.TbRates;
 import com.cnzk.service.AdminService;
 import com.cnzk.service.ChackphotoService;
@@ -14,9 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.annotation.Resource;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 @Controller
 @RequestMapping("/ChackphotoController")
@@ -31,31 +31,55 @@ public class ChackphotoController
 	@ResponseBody
 	public String file(@RequestParam("file")MultipartFile file){
 
-		String carnum = chackphotoService.file(file);
-		System.out.println("车牌-----------:"+carnum);
+		List<TbPark> PS=chackphotoService.findParkSpace("未停车");//查剩余空车位
+		if (PS.size() == 0) {//无车位
+			return "NO";
+		}else{
+
+
+
+		String carNum = chackphotoService.file(file);
+		System.out.println("车牌-----------:"+carNum);
+        String ParkSpace=chackphotoService.parkspacemsg(carNum);//查重
+		if(carNum=="NO")
+		{
+			return "NOCAR";//无法识别车牌
+		}else if(ParkSpace!=null){
+			return  "HAVEING";//车牌重复
+		}
 
 		SimpleDateFormat sdf =   new SimpleDateFormat( " yyyy-MM-dd HH:mm:ss " );
 		String starttime = sdf.format(new Date());
 		//查车找人
-		String username=chackphotoService.finduser(carnum);
+		String username=chackphotoService.finduser(carNum);
 		System.out.println("入场用户-----------"+username);
         //入场插入数据
-		chackphotoService.caraddenter(carnum,starttime);
+		chackphotoService.caraddenter(carNum,starttime);
 		String state;
 		//车辆情况查询 是临时还是有身份
 		if ("临时用户".equals(username)){
 			state = "临时车";
 		} else {
-			state=chackphotoService.findcarvip(carnum);
+			state=chackphotoService.findcarvip(carNum);
 		}
 		System.out.println("车辆情况---------"+state);
 		//车位查询
-		String ps=null;
-
+		String ps=chackphotoService.findParkSpacenum("未停车");
+		//插入车库数据
+			Random r = new Random();
+			int num = r.nextInt(PS.size());
+			System.out.println("num==============="+num);
+			System.out.println("--------------------"+PS.get(num).toString());
+			long parkId = PS.get(num).getParkId();
+			String parkState="已停车";
+			TbPark tbPark= new TbPark(parkId,parkState,carNum);
+			System.out.println("tbPark+++++++++++++"+tbPark);
+			chackphotoService.updatetoPark(tbPark);
 
 
 		//		Object obj = new Gson().toJson()
-		return carnum+","+username+","+state+","+starttime+","+ps;
+		return carNum+","+username+","+state+","+starttime+","+ps;
+		}
 
 	}
 
@@ -63,26 +87,26 @@ public class ChackphotoController
 	@ResponseBody
 	public String file2(@RequestParam("file2")MultipartFile file2){
 
-		String carnum = chackphotoService.file2(file2);
-		System.out.println("车牌-----------:"+carnum);
+		String carNum = chackphotoService.file2(file2);
+		System.out.println("车牌-----------:"+carNum);
 
 		SimpleDateFormat sdf =   new SimpleDateFormat( " yyyy-MM-dd HH:mm:ss " );
 		String exittime = sdf.format(new Date());//查车找人
 
-		String username=chackphotoService.finduser(carnum);
+		String username=chackphotoService.finduser(carNum);
 		System.out.println("入场用户-----------"+username);
 		//出场插入数据
-		chackphotoService.caraddexit(carnum,exittime);
+		chackphotoService.caraddexit(carNum,exittime);
 		//车辆情况查询 是临时还是有身份
 		String state;
 		if ("临时用户".equals(username)){
 			state = "临时车";
 		} else {
-			state=chackphotoService.findcarvip(carnum);
+			state=chackphotoService.findcarvip(carNum);
 		}
 		System.out.println("车辆情况---------"+state);
 		//查询入场时间
-		String entertime=chackphotoService.findentertime(carnum);
+		String entertime=chackphotoService.findentertime(carNum);
 		System.out.println("查询入场时间"+entertime);
 
 //		查询计费规则
@@ -97,11 +121,11 @@ public class ChackphotoController
 		}
 
 		//车位查询
-		String ps=null;
-		Integer money= Integer.valueOf(map.get("bill")+"");
+		String ps=chackphotoService.carfindps(carNum);
+		Double money= Double.valueOf(map.get("bill")+"");
 		String time=map.get("time").toString();;
-		String date= carnum+","+username+","+state+","+ps+","+entertime+","+exittime+","+time+","+money;
-		System.out.println("车牌："+carnum+"用户名："+username+"车状态："+state+"车位："+ps+"进场时间："+entertime+"出场时间："+exittime+"总时长："+time+"收费："+money);
+		String date= carNum+","+username+","+state+","+ps+","+entertime+","+exittime+","+time+","+money;
+		System.out.println("车牌："+carNum+"用户名："+username+"车状态："+state+"车位："+ps+"进场时间："+entertime+"出场时间："+exittime+"总时长："+time+"收费："+money);
 		//		Object obj = new Gson().toJson()
 		return date;
 

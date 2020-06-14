@@ -1,6 +1,9 @@
 package com.cnzk.service;
 
+import com.cnzk.pojo.TbPark;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 public interface ChackphotoService
 {
@@ -10,6 +13,10 @@ public interface ChackphotoService
 	String findentertime(String carnum);//根据车牌查最近的入场时间
 	void caraddenter(String carnum,String starttime);//插入进场时间
 	void caraddexit(String carnum,String starttime);//插入出场时间
-	String findcarvip(String carnum);
-
+	String findcarvip(String carnum);//查权限
+	String parkspacemsg(String carnum);//查重复
+	List<TbPark> findParkSpace(String state);//查空车位
+	String findParkSpacenum(String state);//查空车位数量
+	void updatetoPark(TbPark tbPark);
+	String carfindps(String carNum);
 }
