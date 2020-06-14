@@ -67,6 +67,8 @@
 			<button type="button" class="layui-btn layui-btn-sm layui-icon layui-icon-edit" lay-event="edit">编辑</button>
 			<button type="button"  id="uploadImg" class="layui-btn layui-btn-sm layui-icon layui-icon-upload-circle" lay-event="uploadImg">上传头像</button>
 			<button type="button" class="layui-btn layui-btn-sm layui-icon layui-icon-download-circle" lay-event="queryImg">查看头像</button>
+			<button type="button" class="layui-btn layui-btn-sm  layui-btn-danger layui-icon layui-icon-close" lay-event="changeState">禁用</button>
+			<button type="button" class="layui-btn layui-btn-sm  layui-btn layui-icon layui-icon-ok" lay-event="changeState">启用</button>
 <%--			<button type="button" class="layui-btn layui-btn-sm  layui-btn-danger layui-icon layui-icon-delete" lay-event="delete">删除</button>--%>
 		</div>
 		<!--        表格主体-->
