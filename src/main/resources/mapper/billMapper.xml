@@ -32,4 +32,79 @@
         </where>
     </select>
 
+<!--查一周的总收入-->
+    <select id="findWeekAllCount" resultType="java.lang.Integer">
+		SELECT sum(bill_money) FROM tb_bill
+		WHERE DATE(bill_time) &gt; (select subdate(curdate(),date_format(curdate(),'%w')))
+		AND DATE(bill_time) &lt;= (select subdate(curdate(),date_format(curdate(),'%w')-7))
+	</select>
+
+<!--//统计一周中每天的临时停车收入-->
+    <select id="showWeekTempStatistics" resultType="java.lang.Integer" parameterType="java.util.Map">
+		SELECT sum(bill_money) FROM tb_bill
+		WHERE DATE_FORMAT(DATE(bill_time),'%Y-%m-%d') = (select subdate(curdate(),date_format(curdate(),'%w')-#{dayid})) and combo_id is null ;
+	</select>
+<!--//统计一周中每天的月缴办理收入-->
+    <select id="showWeekComboStatistics" resultType="java.lang.Integer" parameterType="java.util.Map">
+		SELECT sum(bill_money) FROM tb_bill
+		WHERE DATE_FORMAT(DATE(bill_time),'%Y-%m-%d') = (select subdate(curdate(),date_format(curdate(),'%w')-#{dayid})) and combo_id is not null ;
+	</select>
+
+
+    <!--查一月的总收入-->
+    <select id="findMonthAllCount" resultType="java.lang.Integer">
+		SELECT SUM(bill_money) FROM tb_bill
+		WHERE DATE_FORMAT(DATE(bill_time),'%Y-%m') = DATE_FORMAT(curdate(),'%Y-%m')
+	</select>
+
+    <!--//统计一月中每周的临时停车收入-->
+    <select id="showMonthTempStatistics" resultType="java.lang.Integer" parameterType="java.util.Map">
+		SELECT SUM(bill_money) FROM tb_bill
+		WHERE DATE_FORMAT(DATE(bill_time),'%Y-%m-%d') &gt;= DATE_FORMAT(DATE(#{daytime1}),'%Y-%m-%d')
+		and DATE_FORMAT(DATE(bill_time),'%Y-%m-%d') &lt;= DATE_FORMAT(DATE(#{daytime2}),'%Y-%m-%d')
+		and combo_id is null;
+	</select>
+
+    <!--//统计一月中每周的月缴办理收入-->
+    <select id="showMonthComboStatistics" resultType="java.lang.Integer" parameterType="java.util.Map">
+		SELECT SUM(bill_money) FROM tb_bill
+		WHERE DATE_FORMAT(DATE(bill_time),'%Y-%m-%d') &gt;= DATE_FORMAT(DATE(#{daytime1}),'%Y-%m-%d')
+		and DATE_FORMAT(DATE(bill_time),'%Y-%m-%d') &lt;= DATE_FORMAT(DATE(#{daytime2}),'%Y-%m-%d')
+		and combo_id is not null;
+	</select>
+
+    <!-- 查半年的总收入-->
+    <select id="findYearAllCount" resultType="java.lang.Integer" parameterType="java.util.Map">
+		select SUM(bill_money) from tb_bill
+		WHERE DATE_FORMAT(DATE(bill_time),'%Y-%m-%d') &gt;= DATE_FORMAT(DATE(#{monthtime1}),'%Y-%m-%d')
+		and DATE_FORMAT(DATE(bill_time),'%Y-%m-%d') &lt;= DATE_FORMAT(DATE(#{monthtime2}),'%Y-%m-%d')
+	</select>
+
+    <!--//统计半年中每月的临时停车收入-->
+    <select id="showYearTempStatistics" resultType="java.lang.Integer" parameterType="java.util.Map">
+		select SUM(bill_money) from tb_bill
+		WHERE DATE_FORMAT(DATE(bill_time),'%Y-%m-%d') &gt;= DATE_FORMAT(DATE(#{daytime3}),'%Y-%m-%d')
+		and DATE_FORMAT(DATE(bill_time),'%Y-%m-%d') &lt; DATE_FORMAT(DATE(#{daytime4}),'%Y-%m-%d')
+		and combo_id is null;
+	</select>
+
+<!--    //统计半年中每月的月缴办理收入-->
+    <select id="showYearComboStatistics" resultType="java.lang.Integer" parameterType="java.util.Map">
+		select SUM(bill_money) from tb_bill
+		WHERE DATE_FORMAT(DATE(bill_time),'%Y-%m-%d') &gt;= DATE_FORMAT(DATE(#{daytime3}),'%Y-%m-%d')
+		and DATE_FORMAT(DATE(bill_time),'%Y-%m-%d') &lt; DATE_FORMAT(DATE(#{daytime4}),'%Y-%m-%d')
+		and combo_id is not null;
+	</select>
+
+    <!--//补充缺失当天的临时车收入-->
+    <select id="lackTempMoney" resultType="java.lang.Integer" parameterType="java.util.Map">
+		select SUM(bill_money) from tb_bill
+		WHERE DATE_FORMAT(DATE(bill_time),'%Y-%m-%d') = DATE_FORMAT(DATE(#{lacktime}),'%Y-%m-%d') and combo_id is null;
+	</select>
+
+    <!--//补充缺失当天的月缴办理收入-->
+    <select id="lackComboMoney" resultType="java.lang.Integer" parameterType="java.util.Map">
+		select SUM(bill_money) from tb_bill
+		WHERE DATE_FORMAT(DATE(bill_time),'%Y-%m-%d') = DATE_FORMAT(DATE(#{lacktime}),'%Y-%m-%d') and combo_id is not null;
+	</select>
 </mapper>

@@ -7,6 +7,7 @@ import com.cnzk.pojo.TbRates;
 import org.apache.ibatis.annotations.Param;
 
 import javax.servlet.http.HttpSession;
+import java.text.ParseException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -56,4 +57,8 @@ public interface AdminService
 //	查收支明细
 	LayuiData queryBill(String page,String limit,String billNum ,String billTime);
 
+//	渠道量统计
+	HashMap<String,Object> showBillStatistics(HashMap<String, Object> condition) throws ParseException;
+//月缴统计
+	HashMap<String, Object> showPieComboStatistics();
 }

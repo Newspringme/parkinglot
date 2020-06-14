@@ -28,6 +28,7 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -466,5 +467,40 @@ public Object addCombo(TbCombo tbCombo){
 		return layuiData;
 	}
 
+
+	//用户统计
+	@RequestMapping("/showBillStatistics")
+	@ResponseBody
+	public void showBillStatistics(HttpServletRequest request, HttpServletResponse response) throws IOException, ParseException {
+		System.out.println("showBillStatistics");
+		String mystatic = request.getParameter("mystatic");
+		System.out.println(mystatic);
+		//存带有值得条件
+		HashMap<String,Object> condition = new HashMap<>();
+		if(null!=mystatic&&!"".equals(mystatic.trim())) {
+			condition.put("mystatic",mystatic);
+		}
+		HashMap<String,Object> statisticsMap =  adminService.showBillStatistics(condition);
+		StatisticsData statisticsData = new StatisticsData(statisticsMap);
+		if (null!=statisticsMap){
+			ResponseUtils.outJson(response, statisticsData);
+		}else{
+			response.getWriter().print("error");
+		}
+	}
+
+	//	月缴统计
+	@RequestMapping("/showPieComboStatistics")
+	@ResponseBody
+	public void showPieComboStatistics(HttpServletRequest request, HttpServletResponse response) throws IOException {
+		System.out.println("showPieComboStatistics");
+		HashMap<String,Object> statisticsMap =  adminService.showPieComboStatistics();
+		StatisticsData statisticsData = new StatisticsData(statisticsMap);
+		if (null!=statisticsMap){
+			ResponseUtils.outJson(response, statisticsData);
+		}else{
+			response.getWriter().print("error");
+		}
+	}
 
 }
