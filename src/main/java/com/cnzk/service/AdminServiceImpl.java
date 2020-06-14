@@ -1,9 +1,6 @@
 package com.cnzk.service;
 
-import com.cnzk.mapper.AdminMapper;
-import com.cnzk.mapper.BillMapper;
-import com.cnzk.mapper.ComboMapper;
-import com.cnzk.mapper.RatesMapper;
+import com.cnzk.mapper.*;
 import com.cnzk.pojo.*;
 import com.cnzk.utils.MD5;
 import com.cnzk.utils.TimeUtils;
@@ -33,6 +30,8 @@ public class AdminServiceImpl implements AdminService
 	private ComboMapper comboMapper;
 	@Resource
 	private BillMapper billMapper;
+	@Resource
+	private ParamMapper paramMapper;
     //登陆
 	//登陆
 
@@ -294,6 +293,24 @@ public class AdminServiceImpl implements AdminService
 		}
 		System.out.println(statisticsMap.toString());
 		return statisticsMap;
+	}
+
+
+
+	@Override
+	public LayuiData queryParam( int start, int pageSize) {
+		List<TbParam> list = paramMapper.queryParam( start, pageSize);
+		int count = paramMapper.queryParamCount();
+		LayuiData layuiData = new LayuiData();
+		layuiData.setCode(0);
+		layuiData.setCount(count);
+		layuiData.setData(list);
+		return layuiData;
+	}
+
+	@Override
+	public Integer editParam(TbParam tbParam) {
+		return paramMapper.editParam(tbParam);
 	}
 
 

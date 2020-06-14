@@ -50,9 +50,7 @@ public interface AdminService
 
 	//    修改月缴产品
 	Integer editCombo(TbCombo tbCombo);
-	//    改变状态
 	Integer updateState(Admin admin);
-
 //	查收支明细
 	LayuiData queryBill(String page,String limit,String billNum ,String billTime);
 
@@ -60,4 +58,10 @@ public interface AdminService
 	HashMap<String,Object> showBillStatistics(HashMap<String, Object> condition) throws ParseException;
 //月缴统计
 	HashMap<String, Object> showPieComboStatistics();
+	//参数查询
+	LayuiData queryParam(int start, int pageSize);
+
+	//参数修改
+	Integer editParam(TbParam tbParam);
+
 }

@@ -487,6 +487,29 @@ public Object addCombo(TbCombo tbCombo){
 		return layuiData;
 	}
 
+	@ResponseBody
+	@RequestMapping("queryParam")
+	public Object queryParam(String page,String limit){
+		int startPage=Integer.parseInt(page);//获取页码;
+		int pageSize=Integer.parseInt(limit);//每页数量
+		int start = (startPage-1)*pageSize;//计算出起始查询位置
+		LayuiData layuiData=adminService.queryParam(start,pageSize);
+		System.out.println("layuiData = " + JSON.toJSONString(layuiData));
+		return layuiData;
+	}
+
+	@ResponseBody
+	@RequestMapping("editParam")
+	public Object editParam(TbParam tbParam){
+		if (adminService.editParam(tbParam)!=0){
+			System.out.println("修改成功");
+			return "true";
+		}else {
+			System.out.println("修改失败");
+			return "false";
+		}
+	}
+
 
 	//用户统计
 	@RequestMapping("/showBillStatistics")
