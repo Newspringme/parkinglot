@@ -264,6 +264,26 @@ public class AdminController
 		}
 		return layuiData;
 	}
+	//更改管理员状态
+	@ResponseBody
+    @RequestMapping("updateState")
+	public void updateState(HttpServletRequest request, HttpServletResponse response) throws Exception{
+		response.setCharacterEncoding("UTF-8");
+		response.setContentType("text/html;charset=UTF-8");
+		System.out.println("doPost");
+
+		Admin admin = new Admin();
+
+		admin.setAdminName(request.getParameter("adminName"));
+		admin.setAdminState(request.getParameter("adminState"));
+
+		int i = adminService.updateState(admin);
+		if (i>0){
+			response.getWriter().write("true");
+		}else{
+			response.getWriter().write("false");
+		}
+	}
 
 	//查角色列表
 	@ResponseBody

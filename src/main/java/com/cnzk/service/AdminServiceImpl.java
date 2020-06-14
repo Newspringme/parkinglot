@@ -153,6 +153,12 @@ public class AdminServiceImpl implements AdminService
 	public Integer editCombo(TbCombo tbCombo) {
 		return comboMapper.editCombo(tbCombo);
 	}
+
+	@Override
+	public Integer updateState(Admin admin) {
+		return adminMapper.updateState(admin);
+	}
+
 	//	查收支明细
 	@Override
 	public LayuiData queryBill(String page, String limit, String billNum, String billTime) {

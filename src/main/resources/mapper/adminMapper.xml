@@ -57,5 +57,9 @@
         where admin_id=#{adminId}
     </update>
 
+    <!--更新状态-->
+    <update id="updateState" parameterType="com.cnzk.pojo.Admin">
+        update tb_admin set admin_state = #{adminState} where admin_name = #{adminName}
+    </update>
 
 </mapper>

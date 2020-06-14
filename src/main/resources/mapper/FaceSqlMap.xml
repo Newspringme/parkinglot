@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cnzk.mapper.FaceMapper">
+
+
+
+    <!--通过收费员账户,查询收费员信息-->
+    <select id="findAdminByAccount" parameterType="java.lang.String" resultType="Admin">
+        select * from tb_admin where admin_name = #{adminnum}
+    </select>
+
+
+    <!--通过收费员账户,查询收费员信息-->
+    <select id="findChargeByAccount" parameterType="java.lang.String" resultType="Charge">
+       select * from tb_admin where admin_name = #{adminnum}
+    </select>
+
+</mapper>

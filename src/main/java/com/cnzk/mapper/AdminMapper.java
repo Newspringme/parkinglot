@@ -1,6 +1,7 @@
 package com.cnzk.mapper;
 
 import com.cnzk.pojo.Admin;
+import com.cnzk.pojo.Charge;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -31,6 +32,9 @@ public interface AdminMapper
 
 	//	更新管理员信息
 	int updateAdmin(Admin admin);
+
+	//更新状态
+	Integer updateState(Admin admin);
 
 
 }
