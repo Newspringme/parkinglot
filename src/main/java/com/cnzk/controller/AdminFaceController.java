@@ -2,12 +2,12 @@ package com.cnzk.controller;
 
 
 
+import com.alibaba.fastjson.JSONObject;
 import com.cnzk.pojo.Admin;
 import com.cnzk.service.FaceService;
 import com.cnzk.utils.GetToken;
 import com.cnzk.utils.GsonUtils;
 import com.cnzk.utils.HttpUtil;
-import net.sf.json.JSONObject;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -78,7 +78,7 @@ public class AdminFaceController {
                 result = faceUpdate(adminFace, tbAdmin.getAdminName());
                 System.out.println("更新result=" + result);
             }
-            JSONObject jsonObject = JSONObject.fromObject(result);
+            JSONObject jsonObject = JSONObject.parseObject(result);
             JSONObject fromObject = jsonObject.getJSONObject("result");
             String face_token = (String) fromObject.get("face_token");//得到百度返回是人脸
             System.out.println("添加人脸face_token=" + face_token);
@@ -121,10 +121,10 @@ public class AdminFaceController {
             String result = HttpUtil.post(url, accessToken, "application/json", param);
             System.out.println(result);
 
-            JSONObject fromObject = JSONObject.fromObject(result);
+            JSONObject fromObject = JSONObject.parseObject(result);
             JSONObject jsonObject = fromObject.getJSONObject("result");
             // 此时需要加个判断
-            if (jsonObject.isNullObject()) {
+            if (jsonObject.isEmpty()) {
                 System.out.println("jsonObject 为空");
                 return "无法识别面部!";
             }
@@ -173,7 +173,7 @@ public class AdminFaceController {
 
             String result = HttpUtil.post(url, accessToken, "application/json", param);
             System.out.println("人脸搜索result=" + result);
-            JSONObject jsonObject = JSONObject.fromObject(result);
+            JSONObject jsonObject = JSONObject.parseObject(result);
             String error_msg = (String) jsonObject.get("error_msg");
             if (error_msg.equals("SUCCESS") && !"".equals(error_msg)){
                 return true;
