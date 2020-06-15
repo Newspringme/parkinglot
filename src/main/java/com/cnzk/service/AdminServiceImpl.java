@@ -253,6 +253,7 @@ public class AdminServiceImpl implements AdminService
 				List XList = TimeUtils.moulist;
 				List tempList = new ArrayList();
 				List comboList = new ArrayList();
+
 				for (int i = 0; i < dateSection1.size(); i++) {
 					if(i<6) {
 						condition.put("daytime3", dateSection1.get(i));
@@ -269,11 +270,18 @@ public class AdminServiceImpl implements AdminService
 						}
 
 						if (i==5){
+                            System.out.println("condition="+condition);
 							condition.put("lacktime", dateSection1.get(i + 1));
-							tempMouthCount += billMapper.lackTempMoney(condition);
-							comboMonthCount += billMapper.lackComboMoney(condition);
+                            System.out.println("condition="+condition);
+                            Integer tempMouthCount1 = billMapper.lackTempMoney(condition);
+                            Integer comboMonthCount1 = billMapper.lackComboMoney(condition);
+                            if (tempMouthCount1!=null){
+                                tempMouthCount += billMapper.lackTempMoney(condition);
+                            }
+                            if (comboMonthCount1!=null){
+                                comboMonthCount += billMapper.lackComboMoney(condition);
+                            }
 						}
-
 						System.out.println("临时月金额为" + tempMouthCount);
 						System.out.println("月缴月金额为" + comboMonthCount);
 						tempList.add(tempMouthCount);

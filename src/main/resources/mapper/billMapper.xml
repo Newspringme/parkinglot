@@ -12,7 +12,7 @@
                 a.bill_num=#{billNum}
             </if>
             <if test="billTime">
-                DATE_FORMAT(DATE(a.bill_time),'%Y-%m-%d')  = DATE_FORMAT(#{billTime},'%Y-%m-%d');
+                DATE_FORMAT(DATE(a.bill_time),'%Y-%m-%d')  = DATE_FORMAT(#{billTime},'%Y-%m-%d')
             </if>
         </where>
         order by a.bill_time DESC
@@ -27,7 +27,7 @@
                 a.bill_num=#{billNum}
             </if>
             <if test="billTime">
-                DATE_FORMAT(DATE(a.bill_time),'%Y-%m-%d')  = DATE_FORMAT(#{billTime},'%Y-%m-%d');
+                DATE_FORMAT(DATE(a.bill_time),'%Y-%m-%d')  = DATE_FORMAT(#{billTime},'%Y-%m-%d')
             </if>
         </where>
     </select>
