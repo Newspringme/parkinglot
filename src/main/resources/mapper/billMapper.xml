@@ -109,4 +109,12 @@
 		select SUM(bill_money) from tb_bill
 		WHERE DATE_FORMAT(DATE(bill_time),'%Y-%m-%d') = DATE_FORMAT(DATE(#{lacktime}),'%Y-%m-%d') and combo_id is not null and bill_state=1;
 	</select>
+
+	<insert id="insertBill" parameterType="com.cnzk.pojo.TbBill">
+		 insert into tb_bill (bill_num,bill_money,car_num) values (#{billNum},#{billMoney},#{carNum});
+	</insert>
+
+	<update id="updateBill" parameterType="com.cnzk.pojo.TbBill">
+       update tb_bill set bill_state=1 where bill_num=#{billNum};
+    </update>
 </mapper>

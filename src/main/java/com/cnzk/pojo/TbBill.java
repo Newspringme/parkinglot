@@ -10,11 +10,33 @@ public class TbBill {
   private long comboId;
   private long billState;
 
+  public long getBillState() {
+    return billState;
+  }
+
+  public void setBillState(long billState) {
+    this.billState = billState;
+  }
+
+  public String getCarNum() {
+    return carNum;
+  }
+
+  public void setCarNum(String carNum) {
+    this.carNum = carNum;
+  }
+
+  private long billState;
+  private String carNum;
+
 //  操作事项
   private String comboName;
 
 //  操作人
   private String userName;
+
+  public TbBill() {
+  }
 
 
   public long getBillId() {
