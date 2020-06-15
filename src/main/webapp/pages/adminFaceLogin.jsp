@@ -27,13 +27,13 @@
     <h1 class="hogo"><i> 人脸识别登录</i></h1>
 </div>
 <section class="stark-login">
-    <form action="" method="">
+    <form >
         <br>
         <video id="video" width="300" height="230" autoplay style=" border: 5px solid #00fffc;"></video>
         <div id="fade-box">
             <input type="button" onclick="query()" value="立即登录" class="submit_btn"/>
             <a style="margin-left: 240px; font-size: 16px; color: #00a4a2"
-               href=<%=path + "/url/admin/adminLogin"%>>账号登录</a>
+               href=<%=path + "/pages/login.jsp"%>>账号登录</a>
             <canvas id="canvas" width="400" height="300" hidden></canvas>
         </div>
     </form>

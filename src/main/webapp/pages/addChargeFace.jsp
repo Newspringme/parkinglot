@@ -19,7 +19,6 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="format-detection" content="telephone=no">
     <title>人脸添加</title>
-<%--    <link rel="stylesheet" type="text/css" href=<%=path + "/css/facelogincss.css"%>/>--%>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/facelogincss.css"  media="all">
 </head>
 <body>
@@ -32,6 +31,8 @@
         <video id="video" width="300" height="230" autoplay style=" border: 5px solid #00fffc;"></video>
         <div id="fade-box">
             <input type="button" onclick="addFace()" value="确认添加" class="submit_btn"/>
+            <a style="margin-left: 240px; font-size: 16px; color: #00a4a2"
+               href=<%=path + "/charge/path/chargeLnterface"%>>取消</a>
             <canvas id="canvas" width="400" height="300" hidden></canvas>
         </div>
     </form>
@@ -112,11 +113,27 @@
     <li></li>
     <li></li>
 </ul>
-<%--<script type="text/javascript" src=<%=jsPath + "jquery-3.4.1.js" %>></script>--%>
-<%--<script src=<%=path + "/layuiadmin/layui/layui.js"%>></script>--%>
 <script src="${pageContext.request.contextPath}/static/js/jquery-3.4.1.js" charset="utf-8"></script>
 <script src="${pageContext.request.contextPath}/static/layuiadmin/layui/layui.js" charset="utf-8"></script>
+
 <script type="text/javascript">
+    //访问用户媒体设备的兼容方法
+    function getUserMedia(constraints, success, error) {
+        if (navigator.mediaDevices.getUserMedia) {
+            //最新的标准API
+            navigator.mediaDevices.getUserMedia(constraints).then(success).catch(error);
+        } else if (navigator.webkitGetUserMedia) {
+            //webkit核心浏览器
+            navigator.webkitGetUserMedia(constraints,success, error)
+        } else if (navigator.mozGetUserMedia) {
+            //firfox浏览器
+            navigator.mozGetUserMedia(constraints, success, error);
+        } else if (navigator.getUserMedia) {
+            //旧版API
+            navigator.getUserMedia(constraints, success, error);
+        }
+    }
+
     //var 是定义变量
     var video = document.getElementById("video"); //获取video标签
     var canvas = document.getElementById("canvas");
@@ -135,54 +152,39 @@
         console.log('访问用户媒体设备失败${error.name}, ${error.message}');
     }
 
-    //调用用户媒体设备, 访问摄像头
-    getUserMedia({video: {width: 1980, height: 1024}}, success, error);
-
-    //访问用户媒体设备的兼容方法
-    function getUserMedia(constraints, success, error) {
-        if (navigator.mediaDevices.getUserMedia) {
-            //最新的标准API
-            navigator.mediaDevices.getUserMedia(constraints).then(success).catch(error);
-        } else if (navigator.webkitGetUserMedia) {
-            //webkit核心浏览器
-            navigator.webkitGetUserMedia(constraints, success, error)
-        } else if (navigator.mozGetUserMedia) {
-            //firfox浏览器
-            navigator.mozGetUserMedia(constraints, success, error);
-        } else if (navigator.getUserMedia) {
-            //旧版API
-            navigator.getUserMedia(constraints, success, error);
-        } else {
-            alert('不支持访问用户媒体');
-        }
+    if (navigator.mediaDevices.getUserMedia || navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia) {
+        //调用用户媒体设备, 访问摄像头
+        getUserMedia({video : {width: 1980, height: 1024}}, success, error);
+    } else {
+        alert('不支持访问用户媒体');
     }
 
     function addFace() {
         //把流媒体数据画到convas画布上去
         context.drawImage(video, 0, 0, 400, 300);
-        var adminFace = getBase64();
-        // console.log('adminFace='+adminFace);
+        var chargeFace = getBase64();
+
         $.ajax({
             type: "post",
-            url: "${pageContext.request.contextPath}/adminFace/addAdminFace",
-            data: {"adminFace": adminFace},
+            url: "${pageContext.request.contextPath}/chargeFace/addChargeFace",
+            data: {"chargeFace": chargeFace},
             success: function (data) {
                 if (data.msg === "1") {
-                    alert("添加成功");
-                    parent.location.reload();
+                    alert("添加成功")
+                    window.location.href = "${pageContext.request.contextPath}/charge/path/chargeLnterface";
                 } else if (data.msg === "2") {
                     alert("添加失败");
+
                 }
             }
         });
     }
 
+
     function getBase64() {
-        var imgSrc = document.getElementById("canvas").toDataURL(
-            "image/png");
+        var imgSrc = document.getElementById("canvas").toDataURL("image/png");
         return imgSrc.split("base64,")[1];
     }
-
 </script>
 
 </body>
