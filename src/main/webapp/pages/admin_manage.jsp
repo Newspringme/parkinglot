@@ -185,7 +185,7 @@
 
 	<button type="button"  id="uploadImg" class="layui-btn layui-btn-sm layui-icon layui-icon-upload-circle" lay-event="uploadImg">上传头像</button>
 
-	<button type="button" class="layui-btn layui-btn-sm layui-icon layui-icon-download-circle" lay-event="queryImg">查看头像</button>
+<%--	<button type="button" class="layui-btn layui-btn-sm layui-icon layui-icon-download-circle" lay-event="queryImg">查看头像</button>--%>
 	<button type="button" class="layui-btn layui-btn-sm  layui-btn layui-icon layui-icon-refresh-3" lay-event="return">重置密码</button>
 	<button type="button" class="layui-btn layui-btn-sm  layui-btn-danger layui-icon layui-icon-more" lay-event="look">查看</button>
 	{{#  if(d.adminState === '启用'){ }}
@@ -300,10 +300,10 @@
 				, {field: 'checkbox', type: 'checkbox'}
 				, {field: 'adminId', hide: true, title: 'ID', align: 'center', width:50, sort: true}
 				, {field: 'adminName', title: '管理员账号', align: 'center', width: 120, templet: '#nameTpl'}
-				, {field: 'adminSex', title: '性别', align: 'center', width: 80, templet: '#sexTpl'}
-				, {field: 'adminTel', title: '手机号码', align: 'center', width: 100}
+				, {field: 'adminSex', title: '性别', align: 'center', width: 80, templet: '#sexTpl',hide:true}
+				, {field: 'adminTel', title: '手机号码', align: 'center', width: 100,hide:true}
 				, {field: 'adminState', title: '状态', align: 'center', width: 100}
-				, {field: 'roleName', title: '角色', align: 'center', width: 100}
+				, {field: 'roleName', title: '角色', align: 'center', width: 100,hide:true}
 				, {field: 'roleId', title: '角色id', hide: true, width: 100}
 				, {field: 'regTime', title: '添加时间', align: 'center', width: 200}
 				, {fixed: 'right', title: '操作', align: 'center', width: 550, toolbar: '#adminBar'}
