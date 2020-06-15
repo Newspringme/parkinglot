@@ -117,4 +117,8 @@
 	<update id="updateBill" parameterType="com.cnzk.pojo.TbBill">
        update tb_bill set bill_state=1 where bill_num=#{billNum};
     </update>
+
+	<select id="getCarNum" resultType="com.cnzk.pojo.TbBill" parameterType="com.cnzk.pojo.TbBill">
+		select * from tb_bill where bill_num=#{billNum}
+	</select>
 </mapper>

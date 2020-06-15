@@ -19,7 +19,7 @@ public interface UserMapper
 	String findcarvip(@PathParam("carnum") String carnum);
 
 	void caraddexit(@PathParam("carnum") String carnum, @PathParam("exittime") String exittime);
-
+	void carexit(@PathParam("carnum") String carnum);
 	String carfindentertime(@PathParam("carnum") String carnum);
 	String parkspacemsg(@PathParam("carnum") String carnum);
 	List<TbPark> findParkSpace(@PathParam("state")String state);
@@ -27,7 +27,6 @@ public interface UserMapper
 	void updatatoPark(@PathParam("tbPark")TbPark tbPark);
 	String carfindps(@PathParam("carNum") String carNum);
 
-}
 
 	//	添加用户
 	int addUser(TbUser tbUser);

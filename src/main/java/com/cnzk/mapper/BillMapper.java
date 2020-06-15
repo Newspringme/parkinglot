@@ -43,4 +43,6 @@ public interface BillMapper {
     int insertBill (TbBill bill);
     //交易成功
     int updateBill (TbBill bill);
+
+    TbBill getCarNum(TbBill bill);
 }

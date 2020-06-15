@@ -20,4 +20,9 @@ public class BillServiceImpl  implements  BillService{
     public int updateBill(TbBill bill) {
         return billMapper.updateBill(bill);
     }
+
+    @Override
+    public TbBill getCarNum(TbBill bill) {
+        return billMapper.getCarNum(bill);
+    }
 }

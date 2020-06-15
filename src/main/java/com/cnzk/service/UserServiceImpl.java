@@ -35,4 +35,9 @@ public class UserServiceImpl implements UserService
 	{
 		return userMapper.queryUserByUserName(userName);
 	}
+
+	@Override
+	public void carexit(String carnum) {
+		userMapper.carexit(carnum);
+	}
 }
