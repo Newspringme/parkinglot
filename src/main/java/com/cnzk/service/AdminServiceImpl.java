@@ -203,7 +203,7 @@ public class AdminServiceImpl implements AdminService
 				List XList = new ArrayList<String>(Arrays.asList("周一", "周二", "周三", "周四", "周五", "周六","周日"));
 				List tempList = new ArrayList();
 				List comboList = new ArrayList();
-				for (int i = 0; i < 7; i++) {
+				for (int i = 1; i < 8; i++) {
 					condition.put("dayid", i);
 					Integer tempDayCount = billMapper.showWeekTempStatistics(condition);
 					if (tempDayCount==null){

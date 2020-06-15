@@ -33,6 +33,6 @@
 
 <!--    查每种套餐的购买量-->
     <select id="queryComboMoney" resultType="PieStatisticsData">
-    select b.combo_name as name,sum(a.bill_money) as value from tb_bill a left join tb_combo b on a.combo_id = b.combo_id where b.combo_state = '启用' group by b.combo_name order by value desc
+    select b.combo_name as name,sum(a.bill_money) as value from tb_bill a left join tb_combo b on a.combo_id = b.combo_id where b.combo_state = '启用' and a.bill_state = 1 group by b.combo_name order by value desc
     </select>
 </mapper>

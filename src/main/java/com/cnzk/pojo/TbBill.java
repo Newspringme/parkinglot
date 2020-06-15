@@ -8,6 +8,7 @@ public class TbBill {
   private String billNum;
   private String billMoney;
   private long comboId;
+  private long billState;
 
 //  操作事项
   private String comboName;
@@ -76,6 +77,14 @@ public class TbBill {
     this.userName = userName;
   }
 
+  public long getBillState() {
+    return billState;
+  }
+
+  public void setBillState(long billState) {
+    this.billState = billState;
+  }
+
   @Override
   public String toString() {
     return "TbBill{" +
@@ -84,6 +93,7 @@ public class TbBill {
             ", billNum='" + billNum + '\'' +
             ", billMoney='" + billMoney + '\'' +
             ", comboId=" + comboId +
+            ", billState=" + billState +
             ", comboName='" + comboName + '\'' +
             ", userName='" + userName + '\'' +
             '}';
