@@ -1,9 +1,6 @@
 package com.cnzk.service;
 
-import com.cnzk.pojo.Admin;
-import com.cnzk.pojo.LayuiData;
-import com.cnzk.pojo.TbCombo;
-import com.cnzk.pojo.TbRates;
+import com.cnzk.pojo.*;
 import org.apache.ibatis.annotations.Param;
 
 import javax.servlet.http.HttpSession;
@@ -53,7 +50,7 @@ public interface AdminService
 
 	//    修改月缴产品
 	Integer editCombo(TbCombo tbCombo);
-
+	Integer updateState(Admin admin);
 //	查收支明细
 	LayuiData queryBill(String page,String limit,String billNum ,String billTime);
 
@@ -61,4 +58,10 @@ public interface AdminService
 	HashMap<String,Object> showBillStatistics(HashMap<String, Object> condition) throws ParseException;
 //月缴统计
 	HashMap<String, Object> showPieComboStatistics();
+	//参数查询
+	LayuiData queryParam(int start, int pageSize);
+
+	//参数修改
+	Integer editParam(TbParam tbParam);
+
 }

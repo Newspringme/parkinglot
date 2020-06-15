@@ -1,6 +1,8 @@
 package com.cnzk.mapper;
 
 import com.cnzk.pojo.PieStatisticsData;
+import com.cnzk.pojo.Admin;
+import com.cnzk.pojo.Charge;
 import com.cnzk.pojo.TbCombo;
 import org.apache.ibatis.annotations.Mapper;
 
