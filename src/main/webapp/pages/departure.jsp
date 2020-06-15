@@ -17,10 +17,33 @@
     <title>出库显示界面</title>
     <%String path = request.getContextPath();%>
     <script rel="script" src=<%=path + "/static/js/jquery-3.4.1.js"%>></script>
+    <link rel="stylesheet" href="<%=path%>/static/lib/layui-v2.5.5/css/layui.css" media="all">
+    <link rel="stylesheet" href="<%=path%>/static/css/public.css" media="all">
+    <script src="<%=path%>/static/lib/layui-v2.5.5/layui.js" charset="utf-8"></script>
 </head>
 <body style="margin: 0">
 <div style="height: 100%;width: 19%;float: left;border: 1px solid #92B8B1">
-    <img src="https://i.loli.net/2020/06/09/dPjLE2aeGVKhADT.jpg" style="width: 100%;">
+<%--    <img src="https://i.loli.net/2020/06/09/dPjLE2aeGVKhADT.jpg" style="width: 100%;">--%>
+    <div class="layui-form layuimini-form">
+        <div class="layui-form-item">
+            <label class="layui-form-label required">车牌号</label>
+            <div class="layui-input-block">
+                <input type="text" name="carnum" lay-verify="required" lay-reqtext="车牌号不能为空" placeholder="请输入车牌号" value="" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <button class="layui-btn layui-btn-normal" lay-submit lay-filter="saveBtn">查询</button>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <input type="hidden" class="enter">
+                <input type="hidden" class="exit">
+                <button class="layui-btn layui-btn-normal" lay-submit onclick="zhifu()">出库</button>
+            </div>
+        </div>
+    </div>
     <div style="width: 100%;height: 57%;background-color: black">
         <br><br>
         <br><br>
@@ -44,7 +67,9 @@
                style="margin-top: -50px">
         <input type="button" value="确定" onclick="add()" id="btn"
                style="margin-top: -50px">
+
         <img src="" id="imgPre" style="width: 100%;height: 100%;margin-top:-20px">
+
     </div>
 
     <div id="msg" style="margin: 0 auto;width: 70%;height: 40%;background:wheat;border:1px solid cornflowerblue">
@@ -152,6 +177,60 @@
             }
         })
 
+    }
+    layui.use(['form'], function () {
+        var form = layui.form,
+            layer = layui.layer,
+            $ = layui.$;
+
+        //监听提交
+        form.on('submit(saveBtn)', function (msg) {
+            $.ajax({
+                url:"${pageContext.request.contextPath}/ChackphotoController/search"
+                ,type:"POST"
+                ,dataType:"text"
+                ,data:{
+                    carnum:msg.field.carnum,
+                },
+                success:function (data) {
+                    if (data == "NO") {
+                        // var file = document.getElementById("fileaot");
+                        // var btn = document.getElementById("btn");
+                        // file.style.display = "none";
+                        // btn.style.display = "none";
+                        alert("车位已满")
+                    }else if(data=="NOCAR"){
+                        alert("无识别到车牌")
+                    }else if (data=="HAVEING") {
+                        alert("车牌重复，车辆已入库")
+                    }else {
+                        var carnumber = data.split(",")[0];
+                        var username = data.split(",")[1];
+                        var state = data.split(",")[2];
+                        var ps = data.split(",")[3];
+                        var entertime = data.split(",")[4];
+                        var exittime = data.split(",")[5];
+                        var time = data.split(",")[6];
+                        var money = data.split(",")[7];
+                        document.getElementById("carnumber").innerHTML = "车牌号 :  " + carnumber;
+                        document.getElementById("username").innerHTML = "用户名：  " + username;
+                        document.getElementById("state").innerHTML = "车辆情况 : " + state;
+                        document.getElementById("ps").innerHTML = "停车位: " + ps;
+                        document.getElementById("entertime").innerHTML = "入库时间: " + entertime;
+                        document.getElementById("exittime").innerHTML = "出库时间: " + exittime;
+                        document.getElementById("time").innerHTML = "停放时长 :  " + time;
+                        document.getElementById("money").innerHTML = "应缴费:  " + money;
+                        $(".enter").val(entertime);
+                        $(".exit").val(exittime);
+                    }
+                }
+            })
+            return false;
+        });
+
+    });
+    function zhifu() {
+        window.open("${pageContext.request.contextPath}/alipay?enter="+$(".enter").val()+"&exit="+$(".exit").val());
     }
 </script>
 </html>

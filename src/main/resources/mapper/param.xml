@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cnzk.mapper.ParamMapper">
+    <!--    查询所有参数-->
+    <select id="queryParam" resultType="com.cnzk.pojo.TbParam" >
+        select * from  tb_param limit #{start},#{pageSize};
+    </select>
+    <!--查询所有参数数量-->
+    <select id="queryParamCount" resultType="int">
+        select count(*) as count from tb_param;
+    </select>
+    <update id="editParam" parameterType="com.cnzk.pojo.TbParam">
+       update tb_param set param_value=#{paramValue} where param_id=#{paramId};
+    </update>
+
+
+</mapper>
