@@ -28,6 +28,7 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -267,6 +268,26 @@ public class AdminController
 		}
 		return layuiData;
 	}
+	//更改管理员状态
+	@ResponseBody
+    @RequestMapping("updateState")
+	public void updateState(HttpServletRequest request, HttpServletResponse response) throws Exception{
+		response.setCharacterEncoding("UTF-8");
+		response.setContentType("text/html;charset=UTF-8");
+		System.out.println("doPost");
+
+		Admin admin = new Admin();
+
+		admin.setAdminName(request.getParameter("adminName"));
+		admin.setAdminState(request.getParameter("adminState"));
+
+		int i = adminService.updateState(admin);
+		if (i>0){
+			response.getWriter().write("true");
+		}else{
+			response.getWriter().write("false");
+		}
+	}
 
 	//查角色列表
 	@ResponseBody
@@ -275,42 +296,31 @@ public class AdminController
 	{
 		Admin admin = (Admin) request.getSession().getAttribute("tbAdmin");
 		Integer roleId = admin.getRoleId();
-
 		//存带有值得条件
 		HashMap<String, Object> condition = new HashMap<>();
 		condition.put("roleId", roleId);
-
 		//获取页码
 		int startPage;
 		//每页数量
 		int pageSize;
 		//计算出起始查询位置
 		int start;
-
-		if (null != limit && !"".equals(limit.trim()) && !"0".equals(limit))
-		{
+		if (null != limit && !"".equals(limit.trim()) && !"0".equals(limit)) {
 			pageSize = Integer.valueOf(limit);
 			condition.put("pageSize", pageSize);
-		}
-		else
-		{
+		} else {
 			pageSize = 10;
 			condition.put("pageSize", pageSize);
 		}
-		if (null != page && !"".equals(page.trim()) && !"0".equals(page))
-		{
+		if (null != page && !"".equals(page.trim()) && !"0".equals(page)) {
 			startPage = Integer.parseInt(page);
 			start = (startPage - 1) * pageSize;
 			condition.put("start", start);
-		}
-		else
-		{
+		} else {
 			start = 0;
 			condition.put("start", start);
 		}
-
 		condition.put("roleName", roleName);
-
 		LayuiData layuiData = roleServeice.queryRolesList(condition);
 		System.out.println("layuiData = " + JSON.toJSONString(layuiData));
 		return layuiData;
@@ -472,5 +482,72 @@ public Object addCombo(TbCombo tbCombo){
 		}
 	}
 
+//	查收支明细
+	@ResponseBody
+	@RequestMapping("queryBill")
+	public Object queryBill(String page,String limit,String billNum ,String billTime){
+		LayuiData layuiData=adminService.queryBill(page,limit,billNum,billTime);
+		System.out.println("layuiData = " + JSON.toJSONString(layuiData));
+		return layuiData;
+	}
+
+	@ResponseBody
+	@RequestMapping("queryParam")
+	public Object queryParam(String page,String limit){
+		int startPage=Integer.parseInt(page);//获取页码;
+		int pageSize=Integer.parseInt(limit);//每页数量
+		int start = (startPage-1)*pageSize;//计算出起始查询位置
+		LayuiData layuiData=adminService.queryParam(start,pageSize);
+		System.out.println("layuiData = " + JSON.toJSONString(layuiData));
+		return layuiData;
+	}
+
+	@ResponseBody
+	@RequestMapping("editParam")
+	public Object editParam(TbParam tbParam){
+		if (adminService.editParam(tbParam)!=0){
+			System.out.println("修改成功");
+			return "true";
+		}else {
+			System.out.println("修改失败");
+			return "false";
+		}
+	}
+
+
+	//用户统计
+	@RequestMapping("/showBillStatistics")
+	@ResponseBody
+	public void showBillStatistics(HttpServletRequest request, HttpServletResponse response) throws IOException, ParseException {
+		System.out.println("showBillStatistics");
+		String mystatic = request.getParameter("mystatic");
+		System.out.println(mystatic);
+		//存带有值得条件
+		HashMap<String,Object> condition = new HashMap<>();
+		if(null!=mystatic&&!"".equals(mystatic.trim())) {
+			condition.put("mystatic",mystatic);
+		}
+		HashMap<String,Object> statisticsMap =  adminService.showBillStatistics(condition);
+		StatisticsData statisticsData = new StatisticsData(statisticsMap);
+		if (null!=statisticsMap){
+			ResponseUtils.outJson(response, statisticsData);
+		}else{
+			response.getWriter().print("error");
+		}
+	}
+
+	//	月缴统计
+	@RequestMapping("/showPieComboStatistics")
+	@ResponseBody
+	public void showPieComboStatistics(HttpServletRequest request, HttpServletResponse response) throws IOException {
+		System.out.println("showPieComboStatistics");
+		HashMap<String,Object> statisticsMap =  adminService.showPieComboStatistics();
+		StatisticsData statisticsData = new StatisticsData(statisticsMap);
+		if (null!=statisticsMap){
+			ResponseUtils.outJson(response, statisticsData);
+		}else{
+			response.getWriter().print("error");
+		}
+	}
 
 }

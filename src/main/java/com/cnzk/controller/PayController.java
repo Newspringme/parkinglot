@@ -1,14 +1,23 @@
 package com.cnzk.controller;
 
+import com.alibaba.fastjson.JSON;
 import com.alipay.api.AlipayApiException;
 import com.alipay.api.AlipayClient;
 import com.alipay.api.DefaultAlipayClient;
 import com.alipay.api.request.AlipayTradePagePayRequest;
+import com.cnzk.mapper.RatesMapper;
+import com.cnzk.pojo.App;
+import com.cnzk.pojo.LayuiData;
+import com.cnzk.service.AdminService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.text.ParseException;
+import java.util.Map;
 import java.util.Random;
 import java.util.UUID;
 
@@ -26,10 +35,15 @@ public class PayController {
     //支付宝异步通知路径,付款完毕后会异步调用本项目的方法,必须为公网地址
     private final String NOTIFY_URL = "http://www.badiu.com";
 //    //支付宝同步通知路径,也就是当付款完毕后跳转本项目的页面,可以不是公网地址
-    private final String RETURN_URL = "http://www.badiu.com";
-    @RequestMapping("alipay")
-    public void alipay(HttpServletResponse httpResponse) throws IOException {
+    private final String RETURN_URL = "http://localhost:8080/parkinglot/url/departure";
 
+    @Autowired
+    private AdminService adminService;
+
+    @RequestMapping("alipay")
+    public void alipay(HttpServletResponse httpResponse,String enter,String exit) throws IOException, ParseException {
+        System.out.println(enter);
+        System.out.println(exit);
         Random r=new Random();
         //实例化客户端,填入所需参数
         AlipayClient alipayClient = new DefaultAlipayClient(GATEWAY_URL, APP_ID, APP_PRIVATE_KEY, FORMAT, CHARSET, ALIPAY_PUBLIC_KEY, SIGN_TYPE);
@@ -38,15 +52,18 @@ public class PayController {
         request.setReturnUrl(RETURN_URL);
         request.setNotifyUrl(NOTIFY_URL);
 
+
         //商户订单号，商户网站订单系统中唯一订单号，必填
         //生成随机Id
         String out_trade_no = UUID.randomUUID().toString();
         //付款金额，必填
-        String total_amount =Integer.toString(100000);
+//        String total_amount =Integer.toString(100000);
+        Map<String ,String> map = App.getBill(enter,exit,adminService.queryPrice());
+        String total_amount = map.get("bill");
         //订单名称，必填
-        String subject ="奥迪A8 2016款 A8L 60 TFSl quattro豪华型";
+        String subject ="菜鸟停车场"+map.get("stopTime");
         //商品描述，可空
-        String body = "尊敬的会员欢迎购买奥迪A8 2016款 A8L 60 TFSl quattro豪华型";
+        String body = "菜鸟停车场自助缴费"+map.get("stopTime");
         request.setBizContent("{\"out_trade_no\":\""+ out_trade_no +"\","
                 + "\"total_amount\":\""+ total_amount +"\","
                 + "\"subject\":\""+ subject +"\","
@@ -63,5 +80,18 @@ public class PayController {
         httpResponse.getWriter().flush();
         httpResponse.getWriter().close();
     }
+
+//    @ResponseBody
+//    @RequestMapping("exit")
+//    public Object queryRole(String page,String limit){
+//        int startPage=Integer.parseInt(page);//获取页码;
+//        int pageSize=Integer.parseInt(limit);//每页数量
+//        int start = (startPage-1)*pageSize;//计算出起始查询位置
+////        LayuiData layuiData=roleService.queryRole(start,pageSize);
+////        System.out.println("layuiData = " + JSON.toJSONString(layuiData));
+//        return layuiData;
+//    }
+
+
 
 }

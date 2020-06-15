@@ -26,4 +26,13 @@
     <update id="editCombo" parameterType="TbCombo">
        update tb_combo set combo_name=#{comboName},combo_value=#{comboValue} where combo_id=#{comboId};
     </update>
+<!--查询所有启用套餐名字-->
+    <select id="queryComboNameList" resultType="TbCombo">
+        select * from tb_combo where combo_state = '启用';
+    </select>
+
+<!--    查每种套餐的购买量-->
+    <select id="queryComboMoney" resultType="PieStatisticsData">
+    select b.combo_name as name,sum(a.bill_money) as value from tb_bill a left join tb_combo b on a.combo_id = b.combo_id where b.combo_state = '启用' and a.bill_state = 1 group by b.combo_name order by value desc
+    </select>
 </mapper>

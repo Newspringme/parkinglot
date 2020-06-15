@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cnzk.mapper.ParkMapper">
+
+    <select id="queryPark" resultMap="coordinateMap">
+        select * from tb_park
+    </select>
+
+    <resultMap id="coordinateMap" type="com.cnzk.pojo.TbPark">
+        <result property="coordinateId" column="coordinate_id"></result>
+        <association property="TbCoordinate" column="coordinate_id" javaType="com.cnzk.pojo.TbCoordinate" select="queryCoordinate"></association>
+    </resultMap>
+
+    <select id="queryCoordinate" parameterType="java.lang.Integer" resultType="com.cnzk.pojo.TbCoordinate">
+        select * from tb_coordinate where coordinate_id = #{coordinateId}
+    </select>
+</mapper>

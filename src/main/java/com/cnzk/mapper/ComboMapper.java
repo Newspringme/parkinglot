@@ -1,5 +1,8 @@
 package com.cnzk.mapper;
 
+import com.cnzk.pojo.PieStatisticsData;
+import com.cnzk.pojo.Admin;
+import com.cnzk.pojo.Charge;
 import com.cnzk.pojo.TbCombo;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -22,4 +25,10 @@ public interface ComboMapper {
 
     //    修改月缴产品
     Integer editCombo(TbCombo tbCombo);
+
+//    查询所有启用套餐名字
+    List<TbCombo> queryComboNameList();
+
+//    查每种套餐的购买量
+    List<PieStatisticsData> queryComboMoney();
 }
