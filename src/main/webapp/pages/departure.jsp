@@ -156,7 +156,7 @@
                 }else if(data=="NOCAR"){
                     alert("无识别到车牌")
                 }else if (data=="HAVEING") {
-                    alert("车牌重复，车辆已入库")
+                    alert("车辆已出库")
                 }else {
                     var carnumber = data.split(",")[0];
                     var username = data.split(",")[1];
@@ -206,7 +206,7 @@
                     }else if(data=="NOCAR"){
                         alert("无识别到车牌")
                     }else if (data=="HAVEING") {
-                        alert("车牌重复，车辆已入库")
+                        alert("车辆已出库")
                     }else {
                         var carnumber = data.split(",")[0];
                         var username = data.split(",")[1];

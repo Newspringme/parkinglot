@@ -46,7 +46,6 @@
     </insert>
     <!--根据车牌查询用户-->
     <select id="queryUserByCarNum" resultType="com.cnzk.pojo.TbUser">
-        select * from tb_car where car_num=#{carNum};
     </select>
     <!--根据用户名查询用户-->
     <select id="queryUserByUserName" resultType="com.cnzk.pojo.TbUser">
