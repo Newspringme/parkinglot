@@ -19,6 +19,6 @@ public class ParkServiceImpl implements ParkService {
 
     @Override
     public int carExit(TbBill bill) {
-        return parkMapper.carexit(bill);
+        return parkMapper.carExit(bill);
     }
 }

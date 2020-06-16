@@ -12,6 +12,6 @@ public interface ParkMapper {
     List<TbPark> queryPark();
 
     //车辆离开车位
-    int carexit(TbBill bill);
+    int carExit(TbBill bill);
 
 }
