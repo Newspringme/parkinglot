@@ -134,7 +134,10 @@ public class ChackphotoController
 	@RequestMapping("/search")
 	@ResponseBody
 	public String search(String carnum){
-
+		String ParkSpace=chackphotoService.parkspacemsg(carnum);//查重
+		if(ParkSpace==null){
+			return  "HAVEING";
+		}
 
 		SimpleDateFormat sdf =   new SimpleDateFormat( " yyyy-MM-dd HH:mm:ss " );
 		String exittime = sdf.format(new Date());//查车找人
@@ -154,6 +157,9 @@ public class ChackphotoController
 		String entertime=chackphotoService.findentertime(carnum);
 		System.out.println("查询入场时间"+entertime);
 
+		if (entertime==null){
+			return  "HAVEING";
+		}
 //		查询计费规则
 		TbRates tbRates = adminService.queryPrice();
 		Map map = new HashMap();
