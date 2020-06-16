@@ -11,11 +11,26 @@ public class TbBill {
   private long billState;
   private long carId;
 
+
+
+  public String getCarNum() {
+    return carNum;
+  }
+
+  public void setCarNum(String carNum) {
+    this.carNum = carNum;
+  }
+
+  private String carNum;
+
 //  操作事项
   private String comboName;
 
 //  操作人
   private String userName;
+
+  public TbBill() {
+  }
 
 
   public long getBillId() {

@@ -101,6 +101,12 @@ public class AdminServiceImpl implements AdminService
 		int num = adminMapper.updateAdmin(admin);
 		return num;
 	}
+	//	上传头像
+	@Override
+	public int uploadAdminImg(String headImg, String adminName)
+	{
+		return adminMapper.uploadAdminImg(headImg,adminName);
+	}
 
 
 	//查计费规则列表

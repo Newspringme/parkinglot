@@ -2,13 +2,16 @@ package com.cnzk.controller;
 
 
 
-import com.alibaba.fastjson.JSONObject;
 import com.cnzk.pojo.Admin;
+import com.cnzk.pojo.Charge;
 import com.cnzk.service.FaceService;
 import com.cnzk.utils.GetToken;
 import com.cnzk.utils.GsonUtils;
 import com.cnzk.utils.HttpUtil;
+
+import net.sf.json.JSONObject;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -16,53 +19,54 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
 /**
- * 管理员人脸识别控制类
+ * 收费员人脸识别控制类
  */
 @Controller
-@RequestMapping("/adminFace")
-public class AdminFaceController {
+@RequestMapping("/chargeFace")
+public class ChargeFaceController {
 
     @Resource
     private FaceService faceService;
 
-//    /**
-//     * 路径跳转
-//     *
-//     * @param path
-//     * @return
-//     */
-//    @RequestMapping("/path/{uri}")
-//    public String redirect(@PathVariable(value = "uri") String path) {
-//        return "/administration/jsp/admin/" + path;
-//    }
+    /**
+     * 路径跳转
+     *
+     * @param path
+     * @return
+     */
+    @RequestMapping("/path/{uri}")
+    public String redirect(@PathVariable(value = "uri") String path) {
+        return "/charge/jsp/" + path;
+    }
 
 
     //添加人脸
-    @RequestMapping("/addAdminFace")
+    @RequestMapping("/addChargeFace")
     @ResponseBody
-    public Map<String, Object> addAdminFace(HttpServletRequest request, HttpSession session) {
+    public Map<String, Object> addChargeFace(HttpServletRequest request, HttpSession session) {
 
         // 请求url
         String url = "https://aip.baidubce.com/rest/2.0/face/v3/faceset/user/add";
         Map<String, Object> mapAdd = new HashMap<String, Object>();
-        String adminFace = request.getParameter("adminFace");
-        System.out.println("adminFace=" + adminFace);
+        String chargeFace = request.getParameter("chargeFace");//图片转换的base64
+        System.out.println("chargeFace=" + chargeFace);
 
-        Admin tbAdmin = (Admin) session.getAttribute("tbAdmin");
+        Admin tbAdmin = (Admin) session.getAttribute("tbAdmin");//获取session信息
         System.out.println("tbadmin=" + tbAdmin.toString());
         try {
-            boolean flag = faceSearch(adminFace);//判断百度中是否存在该人脸
-            System.out.println("flag:"+flag);
+            boolean flag = faceSearch(chargeFace);//判断百度中是否存在该人脸
             String result = null;
             if (flag == false) {
 
                 Map<String, Object> map = new HashMap<>();
-                map.put("image", adminFace);
-                map.put("group_id", "admin_face");//分组
+                map.put("image", chargeFace);
+                map.put("group_id", "cashier_face");//分组
                 map.put("user_id", tbAdmin.getAdminName());//账户
                 map.put("liveness_control", "NORMAL");
                 map.put("image_type", "BASE64");
@@ -76,15 +80,11 @@ public class AdminFaceController {
                 result = HttpUtil.post(url, accessToken, "application/json", param);
                 System.out.println("添加result=" + result);
             } else {
-                System.out.println("账号名称"+ tbAdmin.getAdminName());
-                System.out.println("adminFace"+ adminFace);
-                result = faceUpdate(adminFace, tbAdmin.getAdminName());
+                result = faceUpdate(chargeFace,tbAdmin.getAdminName());
                 System.out.println("更新result=" + result);
             }
-            JSONObject jsonObject = JSONObject.parseObject(result);
-            System.out.println("jsonObject:"+jsonObject);
+            JSONObject jsonObject = JSONObject.fromObject(result);
             JSONObject fromObject = jsonObject.getJSONObject("result");
-            System.out.println("fromObject:"+fromObject);
             String face_token = (String) fromObject.get("face_token");//得到百度返回是人脸
             System.out.println("添加人脸face_token=" + face_token);
 
@@ -103,18 +103,18 @@ public class AdminFaceController {
     }
 
     //人脸登录
-    @RequestMapping("/adminFaceLogin")
+    @RequestMapping("/chargeFaceLogin")
     @ResponseBody
-    public String adminFaceLogin(HttpServletRequest request, HttpServletResponse response) {
+    public String chargeFaceLogin(HttpServletRequest request, HttpServletResponse response) {
 
-        String adminFace = request.getParameter("adminFace");
+        String chargeFace = request.getParameter("chargeFace");//base64
 
         String url = "https://aip.baidubce.com/rest/2.0/face/v3/search";
         try {
             Map<String, Object> map = new HashMap<>();
-            map.put("image", adminFace);
+            map.put("image", chargeFace);
             map.put("liveness_control", "NORMAL");
-            map.put("group_id_list", "admin_face");
+            map.put("group_id_list", "cashier_face");
             map.put("image_type", "BASE64");
             map.put("quality_control", "LOW");
 
@@ -126,26 +126,31 @@ public class AdminFaceController {
             String result = HttpUtil.post(url, accessToken, "application/json", param);
             System.out.println(result);
 
-            JSONObject fromObject = JSONObject.parseObject(result);
+            JSONObject fromObject = JSONObject.fromObject(result);
             JSONObject jsonObject = fromObject.getJSONObject("result");
             // 此时需要加个判断
-            if (jsonObject.isEmpty()) {
+            if (jsonObject.isNullObject()) {
                 System.out.println("jsonObject 为空");
                 return "无法识别面部!";
             }
             JSONObject jsonArray = jsonObject.getJSONArray("user_list").getJSONObject(0);
-            System.out.println("jsonArray"+jsonArray);
-            String adminAccount = (String) jsonArray.get("user_id");
+            String cashierAccount = (String) jsonArray.get("user_id");
+            System.out.println("cashierAccount=" + cashierAccount);
+            Charge tbCashier = faceService.findChargeByAccount(cashierAccount);
+            if (tbCashier != null) {
+                if (tbCashier.getAdminState().equals("启用")) {
+                    Map<String, String> mapLogin = new HashMap<>();
+                    map.put("cashierAccount", cashierAccount);
+                    map.put("name", tbCashier.getAdminName());
 
-            System.out.println("adminAccount=" + adminAccount);
-            Admin tbAdmin = faceService.findAdminByAccount(adminAccount);
-            if (tbAdmin != null) {
-                if (tbAdmin.getAdminState().equals("启用")) {
-                    request.getSession().setAttribute("tbAdmin", tbAdmin);//将管理员信息放到session
+                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//设置日期格式
+                    String time = sdf.format(new Date());
+                    map.put("time", time);
+                    request.getSession().setAttribute("tbCashier", map);
                     return "验证成功";
-                } else if (tbAdmin.getAdminState().equals("禁用")) {
+                } else if (tbCashier.getAdminState().equals("禁用")) {
                     return "该账户已禁用";
-//                } else if (tbAdmin.getAdminState() == 2) {
+//                } else if (tbCashier.getCashierState() == 2) {
 //                    return "该管理员已离职";
                 }
             }
@@ -153,6 +158,7 @@ public class AdminFaceController {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
         return "无法识别面部,请用账户密码登录!";
     }
 
@@ -167,7 +173,7 @@ public class AdminFaceController {
             Map<String, Object> map = new HashMap<>();
             map.put("image", image);
             map.put("liveness_control", "NORMAL");
-            map.put("group_id_list", "admin_face");
+            map.put("group_id_list", "cashier_face");
             map.put("image_type", "BASE64");
             map.put("quality_control", "LOW");
 
@@ -178,10 +184,10 @@ public class AdminFaceController {
 
             String result = HttpUtil.post(url, accessToken, "application/json", param);
             System.out.println("人脸搜索result=" + result);
-            JSONObject jsonObject = JSONObject.parseObject(result);
+            JSONObject jsonObject = JSONObject.fromObject(result);
             String error_msg = (String) jsonObject.get("error_msg");
             if (error_msg.equals("SUCCESS") && !"".equals(error_msg)){
-                return true;
+                return false;
             }
             return false;
         } catch (Exception e) {
@@ -193,14 +199,14 @@ public class AdminFaceController {
     /**
      * 人脸更新
      */
-    public String faceUpdate(String image, String adminAccount) {
+    public String faceUpdate(String image, String cashierAccount) {
         // 请求url
         String url = "https://aip.baidubce.com/rest/2.0/face/v3/faceset/user/update";
         try {
             Map<String, Object> map = new HashMap<>();
             map.put("image", image);
-            map.put("group_id", "admin_face");
-            map.put("user_id", adminAccount);
+            map.put("group_id", "cashier_face");
+            map.put("user_id", cashierAccount);
             map.put("liveness_control", "NORMAL");
             map.put("image_type", "BASE64");
             map.put("quality_control", "LOW");
@@ -218,5 +224,4 @@ public class AdminFaceController {
         }
         return null;
     }
-
 }

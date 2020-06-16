@@ -29,6 +29,8 @@ public interface AdminService
 
 	//	更新管理员信息
 	int updateAdmin(Admin admin);
+	//	上传头像
+	int uploadAdminImg(String headImg,String adminName);
 
 	//查计费规则列表
 	LayuiData queryRatesList(HashMap<String, Object> condition);

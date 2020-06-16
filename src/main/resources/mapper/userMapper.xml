@@ -14,10 +14,15 @@
        insert into tb_enter (enter_time,car_num) values (#{starttime},#{carnum})
     </insert>
     <select id="findcarvip"  resultType="java.lang.String">
+    </select>
+    <select id="findcarvip" resultType="java.lang.String">
        select vip_id from  tb_car where car_num = #{carnum}
     </select>
     <insert id="caraddexit" >
        insert into tb_exit (exit_time,car_num) values (#{exittime},#{carnum})
+    </insert>
+    <insert id="carexit" >
+       insert into tb_exit (car_num) values (#{carnum})
     </insert>
     <select id="parkspacemsg" resultType="java.lang.String">
        select park_name from tb_park  where car_num = #{carnum}
@@ -36,5 +41,16 @@
     </update>
     <select id="carfindps" resultType="java.lang.String">
          select park_name from tb_park where car_num=#{carNum};
+    </select>
+    <!-- 添加用户-->
+    <insert id="addUser" keyProperty="userId" useGeneratedKeys="true">
+        insert into tb_user (user_name,user_tel)values(#{userName},#{userTel});
+    </insert>
+    <!--根据车牌查询用户-->
+    <select id="queryUserByCarNum" resultType="com.cnzk.pojo.TbUser">
+    </select>
+    <!--根据用户名查询用户-->
+    <select id="queryUserByUserName" resultType="com.cnzk.pojo.TbUser">
+        select * from tb_user where user_name=#{userName};
     </select>
 </mapper>

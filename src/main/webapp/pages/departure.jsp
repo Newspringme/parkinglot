@@ -40,6 +40,7 @@
             <div class="layui-input-block">
                 <input type="hidden" class="enter">
                 <input type="hidden" class="exit">
+                <input type="hidden" class="carnum">
                 <button class="layui-btn layui-btn-normal" lay-submit onclick="zhifu()">出库</button>
             </div>
         </div>
@@ -173,6 +174,9 @@
                     document.getElementById("exittime").innerHTML = "出库时间: " + exittime;
                     document.getElementById("time").innerHTML = "停放时长 :  " + time;
                     document.getElementById("money").innerHTML = "应缴费:  " + money;
+                    $(".enter").val(entertime);
+                    $(".exit").val(exittime);
+                    $(".carnum").val(carnumber);
                 }
             }
         })
@@ -222,6 +226,7 @@
                         document.getElementById("money").innerHTML = "应缴费:  " + money;
                         $(".enter").val(entertime);
                         $(".exit").val(exittime);
+                        $(".carnum").val(carnumber);
                     }
                 }
             })
@@ -230,7 +235,7 @@
 
     });
     function zhifu() {
-        window.open("${pageContext.request.contextPath}/alipay?enter="+$(".enter").val()+"&exit="+$(".exit").val());
+        window.open("${pageContext.request.contextPath}/alipay?enter="+$(".enter").val()+"&exit="+$(".exit").val()+"&carNum="+$(".carnum").val());
     }
 </script>
 </html>

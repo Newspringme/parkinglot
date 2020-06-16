@@ -7,6 +7,80 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
+	<head>
+		<meta charset="utf-8">
+		<title>管理员列表</title>
+		<meta name="renderer" content="webkit">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+		<link rel="stylesheet" href="${pageContext.request.contextPath}/static/layui/css/layui.css"  media="all">
+<%--		<script src="${pageContext.request.contextPath}/static/js/jquery-3.4.1.js" charset="utf-8"></script>--%>
+<%--		<script src="${pageContext.request.contextPath}/js/packaging.js" charset="utf-8"></script>--%>
+		<script src="${pageContext.request.contextPath}/static/layui/layui.js" charset="utf-8"></script>
+		<style>
+			.layui-table-cell .layui-form-checkbox[lay-skin=primary] {
+				top: 10px;
+				padding: 0;
+			}
+		</style>
+	</head>
+	<body>
+		<input type="hidden" class="path" value="${pageContext.request.contextPath}">
+		<!--搜索条件开始-->
+		<fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+			<legend>搜索条件</legend>
+		</fieldset>
+		<form  action="" onsubmit="return false;" class="layui-form" method="post" >
+			<div class="layui-inline">
+				<label class="layui-form-label">管理员账号:</label>
+				<div class="layui-input-block">
+					<input type="text" name="adminName" autocomplete="off" placeholder="请输入管理员账号" class="layui-input">
+				</div>
+			</div>
+			<div class="layui-inline">
+				<label class="layui-form-label">添加时间：</label>
+				<div class="layui-input-block">
+					<input type="text" name="startTime" id="startTime" readonly autocomplete="off" placeholder="请选择开始时间" class="layui-input">
+				</div>
+			</div>
+			<div class="layui-inline">
+				<label class="layui-form-label">至：</label>
+				<div class="layui-input-block">
+					<input type="text" name="endTime" id="endTime" readonly autocomplete="off" placeholder="请选择截止时间" class="layui-input">
+				</div>
+			</div>
+			<div class="layui-inline">
+				<div class="layui-input-block">
+					<button type="submit"  lay-submit lay-filter="formSearch" class="layui-btn layui-btn-normal  layui-icon layui-icon-search" >搜索</button>
+					<button type="reset" class="layui-btn layui-btn-warm layui-icon layui-icon-refresh">重置</button>
+				</div>
+			</div>
+		</form>
+		<!--        表格开始-->
+		<!--        头部工具栏-->
+		<div style="display: none" id="adminToolbar">
+			<button type="button" class="layui-btn layui-btn-xm layui-icon layui-icon-add-circle" lay-event="add">新增管理员</button>
+			<button type="button" class="layui-btn layui-btn-xm layui-btn-danger layui-icon layui-icon-delete" lay-event="batchDelete">批量删除</button>
+		</div>
+		<!--        行工具栏-->
+		<div style="display: none" id="adminBar">
+			<button type="button" class="layui-btn layui-btn-sm layui-icon layui-icon-edit" lay-event="edit">编辑</button>
+			<button type="button"  id="uploadImg" class="layui-btn layui-btn-sm layui-icon layui-icon-upload-circle" lay-event="uploadImg">上传头像</button>
+<%--			<button type="button" class="layui-btn layui-btn-sm layui-icon layui-icon-download-circle" lay-event="queryImg">查看头像</button>--%>
+<%--			<button type="button" class="layui-btn layui-btn-sm  layui-btn-danger layui-icon layui-icon-delete" lay-event="delete">删除</button>--%>
+		</div>
+		<!--        表格主体-->
+		<table class="layui-hide" id="adminTable" lay-filter="adminTable"></table>
+		<!--        添加弹出层-->
+		<div id="addAdmin" onsubmit="return false;" style="display: none">
+			<form class="layui-form" id="addForm" action="" style="margin-top: 30px" >
+				<div class="layui-form-item">
+					<label class="layui-form-label" style="margin-left: 120px;">账号名称：</label>
+					<div class="layui-input-block" style="float: left; margin-left: 20px;width: 200px;">
+						<input  type="text" name="adminName" lay-verify="adminName"
+						        autocomplete="off" class="layui-input">
+					</div>
+				</div>
 <head>
 	<meta charset="utf-8">
 	<title>管理员列表</title>

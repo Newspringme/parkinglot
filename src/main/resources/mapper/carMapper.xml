@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cnzk.mapper.CarMapper">
+    <!--    查询记录数-->
+    <select id="queryWhitListCount" resultType="int">
+        select count(*)as count  from tb_car where vip_id=1;
+    </select>
+    <!--白名单列表获取-->
+    <select id="queryWhiteList" resultType="com.cnzk.pojo.TbCar">
+        select c.car_id,c.car_num,c.car_color,c.car_type,c.car_brand,c.vip_id,u.user_id,
+        u.user_name,u.user_tel from tb_car c left join tb_user_car uc on uc.car_id=c.car_id left join
+        tb_user u on u.user_id=uc.user_id where c.vip_id=1
+        limit #{start},#{pageSize};
+    </select>
+    <!--车辆白名单的录入-->
+    <update id="addWhiteList">
+        update tb_car set vip_id=1 where car_num=#{carNum};
+    </update>
+    <!--车辆白名单删除-->
+    <update id="deleteWhiteList">
+        update tb_car set vip_id=0 where car_num=#{carNum};
+    </update>
+    <!-- 根据车牌查询车表记录-->
+    <select id="queryCarByCarNum" resultType="com.cnzk.pojo.TbCar">
+        select * from tb_car where car_num=#{carNum};
+    </select>
+    <!-- 添加车辆信息-->
+    <insert id="addCar" keyProperty="carId" useGeneratedKeys="true" >
+        insert into tb_car (car_num,car_type,car_brand,car_color,vip_id)
+        values (#{carNum},#{carType},#{carBrand},#{carColor},1);
+    </insert>
+    <!-- 开通新月缴-->
+    <insert id="handlePackage" keyProperty="carId" useGeneratedKeys="true" >
+        insert into tb_car (car_num,car_type,car_brand,car_color,vip_id,combo_id,end_time)
+        values (#{carNum},#{carType},#{carBrand},#{carColor},2,#{comboId},#{endTime});
+    </insert>
+    <!--添加用户与车关系-->
+    <insert id="addUserCar">
+        insert into tb_user_car ( user_id,car_id) values (#{userId},#{carId});
+    </insert>
+
+</mapper>

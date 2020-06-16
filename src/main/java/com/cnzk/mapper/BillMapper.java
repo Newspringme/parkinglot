@@ -39,4 +39,10 @@ public interface BillMapper {
     Integer lackTempMoney(HashMap<String, Object> condition);
     //    补充缺失当天的临时车收入
     Integer lackComboMoney(HashMap<String, Object> condition);
+    //添加订单
+    int insertBill (TbBill bill);
+    //交易成功
+    int updateBill (TbBill bill);
+
+    TbBill getCarNum(TbBill bill);
 }
