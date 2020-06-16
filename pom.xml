@@ -126,6 +126,12 @@
             <version>2.8.5</version>
         </dependency>
 
+        <!--        websocket依赖-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-websocket</artifactId>
+        </dependency>
+
 <!--        车牌识别-->
         <dependency>
             <groupId>com.alibaba</groupId>
