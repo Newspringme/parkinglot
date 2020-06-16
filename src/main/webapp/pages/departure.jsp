@@ -41,6 +41,8 @@
                 <input type="hidden" class="enter">
                 <input type="hidden" class="exit">
                 <input type="hidden" class="carnum">
+                <input type="hidden" class="username">
+                <input type="hidden" class="money">
                 <button class="layui-btn layui-btn-normal" lay-submit onclick="zhifu()">出库</button>
             </div>
         </div>
@@ -177,6 +179,10 @@
                     $(".enter").val(entertime);
                     $(".exit").val(exittime);
                     $(".carnum").val(carnumber);
+                    $(".username").val(username);
+                    $(".money").val(money);
+
+
                 }
             }
         })
@@ -227,6 +233,8 @@
                         $(".enter").val(entertime);
                         $(".exit").val(exittime);
                         $(".carnum").val(carnumber);
+                        $(".username").val(username);
+                        $(".money").val(money);
                     }
                 }
             })
@@ -235,7 +243,12 @@
 
     });
     function zhifu() {
-        window.open("${pageContext.request.contextPath}/alipay?enter="+$(".enter").val()+"&exit="+$(".exit").val()+"&carNum="+$(".carnum").val());
+        if ($(".money").val()==0){
+
+        }else {
+            window.open("${pageContext.request.contextPath}/alipay?enter="+$(".enter").val()+"&exit="+$(".exit").val()+"&carNum="+$(".carnum").val()+"&username="+$(".username").val());
+        }
+
     }
 </script>
 </html>
