@@ -11,16 +11,12 @@
        select enter_time from tb_enter where car_num = #{carnum}order by  enter_time DESC limit 0,1
     </select>
     <insert id="caraddenter" >
-    <select id="caraddenter">
        insert into tb_enter (enter_time,car_num) values (#{starttime},#{carnum})
     </insert>
-    <select id="findcarvip"  resultType="java.lang.String">
-    </select>
     <select id="findcarvip" resultType="java.lang.String">
        select vip_id from  tb_car where car_num = #{carnum}
     </select>
     <insert id="caraddexit" >
-    <select id="caraddexit">
        insert into tb_exit (exit_time,car_num) values (#{exittime},#{carnum})
     </insert>
     <select id="parkspacemsg" resultType="java.lang.String">
