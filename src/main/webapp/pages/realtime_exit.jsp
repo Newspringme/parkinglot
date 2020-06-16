@@ -74,8 +74,9 @@
                     <div class="layui-timeline-content layui-text" style="text-align: center">
                         <div class="layui-timeline-title">
                             <button type="button" class="layui-btn" onclick="">异常出库</button>
-                            <button type="button" class="layui-btn" onclick="">确认收费</button>
                             <button type="button" class="layui-btn" onclick="">确认出库</button>
+                            <button type="button" class="layui-btn" onclick="">在线收费</button>
+                            <button type="button" class="layui-btn" onclick="">现金收费</button>
                         </div>
                     </div>
                 </div>
@@ -89,10 +90,14 @@
 
 <script>
 
-    // var tableIns;
-    // var ratesId;
-    // var uprice;
-    // var maxprice;
+    var carnumber;
+    var username;
+    var state;
+    var ps;
+    var entertime;
+    var exittime;
+    var time;
+    var money;
     // window.onload = function () {
     //     var path = $("#path").val();
     //     uprice = document.getElementById("uprice");

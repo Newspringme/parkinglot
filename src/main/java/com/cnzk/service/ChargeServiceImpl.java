@@ -81,4 +81,10 @@ public class ChargeServiceImpl implements ChargeService {
     public Integer updateCharge(Charge charge) {
         return chargeMapper.updateCharge(charge);
     }
+
+    @Override
+    public String realTimeExit(String msg){
+        return "";
+    }
+
 }

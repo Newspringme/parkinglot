@@ -25,16 +25,18 @@
 <script>
     var websocket = null;
     if('WebSocket' in window){
-        websocket = new WebSocket("ws://127.0.0.1:8080/parkinglot/websocket/charge");
+        websocket = new WebSocket("ws://127.0.0.1:8080/parkinglot/ChargeController/realTimeExit");
     }else{
         alert("您的浏览器不支持websocket");
     }
+
     websocket.onerror = function(){
         setMessageInHtml("send error！");
     }
     websocket.onopen = function(){
         setMessageInHtml("connection success！")
     }
+
     websocket.onmessage  = function(event){
         setMessageInHtml(event.data);
         console.log(event);

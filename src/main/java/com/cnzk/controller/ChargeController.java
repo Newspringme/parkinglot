@@ -186,4 +186,12 @@ public class ChargeController {
     }
 
 
+    @ResponseBody
+    @RequestMapping("realTimeExit")
+    public String realTimeExit(String msg){
+        System.out.println("+++++++++++++++++++++++++++++++++++++"+msg);
+        return "";
     }
+
+
+}
