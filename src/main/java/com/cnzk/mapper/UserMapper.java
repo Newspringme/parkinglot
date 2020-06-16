@@ -23,10 +23,15 @@ public interface UserMapper
 	void carexit(@PathParam("carnum") String carnum);
 
 	String carfindentertime(@PathParam("carnum") String carnum);
+
 	String parkspacemsg(@PathParam("carnum") String carnum);
-	List<TbPark> findParkSpace(@PathParam("state")String state);
-	String findParkSpacenum(@PathParam("state")String state);
-	void updatatoPark(@PathParam("tbPark")TbPark tbPark);
+
+	List<TbPark> findParkSpace(@PathParam("state") String state);
+
+	String findParkSpacenum(@PathParam("state") String state);
+
+	void updatatoPark(@PathParam("tbPark") TbPark tbPark);
+
 	String carfindps(@PathParam("carNum") String carNum);
 
 

@@ -181,14 +181,16 @@ public class CarController
 		Date date=sd.parse(str);
 		Calendar calendar=Calendar.getInstance();
 		calendar.setTime(date);
-
-
-
-		int num = carService.handlePackage(tbCar);
+		calendar.add(Calendar.MONTH,tbCar.getMonths());
+		String endTime=calendar.getTime()+"";
+		System.out.println("续费时间endTime = " + endTime);
+		tbCar.setEndTime(endTime);
+		int num = carService.handleRenew(tbCar);
 		boolean bool = false;
 		if (num > 0)
 		{
 			bool = true;
+			System.out.println(" 续费办理成功");
 		}
 		return bool;
 	}

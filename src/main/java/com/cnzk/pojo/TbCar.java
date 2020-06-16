@@ -17,12 +17,13 @@ public class TbCar
 	private int vipId;
 	private int comboId;
 	private String endTime;
+	private int months;
 
 	public TbCar()
 	{
 	}
 
-	public TbCar(int carId, String carNum, String carColor, String carType, String carBrand, int userId, String userName, String userTel, int vipId, int comboId, String endTime)
+	public TbCar(int carId, String carNum, String carColor, String carType, String carBrand, int userId, String userName, String userTel, int vipId, int comboId, String endTime, int months)
 	{
 		this.carId = carId;
 		this.carNum = carNum;
@@ -35,6 +36,17 @@ public class TbCar
 		this.vipId = vipId;
 		this.comboId = comboId;
 		this.endTime = endTime;
+		this.months = months;
+	}
+
+	public int getMonths()
+	{
+		return months;
+	}
+
+	public void setMonths(int months)
+	{
+		this.months = months;
 	}
 
 	public String getEndTime()
