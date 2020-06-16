@@ -16,4 +16,8 @@
     <select id="queryCoordinate" parameterType="java.lang.Integer" resultType="com.cnzk.pojo.TbCoordinate">
         select * from tb_coordinate where coordinate_id = #{coordinateId}
     </select>
+
+    <update id="carExit"  parameterType="com.cnzk.pojo.TbBill">
+       update tb_park set car_num=null where car_num=#{carNum};
+    </update>
 </mapper>

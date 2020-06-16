@@ -20,6 +20,8 @@ public interface UserMapper
 
 	void caraddexit(@PathParam("carnum") String carnum, @PathParam("exittime") String exittime);
 
+	void carexit(@PathParam("carnum") String carnum);
+
 	String carfindentertime(@PathParam("carnum") String carnum);
 	String parkspacemsg(@PathParam("carnum") String carnum);
 	List<TbPark> findParkSpace(@PathParam("state")String state);

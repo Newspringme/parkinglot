@@ -10,13 +10,7 @@ public class TbBill {
   private long comboId;
   private long billState;
 
-  public long getBillState() {
-    return billState;
-  }
 
-  public void setBillState(long billState) {
-    this.billState = billState;
-  }
 
   public String getCarNum() {
     return carNum;
@@ -26,7 +20,6 @@ public class TbBill {
     this.carNum = carNum;
   }
 
-  private long billState;
   private String carNum;
 
 //  操作事项

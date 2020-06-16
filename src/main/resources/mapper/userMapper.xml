@@ -19,6 +19,9 @@
     <insert id="caraddexit" >
        insert into tb_exit (exit_time,car_num) values (#{exittime},#{carnum})
     </insert>
+    <insert id="carexit" >
+       insert into tb_exit (car_num) values (#{carnum})
+    </insert>
     <select id="parkspacemsg" resultType="java.lang.String">
        select park_name from tb_park  where car_num = #{carnum}
     </select>
@@ -43,6 +46,7 @@
     </insert>
     <!--根据车牌查询用户-->
     <select id="queryUserByCarNum" resultType="com.cnzk.pojo.TbUser">
+        select * from tb_car where car_num=#{carNum};
     </select>
     <!--根据用户名查询用户-->
     <select id="queryUserByUserName" resultType="com.cnzk.pojo.TbUser">
