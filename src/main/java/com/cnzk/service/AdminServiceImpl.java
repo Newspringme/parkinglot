@@ -186,9 +186,6 @@ public class AdminServiceImpl implements AdminService
 			}else{
 				tbBill.setComboName("购买"+tbBill.getComboName());
 			}
-			if (null==tbBill.getUserName()) {
-				tbBill.setUserName("临时用户");
-			}
 		}
 		int count=billMapper.queryBillCount(map);
 		LayuiData layuiData = new LayuiData();

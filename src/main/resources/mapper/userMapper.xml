@@ -13,8 +13,6 @@
     <insert id="caraddenter" >
        insert into tb_enter (enter_time,car_num) values (#{starttime},#{carnum})
     </insert>
-    <select id="findcarvip"  resultType="java.lang.String">
-    </select>
     <select id="findcarvip" resultType="java.lang.String">
        select vip_id from  tb_car where car_num = #{carnum}
     </select>
