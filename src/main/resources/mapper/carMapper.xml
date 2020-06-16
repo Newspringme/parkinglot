@@ -27,18 +27,23 @@
         select * from tb_car where car_num=#{carNum};
     </select>
     <!-- 添加车辆信息-->
-    <insert id="addCar" keyProperty="carId" useGeneratedKeys="true" >
+    <insert id="addCar" keyProperty="carId" useGeneratedKeys="true">
         insert into tb_car (car_num,car_type,car_brand,car_color,vip_id)
         values (#{carNum},#{carType},#{carBrand},#{carColor},1);
-    </insert>
-    <!-- 开通新月缴-->
-    <insert id="handlePackage" keyProperty="carId" useGeneratedKeys="true" >
-        insert into tb_car (car_num,car_type,car_brand,car_color,vip_id,combo_id,end_time)
-        values (#{carNum},#{carType},#{carBrand},#{carColor},2,#{comboId},#{endTime});
     </insert>
     <!--添加用户与车关系-->
     <insert id="addUserCar">
         insert into tb_user_car ( user_id,car_id) values (#{userId},#{carId});
+    </insert>
+    <!-- 开通新月缴-->
+    <insert id="handlePackage" keyProperty="carId" useGeneratedKeys="true">
+        insert into tb_car (car_num,car_type,car_brand,car_color,vip_id,combo_id,end_time)
+        values (#{carNum},#{carType},#{carBrand},#{carColor},2,#{comboId},#{endTime});
+    </insert>
+    <!--办理续费-->
+    <insert id="handleRenew">
+        update tb_car set combo_id=#{comboId},end_time=#{endTime} where
+        car_num=#{carNum};
     </insert>
 
 </mapper>
