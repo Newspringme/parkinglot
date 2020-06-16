@@ -9,6 +9,7 @@ import com.cnzk.utils.GetToken;
 import com.cnzk.utils.GsonUtils;
 import com.cnzk.utils.HttpUtil;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -29,16 +30,16 @@ public class AdminFaceController {
     @Resource
     private FaceService faceService;
 
-//    /**
-//     * 路径跳转
-//     *
-//     * @param path
-//     * @return
-//     */
-//    @RequestMapping("/path/{uri}")
-//    public String redirect(@PathVariable(value = "uri") String path) {
-//        return "/administration/jsp/admin/" + path;
-//    }
+    /**
+     * 路径跳转
+     *
+     * @param path
+     * @return
+     */
+    @RequestMapping("/path/{uri}")
+    public String redirect(@PathVariable(value = "uri") String path) {
+        return "/administration/jsp/admin/" + path;
+    }
 
 
     //添加人脸
