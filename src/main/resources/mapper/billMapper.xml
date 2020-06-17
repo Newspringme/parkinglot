@@ -120,4 +120,9 @@
 	<select id="getCarNum" resultType="com.cnzk.pojo.TbBill" parameterType="com.cnzk.pojo.TbBill">
 		select * from tb_bill where bill_num=#{billNum}
 	</select>
+
+	<insert id="insertCashBill" parameterType="TbBill">
+		 insert into tb_bill (bill_num,bill_money,car_num,user_name,bill_state) values (#{billNum},#{billMoney},#{carNum},#{userName},#{billState});
+	</insert>
+
 </mapper>

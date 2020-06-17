@@ -11,16 +11,6 @@ public class TbBill {
   private long billState;
   private long carId;
 
-
-
-  public String getCarNum() {
-    return carNum;
-  }
-
-  public void setCarNum(String carNum) {
-    this.carNum = carNum;
-  }
-
   private String carNum;
 
 //  操作事项
@@ -32,7 +22,13 @@ public class TbBill {
   public TbBill() {
   }
 
+  public String getCarNum() {
+    return carNum;
+  }
 
+  public void setCarNum(String carNum) {
+    this.carNum = carNum;
+  }
   public long getBillId() {
     return billId;
   }
@@ -119,6 +115,7 @@ public class TbBill {
             ", comboId=" + comboId +
             ", billState=" + billState +
             ", carId=" + carId +
+            ", carNum='" + carNum + '\'' +
             ", comboName='" + comboName + '\'' +
             ", userName='" + userName + '\'' +
             '}';

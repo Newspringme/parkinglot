@@ -23,7 +23,7 @@
 </head>
 <body style="margin: 0">
 <div style="height: 100%;width: 19%;float: left;border: 1px solid #92B8B1">
-<%--    <img src="https://i.loli.net/2020/06/09/dPjLE2aeGVKhADT.jpg" style="width: 100%;">--%>
+    <%--    <img src="https://i.loli.net/2020/06/09/dPjLE2aeGVKhADT.jpg" style="width: 100%;">--%>
     <div class="layui-form layuimini-form">
         <div class="layui-form-item">
             <label class="layui-form-label required">车牌号</label>
@@ -167,8 +167,6 @@
                 }else if (data=="HAVEING") {
                     alert("车辆已出库")
                 }else {
-                    // send(data);
-
                     var carnumber = data.split(",")[0];
                     var username = data.split(",")[1];
                     var state = data.split(",")[2];
@@ -197,6 +195,8 @@
         })
 
     }
+
+
     layui.use(['form'], function () {
         var form = layui.form,
             layer = layui.layer,
@@ -223,7 +223,6 @@
                     }else if (data=="HAVEING") {
                         alert("车辆已出库")
                     }else {
-                        send(data);
                         var carnumber = data.split(",")[0];
                         var username = data.split(",")[1];
                         var state = data.split(",")[2];
@@ -261,115 +260,71 @@
 
     }
 
-    var websocket = null;
-    if('WebSocket' in window){
-        websocket = new WebSocket("ws://localhost:8080/parkinglot/websocket/ip");
-    }
-    else{
-        alert("您的浏览器不支持websocket");
-    }
-
-    websocket.onerror = function(){
-        setMessageInHtml("send error！");
-    }
-
-    websocket.onopen = function(){
-        setMessageInHtml("connection success！")
-    }
-
-    websocket.onmessage  = function(event){
-        setMessageInHtml(event.data);
-        console.log(event);
-    }
-
-    websocket.onclose = function(){
-        setMessageInHtml("closed websocket!")
-    }
-
-    window.onbeforeunload = function(){
-        clos();
-    }
-
-    // 接收信息
-    function setMessageInHtml(message){
-        document.getElementById('message').innerHTML += message;
-    }
-
-    //关闭连接
-    function clos(){
-        websocket.close(3000,"强制关闭");
-    }
-
-    //发送信息
-    function send(msg){
-        alert(msg);
-        websocket.send(msg);
-    }
 </script>
 <script>//websocket
-    var websocket = null;
-    if('WebSocket' in window){
-        websocket = new WebSocket("ws://127.0.0.1:8080/parkinglot/websocket/charge");
-    }
-    else{
-        alert("您的浏览器不支持websocket");
-    }
+var websocket = null;
+if('WebSocket' in window){
+    websocket = new WebSocket("ws://127.0.0.1:8080/parkinglot/websocket/ip");
+}
+else{
+    alert("您的浏览器不支持websocket");
+}
 
-    websocket.onerror = function(){
-        setMessageInHtml("send error！");
-    }
+websocket.onerror = function(){
+    setMessageInHtml("send error！");
+}
 
-    websocket.onopen = function(){
-        setMessageInHtml("connection success！")
-    }
+websocket.onopen = function(){
+    setMessageInHtml("connection success!")
+}
 
-    websocket.onmessage  = function(event){
-        setMessageInHtml(event.data);
-        console.log(event);
-    }
+websocket.onmessage  = function(event){
+    setMessageInHtml(event.data);
+    console.log(event);
+}
 
-    websocket.onclose = function(){
-        setMessageInHtml("closed websocket!")
-    }
+websocket.onclose = function(){
+    setMessageInHtml("closed websocket!")
+}
 
-    window.onbeforeunload = function(){
-        clos();
-    }
+window.onbeforeunload = function(){
+    clos();
+}
 
-    // 接收信息
-    function setMessageInHtml(message){
-        document.getElementById('message').innerHTML += message;
-    }
+// 接收信息
+function setMessageInHtml(message){
+    document.getElementById('message').innerHTML += message;
+}
 
-    //关闭连接
-    function clos(){
-        websocket.close(3000,"强制关闭");
-    }
+//关闭连接
+function clos(){
+    websocket.close(3000,"强制关闭");
+}
 
-    //发送信息
-    function send(msg){
-        alert(msg);
-        websocket.send(msg);
-    }
+//发送信息
+function send(msg){
+    alert(msg);
+    websocket.send(msg);
+}
 
-  function upcarimg(index) {
+function upcarimg(index) {
 
-        var upload = layui.upload;
-        console.log(upload);
-        //执行实例
-        var uploadInst = upload.render({
-            elem: '#upload' //绑定元素
-            ,url: '${pageContext.request.contextPath}/AdminController/uploadcarImg' //上传接口
-            ,data:{adminId:obj}
-            ,done: function(res){
-                layer.alert(res);
-            }
-            ,error: function(){
-                //请求异常回调
-            }
-            ,accept: 'images'
-            ,size: 5120 //限制文件大小，单位 KB
-        });
+    var upload = layui.upload;
+    console.log(upload);
+    //执行实例
+    var uploadInst = upload.render({
+        elem: '#upload' //绑定元素
+        ,url: '${pageContext.request.contextPath}/AdminController/uploadcarImg' //上传接口
+        ,data:{adminId:obj}
+        ,done: function(res){
+            layer.alert(res);
+        }
+        ,error: function(){
+            //请求异常回调
+        }
+        ,accept: 'images'
+        ,size: 5120 //限制文件大小，单位 KB
+    });
 
 }
 </script>

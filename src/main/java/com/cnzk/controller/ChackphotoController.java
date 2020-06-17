@@ -173,7 +173,7 @@ public class ChackphotoController
 
 	@RequestMapping("/search")
 	@ResponseBody
-	public String search(String carnum){
+	public String search(String carnum) throws IOException {
 		String ParkSpace=chackphotoService.parkspacemsg(carnum);//查重
 		if(ParkSpace==null){
 			return  "HAVEING";
@@ -217,7 +217,13 @@ public class ChackphotoController
 		String time=map.get("time").toString();;
 		String date= carnum+","+username+","+state+","+ps+","+entertime+","+exittime+","+time+","+money;
 		System.out.println("车牌："+carnum+"用户名："+username+"车状态："+state+"车位："+ps+"进场时间："+entertime+"出场时间："+exittime+"总时长："+time+"收费："+money);
-		//		Object obj = new Gson().toJson()
+		if(WebSocket.electricSocketMap.get("ip")!=null){
+			for (Session session:WebSocket.electricSocketMap.get("ip"))
+			{
+				session.getBasicRemote().sendText("success,"+date);
+			}
+
+		}
 		return date;
 
 	}

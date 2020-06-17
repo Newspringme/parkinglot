@@ -1,14 +1,20 @@
 package com.cnzk.service;
 
+import com.cnzk.mapper.BillMapper;
+import com.cnzk.mapper.CarMapper;
 import com.cnzk.mapper.ChargeMapper;
+import com.cnzk.mapper.ParkMapper;
 import com.cnzk.pojo.Admin;
 import com.cnzk.pojo.Charge;
 import com.cnzk.pojo.LayuiData;
+import com.cnzk.pojo.TbBill;
 import com.cnzk.utils.MD5;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpSession;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -18,6 +24,14 @@ public class ChargeServiceImpl implements ChargeService {
 
     @Resource
     private ChargeMapper chargeMapper;
+    @Resource
+    private CarMapper carMapper;
+    @Resource
+    private BillMapper billMapper;
+    @Resource
+    private ParkMapper parkMapper;
+
+
     //收费人员登陆
     @Override
     public String chargelogin(Map<String,Object> map, HttpSession session) {
@@ -81,10 +95,24 @@ public class ChargeServiceImpl implements ChargeService {
     public Integer updateCharge(Charge charge) {
         return chargeMapper.updateCharge(charge);
     }
-
+    //    实时出场现金支付
     @Override
-    public String realTimeExit(String msg){
-        return "";
+    @Transactional
+    public Integer cashPay(HashMap<String, Object> hashMap) {
+        Integer row = 0;
+        TbBill tbBill = new TbBill();
+        tbBill.setBillNum(hashMap.get("billNum").toString());
+        tbBill.setCarNum(hashMap.get("carnumber").toString());
+        tbBill.setUserName(hashMap.get("username").toString());
+        tbBill.setBillMoney(hashMap.get("money").toString());
+        tbBill.setBillState(1);
+        System.out.println("cashPay_tbBill="+tbBill);
+        row += billMapper.insertCashBill(tbBill);
+        row += carMapper.carexit(hashMap.get("carnumber").toString());
+        row += parkMapper.carExit(tbBill);
+        System.out.println(row);
+        return row;
     }
+
 
 }

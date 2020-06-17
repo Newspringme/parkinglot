@@ -5,6 +5,7 @@ import com.cnzk.pojo.Charge;
 import com.cnzk.pojo.LayuiData;
 
 import javax.servlet.http.HttpSession;
+import java.util.HashMap;
 import java.util.Map;
 
 
@@ -35,6 +36,6 @@ public interface ChargeService {
 
     //更新收费员
     Integer updateCharge(Charge charge);
-//    实时出场
-    String realTimeExit(String msg);
+//    实时出场现金支付
+    Integer cashPay(HashMap<String,Object> hashMap);
 }

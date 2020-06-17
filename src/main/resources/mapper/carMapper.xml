@@ -46,4 +46,10 @@
         car_num=#{carNum};
     </insert>
 
+<!--    //车辆出场（添加出库表数据）-->
+    <insert id="carexit" >
+       insert into tb_exit (car_num) values (#{carnum})
+    </insert>
+
+
 </mapper>

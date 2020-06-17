@@ -98,6 +98,8 @@
     var img_str;
     //layui.use加载模块
     layui.use(['form', 'table'], function () {
+        var $ = layui.jquery;
+        var layer = layui.layer;
         var websocket = null;
         if ('WebSocket' in window) {
             websocket = new WebSocket("ws://127.0.0.1:8080/parkinglot/websocket/ip");
@@ -202,29 +204,34 @@
     //现金收费
     function cashPay() {
         var path = $('#path').val();
-        var ratesUprice = $('.ratesUprice').val();
-        var ratesMaxprice = $('.ratesMaxprice').val();
-        var ratesId = 1;
-        $.ajax({
-            url: path+"/AdminController/editRates",
-            async: true,
-            type: 'POST',
-            data: {"ratesId":ratesId,"ratesUprice": ratesUprice, "ratesMaxprice": ratesMaxprice},
-            success: function (data) {
-                if (data=="success") {
-                    layer.msg('修改成功',{icon:6})
-                    uprice.innerHTML = ratesUprice;
-                    maxprice.innerHTML = ratesMaxprice;
-                    updata();
-                }else{
-                    layer.msg('修改失败，请重试',{icon:5})
-                }
-            },
-            error: function () {
-                layer.msg('网络繁忙',{icon:2});
-                window.parent.location.href=path+"/url/login";
-            }
-        });
+        if (carnumber==null){
+            layer.msg('当前无车辆出场',{icon:5})
+        }else{
+            layer.confirm('是否支付完成？',{icon:7},function (index) {
+                layer.close(index);
+                $.ajax({
+                    url: path+"/ChargeController/cashPay",
+                    async: true,
+                    type: 'POST',
+                    data: {"exittime":exittime,"carnumber": carnumber, "username": username,"money":money},
+                    success: function (data) {
+                        if (data=="success") {
+                            layer.alert('支付成功',{icon:6},function () {
+                                location.reload(true);
+                            });
+                        }else{
+                            layer.msg('支付失败，请重试',{icon:5})
+                        }
+                    },
+                    error: function () {
+                        layer.msg('网络繁忙',{icon:2});
+                        window.parent.location.href=path+"/url/login";
+                    }
+                });
+            });
+        }
+
+
     }
 </script>
 </body>
