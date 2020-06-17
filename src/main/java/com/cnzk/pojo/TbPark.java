@@ -9,6 +9,8 @@ public class TbPark {
   private String carNum;
   private long coordinateId;
 
+  private TbCoordinate tbCoordinate;
+
 	public TbPark()
 	{
 	}
@@ -78,4 +80,12 @@ public class TbPark {
 	{
 		return "TbPark{" + "parkId=" + parkId + ", parkName='" + parkName + '\'' + ", parkState='" + parkState + '\'' + ", carNum='" + carNum + '\'' + ", coordinateId=" + coordinateId + '}';
 	}
+
+    public TbCoordinate getTbCoordinate() {
+        return tbCoordinate;
+    }
+
+    public void setTbCoordinate(TbCoordinate tbCoordinate) {
+        this.tbCoordinate = tbCoordinate;
+    }
 }

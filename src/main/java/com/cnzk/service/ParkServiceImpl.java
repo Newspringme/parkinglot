@@ -14,7 +14,7 @@ public class ParkServiceImpl implements ParkService {
 
     @Override
     public List<TbPark> queryPark() {
-        return null;
+        return parkMapper.queryPark();
     }
 
     @Override

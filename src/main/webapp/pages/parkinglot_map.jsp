@@ -11,16 +11,15 @@
     <meta charset="utf-8">
     <title>地图</title>
     <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
-    <link href="${pageContext.request.contextPath}/static/esmap/lib/bootstrap.min.css" rel="stylesheet" />
-    <link href="${pageContext.request.contextPath}/static/esmap/css/common.css" rel="stylesheet" />
-    <link href="${pageContext.request.contextPath}/static/esmap/css/iconfont/iconfont.css" rel="stylesheet" />
+    <link href="${pageContext.request.contextPath}/static/Case/lib/bootstrap.min.css" rel="stylesheet" />
+    <link href="${pageContext.request.contextPath}/static/Case/css/common.css" rel="stylesheet" />
+    <link href="${pageContext.request.contextPath}/static/Case/css/iconfont/iconfont.css" rel="stylesheet" />
 
-    <script src="${pageContext.request.contextPath}/static/esmap/lib/config.js"></script>
-    <script src="${pageContext.request.contextPath}/static/esmap/lib/esmap-1.6.min.js"></script>
-    <script src="${pageContext.request.contextPath}/static/esmap/lib/jquery-2.1.4.min.js"></script>
-    <script src="${pageContext.request.contextPath}/static/esmap/lib/jquery.qrcode.min.js"></script>
-    <script src="${pageContext.request.contextPath}/static/esmap/lib/tips_controls.js"></script>
-    <script src="${pageContext.request.contextPath}/static/esmap/lib/bootstrap.min.js"></script>
+    <script src="${pageContext.request.contextPath}/static/Case/lib/esmap-1.6.min.js"></script>
+    <script src="${pageContext.request.contextPath}/static/Case/lib/jquery-2.1.4.min.js"></script>
+    <script src="${pageContext.request.contextPath}/static/Case/lib/jquery.qrcode.min.js"></script>
+    <script src="${pageContext.request.contextPath}/static/Case/lib/tips_controls.js"></script>
+    <script src="${pageContext.request.contextPath}/static/Case/lib/bootstrap.min.js"></script>
 </head>
 <style type="text/css">
     .viewmode-group {
@@ -37,7 +36,7 @@
         height: 38px;
         border-radius: 4px;
         border: none;
-        background-image: url("${pageContext.request.contextPath}/static/esmap/image/wedgets/3D.png");
+        background-image: url("${pageContext.request.contextPath}/static/Case/image/wedgets/3D.png");
     }
 
     .parking {
@@ -135,30 +134,15 @@
 <nav class="navbar navbar-inverse">
     <div class="container-fluid">
         <h1>
-            <a href="" title="室内地图-地图轨迹回放">菜鸟室内三维地图</a>
+            <a href="" title="菜鸟室内三维地图">菜鸟室内三维地图</a>
         </h1>
-
-        <div class="tips-right">
-            <span class="tip1"></span> <span class="tip2"></span>
-        </div>
-        <div class="tips-msg">
-            <div class="msg msg1">
-                <div class="erweima"></div>
-                <p>手机扫一扫进入体验</p>
-            </div>
-            <div class="msg msg2">
-                <h4>停车场车位占用</h4>
-                <p>1. 停车场车位占用例子定时5秒从后台获取数据</p>
-                <div style="display: none">停车场车位占用例子定时5秒从后台获取数据,停车场导航,商场导航,停车场定位,易景室内三维地图引擎提供地图浏览、缩放、旋转、图层显隐等基础功能，支持自定义室内地图显示风格及样式，可自动绘制楼层热力图、散点图等专题地图，快速进行空间大数据分析展示。支持跨楼层精准的点到点之间的最短、最优路径计算，支持对路径结果进行导航和动画,并提供丰富的地图主题资源供二次开发调用。</div>
-            </div>
-        </div>
     </div>
 </nav>
 
 <div class="viewmode-group">
     <button id="btn3D" class="btn btn-default"></button>
 </div>
-<div class="parking fix" id="parking"><span id="carid"></span>车位情况：<span id="YorN"></span></div>
+<div class="parking fix" id="parking"><span id="park_id"></span>车位情况：<span id="park_state"></span></div>
 <div class="codition fix">
     <ul>
         <li><span class="codition-first"></span>已停车</li>
@@ -167,7 +151,7 @@
 </div>
 <div class="i-test-tip fix" id="i-test-tip">
     <div class="test-tip">
-        停车场车位总数：<span id="total"></span>个，当前剩余车位数 <span id="freedata"></span>。
+        停车场车位总数：<span id="total"></span>个，当前剩余车位数 <span id="free"></span>。
     </div>
 </div>
 
@@ -175,12 +159,11 @@
     //定义全局map变量
     var map;
     var esmapID = 'cai_niao_parkinglot';
-    var styleid = getQueryString("styleid") || defaultOpt.themeID;
-    var floorControl;
-    // 楼层控制控件配置参数（几楼）
+    var styleid = 2005;
+    var floorControl; // 楼层控制控件配置参数（几楼）
     var ctlOpt = new esmap.ESControlOptions({
         position: esmap.ESControlPositon.RIGHT_TOP,
-        imgURL: "${pageContext.request.contextPath}/static/esmap/image/wedgets/"
+        imgURL: "${pageContext.request.contextPath}/static/Case/image/wedgets/"
     });
     // 放大、缩小控件配置
     var ctlOpt1 = new esmap.ESControlOptions({
@@ -190,10 +173,10 @@
             x: 20,
             y: 80
         },
-        imgURL: "${pageContext.request.contextPath}/static/esmap/image/wedgets/"
+        imgURL: "${pageContext.request.contextPath}/static/Case/image/wedgets/"
     });
-    var dataSrc = "${pageContext.request.contextPath}/static/esmap/data";
-    var themeSrc = "${pageContext.request.contextPath}/static/esmap/data/theme";
+    var dataSrc = "${pageContext.request.contextPath}/static/Case/data";
+    var themeSrc = "${pageContext.request.contextPath}/static/Case/data/theme";
     map = new esmap.ESMap({
         container: $("#map-container")[0], // 渲染dom
         mapDataSrc: dataSrc, //地图数据位置
@@ -202,7 +185,7 @@
         focusAnimateMode: true, // 开启聚焦层切换的动画显示
         focusAlpha: 0.4, // 对不聚焦图层启用透明设置，当focusAlphaMode = true时有效
         focusFloor: 1,
-        mapAudioSrc: '${pageContext.request.contextPath}/static/esmap/lib',
+        mapAudioSrc: '${pageContext.request.contextPath}/static/Case/lib',
         token:'20200611',
         // visibleFloors: "all",
         themeID: styleid //自定义样式主题ID
@@ -220,18 +203,54 @@
         var zoomControl = new esmap.ESZoomControl(map, ctlOpt1);
         bingEvents();
         marquee();
-        //先执行显示一次；
-        setTimeout(function () {CallLoadData(0)},10);
-        //开启定时器从后台获取数据
-        setInterval(function () {
-            CallLoadData((++pos % 2));
-        }, 5000);
+        // //先执行显示一次；
+        // setTimeout(function () {CallLoadData(0)},10);
+        // //开启定时器从后台获取数据
+        // setInterval(function () {
+        //     CallLoadData((++pos % 2));
+        // }, 5000);
+        setTimeout(function () {getParkData();},10);
     });
+    
+    function getParkData() {
+        $.getJSON("${pageContext.request.contextPath}/parkController/getParkData",function (data) {
+            console.log(data);
+            parkData = data.put;
+            console.log(parkData);
+            //解析数据
+            var total = 0;
+            for (var i = 0; i < parkData.length; i++) {
+                var park = parkData[i];
+                console.log(park);
+                var d = {"idList":[[],[],[]]};
+                total++;
+                d.idList[park.parkState].push(park.parkId);
+            }
+            console.log(d);
+            var showText = "";
+            //更新车位颜色
+            for(var j=0;j<color.length;j++)
+            {
+                //调用批量修改颜色接口来修改
+                map.changeModelColor({
+                    id:d.idlist[j],
+                    color: color[j]
+                });
+            }
+            showtext += ":"+d1.idlist[2].length+"个  ";
+
+
+            //3.显示更新统计
+            $("#free").html(showtext); //滚动字幕 相应楼层剩余停车位数
+            $("#total").html(total);
+        });
+    }
 
     function CallLoadData(pos) {
         var id = [];
         var fileName = 'data' + pos + '.json'; //json数据切换
         $.getJSON(fileName, function (data) {
+            console.log(data);
             var mydata=new Map();
             parkData = data.put;
             //1.解析数据,将数据按每层进行整理
@@ -266,7 +285,7 @@
             }
 
             //3.显示更新统计
-            $("#freedata").html(showtext); //滚动字幕 相应楼层剩余停车位数
+            $("#free").html(showtext); //滚动字幕 相应楼层剩余停车位数
             $("#total").html(total);
         });
     }
@@ -278,10 +297,10 @@
             return;
         }
         $("#parking").css("fontSize", "18px").html();
-        $("#carid").css("color", "rgb(255, 255, 0)").html(event.name); //停车位ID
+        $("#park_id").css("color", "rgb(255, 255, 0)").html(event.name); //停车位ID
         for (var i = 0; i < parkData.length; ++i) {
             if (event.ID == parkData[i].ID) {
-                $("#YorN").html(statusname[parkData[i].status]);
+                $("#park_state").html(statusname[parkData[i].status]);
             }
         }
     });
@@ -308,11 +327,11 @@
             if (map.viewMode == esmap.ESViewMode.MODE_2D) {
                 map.viewMode = esmap.ESViewMode.MODE_3D; //2D-->3D
                 document.getElementById("btn3D").style.backgroundImage =
-                    "url('${pageContext.request.contextPath}/static/esmap/image/wedgets/3D.png')";
+                    "url('${pageContext.request.contextPath}/static/Case/image/wedgets/3D.png')";
             } else {
                 map.viewMode = esmap.ESViewMode.MODE_2D; //3D-->2D
                 document.getElementById("btn3D").style.backgroundImage =
-                    "url('${pageContext.request.contextPath}/static/esmap/image/wedgets/2D.png')";
+                    "url('${pageContext.request.contextPath}/static/Case/image/wedgets/2D.png')";
             }
         };
     }
