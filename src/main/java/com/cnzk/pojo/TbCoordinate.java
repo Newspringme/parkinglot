@@ -3,7 +3,7 @@ package com.cnzk.pojo;
 
 public class TbCoordinate {
 
-    private Integer coordinateId;
+    private long coordinateId;
     private String coordinateName;
     private String xyId;
     private String coordinateX;
@@ -11,11 +11,11 @@ public class TbCoordinate {
 
 
 
-    public Integer getCoordinateId() {
+    public long getCoordinateId() {
         return coordinateId;
     }
 
-    public void setCoordinateId(Integer coordinateId) {
+    public void setCoordinateId(long coordinateId) {
         this.coordinateId = coordinateId;
     }
 

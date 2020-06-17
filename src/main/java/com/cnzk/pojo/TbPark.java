@@ -9,6 +9,8 @@ public class TbPark {
   private String carNum;
   private long coordinateId;
 
+  private TbCoordinate tbCoordinate;
+
 	public TbPark()
 	{
 	}
@@ -42,23 +44,23 @@ public class TbPark {
     return parkName;
   }
 
-  public void setParkName(String parkName) {
-    this.parkName = parkName;
-  }
+    public void setParkName(String parkName) {
+        this.parkName = parkName;
+    }
 
 
-  public String getParkState() {
-    return parkState;
-  }
+    public String getParkState() {
+        return parkState;
+    }
 
-  public void setParkState(String parkState) {
-    this.parkState = parkState;
-  }
+    public void setParkState(String parkState) {
+        this.parkState = parkState;
+    }
 
 
-  public String getCarNum() {
-    return carNum;
-  }
+    public String getCarNum() {
+        return carNum;
+    }
 
   public void setCarNum(String carNum) {
     this.carNum = carNum;
@@ -78,4 +80,12 @@ public class TbPark {
 	{
 		return "TbPark{" + "parkId=" + parkId + ", parkName='" + parkName + '\'' + ", parkState='" + parkState + '\'' + ", carNum='" + carNum + '\'' + ", coordinateId=" + coordinateId + '}';
 	}
+
+    public TbCoordinate getTbCoordinate() {
+        return tbCoordinate;
+    }
+
+    public void setTbCoordinate(TbCoordinate tbCoordinate) {
+        this.tbCoordinate = tbCoordinate;
+    }
 }
