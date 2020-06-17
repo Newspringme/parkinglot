@@ -15,11 +15,7 @@
     <link href="${pageContext.request.contextPath}/static/Case/css/common.css" rel="stylesheet" />
     <link href="${pageContext.request.contextPath}/static/Case/css/iconfont/iconfont.css" rel="stylesheet" />
 
-    <script src="${pageContext.request.contextPath}/static/Case/lib/esmap-1.6.min.js"></script>
-    <script src="${pageContext.request.contextPath}/static/Case/lib/jquery-2.1.4.min.js"></script>
-    <script src="${pageContext.request.contextPath}/static/Case/lib/jquery.qrcode.min.js"></script>
-    <script src="${pageContext.request.contextPath}/static/Case/lib/tips_controls.js"></script>
-    <script src="${pageContext.request.contextPath}/static/Case/lib/bootstrap.min.js"></script>
+
 </head>
 <style type="text/css">
     .viewmode-group {
@@ -155,11 +151,16 @@
     </div>
 </div>
 
+<script src="${pageContext.request.contextPath}/static/Case/lib/esmap-1.6.min.js"></script>
+<script src="${pageContext.request.contextPath}/static/Case/lib/jquery-2.1.4.min.js"></script>
+<script src="${pageContext.request.contextPath}/static/Case/lib/jquery.qrcode.min.js"></script>
+<script src="${pageContext.request.contextPath}/static/Case/lib/tips_controls.js"></script>
+<script src="${pageContext.request.contextPath}/static/Case/lib/bootstrap.min.js"></script>
 <script type="text/javascript">
     //定义全局map变量
     var map;
     var esmapID = 'cai_niao_parkinglot';
-    var styleid = 2005;
+    var styleid = 1005;
     var floorControl; // 楼层控制控件配置参数（几楼）
     var ctlOpt = new esmap.ESControlOptions({
         position: esmap.ESControlPositon.RIGHT_TOP,
@@ -193,25 +194,20 @@
     map.openMapById(esmapID); //打开地图
     map.showCompass = true; //显示指南针
 
-    var parkData = null,
-        pos = 0;
-    var color = [ "#ff0000", "#00ff00"];
-    var statusname=["有车","无车"];
+    var parkData;
+    var color = ["#ff0000", "#00ff00"];
+    var statusname=["已停车","未停车"];
     //地图加载完成回调
     map.on("loadComplete", function () {
         floorControl = new esmap.ESScrollFloorsControl(map, ctlOpt);
         var zoomControl = new esmap.ESZoomControl(map, ctlOpt1);
         bingEvents();
         marquee();
-        // //先执行显示一次；
-        // setTimeout(function () {CallLoadData(0)},10);
-        // //开启定时器从后台获取数据
-        // setInterval(function () {
-        //     CallLoadData((++pos % 2));
-        // }, 5000);
+        // //先执行显示一次
         setTimeout(function () {getParkData();},10);
-    });
-    
+        //开启定时器从后台获取数据
+        setInterval(function () {getParkData();}, 10000);});
+
     function getParkData() {
         $.getJSON("${pageContext.request.contextPath}/parkController/getParkData",function (data) {
             console.log(data);
@@ -219,76 +215,40 @@
             console.log(parkData);
             //解析数据
             var total = 0;
-            for (var i = 0; i < parkData.length; i++) {
+            var d = {"idList":[[],[],[]]};
+            for (var i = 0; i < parkData.length; i++)
+            {
                 var park = parkData[i];
                 console.log(park);
-                var d = {"idList":[[],[],[]]};
+                var parkState;
+                if (park.parkState == "已停车")
+                {
+                    parkState = 1;
+                }else{
+                    parkState = 2;
+                }
                 total++;
-                d.idList[park.parkState].push(park.parkId);
+                d.idList[parkState].push(park.eventId);
             }
             console.log(d);
             var showText = "";
-            //更新车位颜色
-            for(var j=0;j<color.length;j++)
-            {
-                //调用批量修改颜色接口来修改
-                map.changeModelColor({
-                    id:d.idlist[j],
-                    color: color[j]
-                });
-            }
-            showtext += ":"+d1.idlist[2].length+"个  ";
 
-
+            //调用批量修改颜色接口来修改
+            map.changeModelColor({
+                id: d.idList[1],
+                color: color[0]
+            });
+            map.changeModelColor({
+                id: d.idList[2],
+                color: color[1]
+            });
+            showText += ":"+d.idList[2].length+"个";
             //3.显示更新统计
-            $("#free").html(showtext); //滚动字幕 相应楼层剩余停车位数
+            $("#free").html(showText); //滚动字幕 相应楼层剩余停车位数
             $("#total").html(total);
         });
     }
 
-    function CallLoadData(pos) {
-        var id = [];
-        var fileName = 'data' + pos + '.json'; //json数据切换
-        $.getJSON(fileName, function (data) {
-            console.log(data);
-            var mydata=new Map();
-            parkData = data.put;
-            //1.解析数据,将数据按每层进行整理
-            var total =  0;
-            for (var i = 0, len = parkData.length; i < len; ++i) {
-                var m = parkData[i];
-                var d=mydata.get(m.fnum);
-                if(d==null)
-                {
-                    d = {"idlist":[[],[],[]]};
-                }
-                total++;
-                d.idlist[m.status].push(m.ID);
-                mydata.set(m.fnum,d);
-            }
-
-            var showtext="";
-            //2.更新车位颜色
-            for (var i = 1; i < mydata.size; i++) {
-                var d1 = mydata.get(i);
-                var fnum = i;
-                for(var j=0;j<color.length;j++)
-                {
-                    //调用批量修改颜色接口来修改
-                    map.changeModelColor({
-                        id:d1.idlist[j],
-                        fnum: fnum,
-                        color: color[j]
-                    });
-                }
-                showtext += map.floorNames[fnum-1]+":"+d1.idlist[2].length+"个  ";
-            }
-
-            //3.显示更新统计
-            $("#free").html(showtext); //滚动字幕 相应楼层剩余停车位数
-            $("#total").html(total);
-        });
-    }
     //地图点击事件
     map.on("mapClickNode", function (event) {
         if (event.nodeType == esmap.ESNodeType.NONE ||
@@ -297,10 +257,10 @@
             return;
         }
         $("#parking").css("fontSize", "18px").html();
-        $("#park_id").css("color", "rgb(255, 255, 0)").html(event.name); //停车位ID
+        $("#park_id").css("color", "rgb(255, 255, 0)").html(event.name); //停车位ID(parkName)
         for (var i = 0; i < parkData.length; ++i) {
-            if (event.ID == parkData[i].ID) {
-                $("#park_state").html(statusname[parkData[i].status]);
+            if (event.ID == parkData[i].eventId) {
+                $("#park_state").html(parkData[i].parkState);
             }
         }
     });

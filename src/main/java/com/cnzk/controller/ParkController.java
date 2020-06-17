@@ -22,7 +22,6 @@ public class ParkController {
         Map map = new HashMap();
         map.put("put",parkService.queryPark());
         System.out.println(JSON.toJSON(map));
-//        return JSON.toJSON(map);
         return JSON.toJSON(map);
     }
 
