@@ -37,5 +37,8 @@ public interface CarMapper
 	//	开通过新月缴
 	int handlePackage(TbCar tbCar);
 
+	//	办理续费
+	int handleRenew(TbCar tbCar);
+
 
 }

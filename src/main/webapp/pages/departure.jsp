@@ -41,6 +41,8 @@
                 <input type="hidden" class="enter">
                 <input type="hidden" class="exit">
                 <input type="hidden" class="carnum">
+                <input type="hidden" class="username">
+                <input type="hidden" class="money">
                 <button class="layui-btn layui-btn-normal" lay-submit onclick="zhifu()">出库</button>
             </div>
         </div>
@@ -101,6 +103,8 @@
     /**
      * 将本地图片 显示到浏览器上
      */
+
+    var img_str;
     function preImg(sourceId, targetId) {
         <%--$.ajax({--%>
         <%--            url:"${pageContext.request.contextPath}/ChackphotoController/img",--%>
@@ -184,6 +188,10 @@
                     $(".enter").val(entertime);
                     $(".exit").val(exittime);
                     $(".carnum").val(carnumber);
+                    $(".username").val(username);
+                    $(".money").val(money);
+
+
                 }
             }
         })
@@ -234,6 +242,8 @@
                         $(".enter").val(entertime);
                         $(".exit").val(exittime);
                         $(".carnum").val(carnumber);
+                        $(".username").val(username);
+                        $(".money").val(money);
                     }
                 }
             })
@@ -242,7 +252,57 @@
 
     });
     function zhifu() {
-        window.open("${pageContext.request.contextPath}/alipay?enter="+$(".enter").val()+"&exit="+$(".exit").val()+"&carNum="+$(".carnum").val());
+        if ($(".money").val()==0){
+
+        }else {
+            window.open("${pageContext.request.contextPath}/alipay?enter="+$(".enter").val()+"&exit="+$(".exit").val()+"&carNum="+$(".carnum").val()+"&username="+$(".username").val());
+        }
+
+    }
+
+    var websocket = null;
+    if('WebSocket' in window){
+        websocket = new WebSocket("ws://127.0.0.1:8080/parkinglot/websocket/ip");
+    }
+    else{
+        alert("您的浏览器不支持websocket");
+    }
+
+    websocket.onerror = function(){
+        setMessageInHtml("send error！");
+    }
+
+    websocket.onopen = function(){
+        setMessageInHtml("connection success！")
+    }
+
+    websocket.onmessage  = function(event){
+        setMessageInHtml(event.data);
+        console.log(event);
+    }
+
+    websocket.onclose = function(){
+        setMessageInHtml("closed websocket!")
+    }
+
+    window.onbeforeunload = function(){
+        clos();
+    }
+
+    // 接收信息
+    function setMessageInHtml(message){
+        document.getElementById('message').innerHTML += message;
+    }
+
+    //关闭连接
+    function clos(){
+        websocket.close(3000,"强制关闭");
+    }
+
+    //发送信息
+    function send(msg){
+        alert(msg);
+        websocket.send(msg);
     }
 </script>
 <script>//websocket

@@ -110,7 +110,7 @@
 	</select>
 
 	<insert id="insertBill" parameterType="com.cnzk.pojo.TbBill">
-		 insert into tb_bill (bill_num,bill_money,car_num) values (#{billNum},#{billMoney},#{carNum});
+		 insert into tb_bill (bill_num,bill_money,car_num,user_name) values (#{billNum},#{billMoney},#{carNum},#{userName});
 	</insert>
 
 	<update id="updateBill" parameterType="com.cnzk.pojo.TbBill">

@@ -27,7 +27,7 @@ public class UserServiceImpl implements UserService
 	@Override
 	public TbUser queryUserByCarNum(String carNum)
 	{
-		return null;
+		return userMapper.queryUserByCarNum(carNum);
 	}
 	//根据用户名查询用户
 	@Override

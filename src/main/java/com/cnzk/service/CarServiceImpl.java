@@ -68,5 +68,11 @@ public class CarServiceImpl implements CarService
 	{
 		return carMapper.handlePackage(tbCar);
 	}
+	//	办理续费
+	@Override
+	public int handleRenew(TbCar tbCar)
+	{
+		return carMapper.handleRenew(tbCar);
+	}
 
 }

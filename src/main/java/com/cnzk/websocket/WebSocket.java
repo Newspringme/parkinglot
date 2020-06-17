@@ -1,23 +1,24 @@
 package com.cnzk.websocket;
 
-
-
-import com.google.gson.Gson;
 import org.springframework.stereotype.Component;
 
 import javax.websocket.*;
 import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 
-@ServerEndpoint("/websocket/{pageCode}")
+@ServerEndpoint("/websocket/{ip}")
 @Component
 public class WebSocket {
+    // 静态变量，用来记录当前在线连接数。应该把它设计成线程安全的。
+    private static int onlineCount = 0;
+    // concurrent包的线程安全Map，用来存放每个客户端对应的WebSocket对象。
+    private static ConcurrentHashMap<String, WebSocket> webSocketMap = new ConcurrentHashMap<String, WebSocket>();
+    // 与某个客户端的连接会话，需要通过它来给客户端发送数据
+    private Session session;
 
     private static final String loggerName = WebSocket.class.getName();
     //concurrent包的线程安全Set，用来存放每个客户端对应的MyWebSocket对象。若要实现服务端与单一客户端通信的话，可以使用Map来存放，其中Key可以为用户标识
@@ -60,34 +61,9 @@ public class WebSocket {
      */
     @OnMessage
     public void onMessage(String message, Session session) {
-        System.out.println("websocket-----------"+message);
-//        IMData imData = new Gson().fromJson(message, IMData.class);
-//        UserEntity userEntity = new UserEntity();
-//        if (WebSocket.electricSocketMap.get(("" + imData.getTo().getId())) != null) {
-//            userEntity.setUsername(imData.getMine().getUsername());
-//            userEntity.setAvatar(imData.getMine().getAvatar());
-//            userEntity.setType(imData.getMine().getType());
-//            userEntity.setId(imData.getMine().getId());
-//            userEntity.setContent(imData.getMine().getContent());
-//            for (Session sessions : WebSocket.electricSocketMap.get(("" + imData.getTo().getId()))) {
-//                try {
-//                    sessions.getBasicRemote().sendText(new Gson().toJson(userEntity));
-//                } catch (IOException e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//        } else {
-//            userEntity.setUsername(imData.getTo().getUsername());
-//            userEntity.setAvatar(imData.getTo().getAvatar());
-//            userEntity.setType(imData.getTo().getType());
-//            userEntity.setId(imData.getTo().getId());
-//            userEntity.setContent("您好，我现在有事不在，一会再和您联系。");
-//            try {
-//                session.getBasicRemote().sendText(new Gson().toJson(userEntity));
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            }
-//        }
+		System.out.println("来自客户端的消息:" + message);
+        sendMessage(message);
+        sendInfo(message);
     }
 
     /**
