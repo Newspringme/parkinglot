@@ -14,9 +14,15 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import static org.apache.tomcat.util.codec.binary.Base64.encodeBase64;
 
 @Controller
 @RequestMapping("/ChackphotoController")
@@ -180,6 +186,24 @@ public class ChackphotoController
 		//		Object obj = new Gson().toJson()
 		return date;
 
+	}
+
+	@RequestMapping("/img")
+	@ResponseBody
+	public String img(HttpServletRequest request, HttpServletResponse response)  {
+		String imgBase64 = "";
+		try {
+			File file = new File("upload");//储存地址
+			byte[] content = new byte[(int) file.length()];
+			FileInputStream finputstream = new FileInputStream(file);
+			finputstream.read(content);
+			finputstream.close();
+			imgBase64 = new String(encodeBase64(content));
+		} catch (IOException e) {
+			e.printStackTrace();
+			return "";
+		}
+		return imgBase64;
 	}
 
 }

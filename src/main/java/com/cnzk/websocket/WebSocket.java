@@ -60,7 +60,7 @@ public class WebSocket {
      */
     @OnMessage
     public void onMessage(String message, Session session) {
-        System.out.println(message);
+        System.out.println("websocket-----------"+message);
 //        IMData imData = new Gson().fromJson(message, IMData.class);
 //        UserEntity userEntity = new UserEntity();
 //        if (WebSocket.electricSocketMap.get(("" + imData.getTo().getId())) != null) {

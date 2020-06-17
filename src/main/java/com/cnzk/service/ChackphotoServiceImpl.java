@@ -61,6 +61,7 @@ public class ChackphotoServiceImpl implements ChackphotoService
 
 		// 对图像进行base64编码
 		String imgBase64 = change64;
+		System.out.println("imgBase64___---------____"+imgBase64);
 //		try {
 //			File file1 = new File(imgFile);
 //			byte[] content = new byte[(int) file1.length()];
