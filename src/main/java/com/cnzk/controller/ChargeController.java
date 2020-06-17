@@ -185,13 +185,10 @@ public class ChargeController {
         }
     }
 
-
     @ResponseBody
-    @RequestMapping("realTimeExit")
-    public String realTimeExit(String msg){
-        System.out.println("+++++++++++++++++++++++++++++++++++++"+msg);
-        return "";
-    }
+    @RequestMapping("cashPay")
+    public void cashPay(){
 
+    }
 
 }

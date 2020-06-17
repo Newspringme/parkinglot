@@ -18,6 +18,6 @@
     </select>
 
     <update id="carExit"  parameterType="com.cnzk.pojo.TbBill">
-       update tb_park set car_num=null where car_num=#{carNum};
+       update tb_park set car_num=null,park_state='未停车' where car_num=#{carNum};
     </update>
 </mapper>

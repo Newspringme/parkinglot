@@ -100,7 +100,7 @@
     layui.use(['form', 'table'], function () {
         var websocket = null;
         if ('WebSocket' in window) {
-            websocket = new WebSocket("ws://127.0.0.1:8080/parkinglot/websocket/ip");
+            websocket = new WebSocket("ws://39.102.35.36:8080/parkinglot/websocket/ip");
         } else {
             alert("您的浏览器不支持websocket");
         }
@@ -135,8 +135,9 @@
 
         // 接收信息
         function setMessageInHtml(message) {
-            if (message.split(",")[0] == "success") {
+            console.log("666666666666666666666666"+message);
 
+            if (message.split(",")[0] == "success") {
                 carnumber = message.split(",")[1];
                 username = message.split(",")[2];
                 state = message.split(",")[3];
@@ -157,6 +158,7 @@
                 document.getElementById("money").innerHTML = money;
             } else if(message.split(",")[0] == "refresh"){
 
+                alert("支付成功");
                 layer.msg("支付成功", {icon: 6});
             }else {
                 layer.msg("暂无车辆出场", {icon: 5});
@@ -201,11 +203,8 @@
     //现金收费
     function cashPay() {
         var path = $('#path').val();
-        var ratesUprice = $('.ratesUprice').val();
-        var ratesMaxprice = $('.ratesMaxprice').val();
-        var ratesId = 1;
         $.ajax({
-            url: path+"/AdminController/editRates",
+            url: path+"/ChargeController/cashPay",
             async: true,
             type: 'POST',
             data: {"ratesId":ratesId,"ratesUprice": ratesUprice, "ratesMaxprice": ratesMaxprice},

@@ -218,6 +218,7 @@
                     }else if (data=="HAVEING") {
                         alert("车辆已出库")
                     }else {
+                        send(data);
                         var carnumber = data.split(",")[0];
                         var username = data.split(",")[1];
                         var state = data.split(",")[2];
@@ -257,7 +258,7 @@
 
     var websocket = null;
     if('WebSocket' in window){
-        websocket = new WebSocket("ws://127.0.0.1:8080/parkinglot/websocket/ip");
+        websocket = new WebSocket("ws://39.102.35.36:8080/parkinglot/websocket/ip");
     }
     else{
         alert("您的浏览器不支持websocket");
