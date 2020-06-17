@@ -89,7 +89,12 @@ public class WebSocket {
      * 群发自定义消息
      */
     public static void sendInfo(String message) {
-        message = "success,"+message;
+
+        if (message.equals("refresh")){
+            message = "refresh,"+message;
+        }else {
+            message = "success,"+message;
+        }
         for (Map.Entry<String, WebSocket> entry : webSocketMap.entrySet()) {
             WebSocket value = entry.getValue();
             value.sendMessage(message);

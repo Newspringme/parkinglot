@@ -141,7 +141,7 @@ public class ChackphotoServiceImpl implements ChackphotoService
 	{
 		HashMap<String,Object> condition = new HashMap<>();
 		String change64=ChangeBase64.multipartFileToBASE64(file2);
-		condition.put("change64",change64);
+//		condition.put("change64",change64);
 		System.out.println("change64==============================================================");
 		System.out.println("change64:"+change64);
 		String host = "https://ocrcp.market.alicloudapi.com";

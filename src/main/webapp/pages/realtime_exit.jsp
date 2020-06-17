@@ -155,9 +155,13 @@
                 document.getElementById("exittime").innerHTML = exittime;
                 document.getElementById("time").innerHTML = time;
                 document.getElementById("money").innerHTML = money;
-            } else {
+            } else if(message.split(",")[0] == "refresh"){
+
+                layer.msg("支付成功", {icon: 6});
+            }else {
                 layer.msg("暂无车辆出场", {icon: 5});
             }
+
 
         }
     })
@@ -188,30 +192,11 @@
     }
     //在线收费
     function onlinePay() {
-        var path = $('#path').val();
-        var ratesUprice = $('.ratesUprice').val();
-        var ratesMaxprice = $('.ratesMaxprice').val();
-        var ratesId = 1;
-        $.ajax({
-            url: path+"/AdminController/editRates",
-            async: true,
-            type: 'POST',
-            data: {"ratesId":ratesId,"ratesUprice": ratesUprice, "ratesMaxprice": ratesMaxprice},
-            success: function (data) {
-                if (data=="success") {
-                    layer.msg('修改成功',{icon:6})
-                    uprice.innerHTML = ratesUprice;
-                    maxprice.innerHTML = ratesMaxprice;
-                    updata();
-                }else{
-                    layer.msg('修改失败，请重试',{icon:5})
-                }
-            },
-            error: function () {
-                layer.msg('网络繁忙',{icon:2});
-                window.parent.location.href=path+"/url/login";
-            }
-        });
+        if ($(".money").val()==0){
+
+        }else {
+            window.open("${pageContext.request.contextPath}/alipay?enter="+entertime+"&exit="+exittime+"&carNum="+carnumber+"&username="+username);
+        }
     }
     //现金收费
     function cashPay() {

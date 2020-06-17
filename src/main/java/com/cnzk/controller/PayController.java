@@ -39,7 +39,7 @@ public class PayController {
     //支付宝异步通知路径,付款完毕后会异步调用本项目的方法,必须为公网地址
     private final String NOTIFY_URL = "http://39.102.35.36:8080/parkinglot/exitcar";
 //    //支付宝同步通知路径,也就是当付款完毕后跳转本项目的页面,可以不是公网地址
-    private final String RETURN_URL = "http://localhost:8080/parkinglot/url/close.html";
+    private final String RETURN_URL = "http://39.102.35.36:8080/parkinglot/url/close.html";
 
     @Autowired
     private AdminService adminService;
@@ -144,15 +144,7 @@ public class PayController {
                 //如果没有做过处理，根据订单号（out_trade_no）在商户网站的订单系统中查到该笔订单的详细，并执行商户的业务程序
                 //请务必判断请求时的total_fee、seller_id与通知时获取的total_fee、seller_id为一致的
                 //如果有做过处理，不执行商户的业务程序
-                TbBill bill = new TbBill();
-                bill.setBillNum(out_trade_no);
-                //付款完成
-                billService.updateBill(bill);
-                bill=billService.getCarNum(bill);
-                //车位清空
-                parkService.carExit(bill);
-                //车出库
-                userService.carexit(bill.getCarNum());
+
                 //注意：
                 //如果签约的是可退款协议，退款日期超过可退款期限后（如三个月可退款），支付宝系统发送该交易状态通知
                 //如果没有签约可退款协议，那么付款完成后，支付宝系统发送该交易状态通知。
@@ -177,9 +169,11 @@ public class PayController {
             //——请根据您的业务逻辑来编写程序（以上代码仅作参考）——
 //            out.clear();
 //            out.println("success");	//请不要修改或删除
-
+            Response.getWriter().write("success");
             //////////////////////////////////////////////////////////////////////////////////////////
         }else{//验证失败
+
+            Response.getWriter().write("fail");
 //            out.println("fail");
         }
     }
