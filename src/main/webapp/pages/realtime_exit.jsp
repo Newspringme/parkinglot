@@ -112,8 +112,8 @@
         }
 
         websocket.onmessage = function (event) {
-            setMessageInHtml(event.data);
-            console.log(event);
+            setMessageInHtml(event);
+            // console.log(event);
         }
         websocket.onclose = function () {
             setMessageInHtml("closed websocket!")
@@ -135,18 +135,19 @@
 
         // 接收信息
         function setMessageInHtml(message) {
-            if (message.split(",")[0] == "success") {
+            console.log(message.data);
+            if (message.data.split(",")[0] == "success") {
 
-                carnumber = message.split(",")[1];
-                username = message.split(",")[2];
-                state = message.split(",")[3];
-                ps = message.split(",")[4];
-                entertime = message.split(",")[5];
-                exittime = message.split(",")[6];
-                time = message.split(",")[7];
-                money = message.split(",")[8];
-                // img_str = message.split(",")[9];
-                // $("#img").attr("src", "data:image/png; base64," + img_str);
+                carnumber = message.data.split(",")[1];
+                username = message.data.split(",")[2];
+                state = message.data.split(",")[3];
+                ps = message.data.split(",")[4];
+                entertime = message.data.split(",")[5];
+                exittime = message.data.split(",")[6];
+                time = message.data.split(",")[7];
+                money = message.data.split(",")[8];
+                img_str = message.data.split(",")[9];
+                $("#img").attr("src", "data:image/png; base64," + img_str);
                 document.getElementById("carnumber").innerHTML = carnumber;
                 document.getElementById("username").innerHTML = username;
                 document.getElementById("state").innerHTML = state;

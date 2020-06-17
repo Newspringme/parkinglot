@@ -167,7 +167,7 @@
                 }else if (data=="HAVEING") {
                     alert("车辆已出库")
                 }else {
-                    send(data);
+                    // send(data);
 
                     var carnumber = data.split(",")[0];
                     var username = data.split(",")[1];

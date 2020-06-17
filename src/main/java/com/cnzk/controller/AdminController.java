@@ -550,19 +550,15 @@ public Object addCombo(TbCombo tbCombo){
 			response.getWriter().print("error");
 		}
 	}
-	//	退出登录
-//	@RequestMapping("/outLogin")
-//	@ResponseBody
-//	@Log(operationThing = "退出登录",operationType = "退出")
-//	public Object outLogin(String msg)
-//	{
-//		Session session
-//
-//		session.invalidate();
-//
+//		退出登录
+	@RequestMapping("/outLogin")
+	@ResponseBody
+	@Log(operationThing = "退出登录",operationType = "退出")
+	public String outLogin(HttpServletRequest request)
+	{
+		request.getSession().invalidate();
 //		Boolean out = true;
-//
-//		return out;
-//	}
+		return "success";
+	}
 
 }

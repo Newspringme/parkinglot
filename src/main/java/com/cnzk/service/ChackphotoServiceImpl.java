@@ -137,6 +137,16 @@ public class ChackphotoServiceImpl implements ChackphotoService
 		}
 		return null;
 	}
+    //转base64
+	@Override
+	public String change64(MultipartFile file)
+	{
+		String change64=ChangeBase64.multipartFileToBASE64(file);
+		System.out.println("servicechange64打印------------"+change64);
+
+		return change64;
+	}
+
 	@Override
 	public HashMap<String, Object> file2(MultipartFile file2)//出场图片确认
 	{
@@ -259,6 +269,8 @@ public class ChackphotoServiceImpl implements ChackphotoService
 
 	}
 
+
+
 	@Override
 	public String findentertime(String carnum)//根据车牌查找最近入库的时间
 	{
@@ -277,6 +289,13 @@ public class ChackphotoServiceImpl implements ChackphotoService
 	{
 		userMapper.caraddexit(carnum,exittime);
 	}
+
+	@Override
+	public void addimgurl(String carnum, String url)
+	{
+		userMapper.addimgurl(carnum,url);
+	}
+
 	@Override
 	public String findcarvip(String carnum)
 	{     //查VIP ，如果为空返回临时车，如果有。返回数据

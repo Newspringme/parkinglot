@@ -6,6 +6,8 @@ import javax.websocket.*;
 import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -24,20 +26,24 @@ public class WebSocket {
     //concurrent包的线程安全Set，用来存放每个客户端对应的MyWebSocket对象。若要实现服务端与单一客户端通信的话，可以使用Map来存放，其中Key可以为用户标识
     public static Map<String, List<Session>> electricSocketMap = new ConcurrentHashMap<String, List<Session>>();
 
+
+
+
     /**
      * 连接建立成功调用的方法
      *
      * @param session 可选的参数。session为与某个客户端的连接会话，需要通过它来给客户端发送数据
      */
     @OnOpen
-    public void onOpen(@PathParam("pageCode") String pageCode, Session session) {
+    public void onOpen(@PathParam("ip") String ip, Session session) {
+        System.out.println("pageCode====" + ip);
         session.setMaxIdleTimeout(3600000);
-        List<Session> sessions = electricSocketMap.get(pageCode);
-        System.out.println("pageCode====" + pageCode);
+        List<Session> sessions = electricSocketMap.get(ip);
+
         if (null == sessions) {
             List<Session> sessionList = new ArrayList<>();
             sessionList.add(session);
-            electricSocketMap.put(pageCode, sessionList);
+            electricSocketMap.put(ip, sessionList);
         } else {
             sessions.add(session);
         }
@@ -62,8 +68,8 @@ public class WebSocket {
     @OnMessage
     public void onMessage(String message, Session session) {
 		System.out.println("来自客户端的消息:" + message);
-        sendMessage(message);
-        sendInfo(message);
+//        sendMessage(message);
+//        sendInfo(message);
     }
 
     /**
