@@ -53,9 +53,9 @@ public class WebSocket {
      * 连接关闭调用的方法
      */
     @OnClose
-    public void onClose(@PathParam("pageCode") String pageCode, Session session) {
-        if (electricSocketMap.containsKey(pageCode)) {
-            electricSocketMap.get(pageCode).remove(session);
+    public void onClose(@PathParam("ip") String ip, Session session) {
+        if (electricSocketMap.containsKey(ip)) {
+            electricSocketMap.get(ip).remove(session);
         }
     }
 
@@ -80,6 +80,7 @@ public class WebSocket {
      */
     @OnError
     public void onError(Session session, Throwable error) {
+
         System.out.println("发生错误");
     }
 }
