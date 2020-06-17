@@ -8,12 +8,29 @@ public class TbBill {
   private String billNum;
   private String billMoney;
   private long comboId;
+  private long billState;
+  private long carId;
+
+
+
+  public String getCarNum() {
+    return carNum;
+  }
+
+  public void setCarNum(String carNum) {
+    this.carNum = carNum;
+  }
+
+  private String carNum;
 
 //  操作事项
   private String comboName;
 
 //  操作人
   private String userName;
+
+  public TbBill() {
+  }
 
 
   public long getBillId() {
@@ -76,6 +93,22 @@ public class TbBill {
     this.userName = userName;
   }
 
+  public long getBillState() {
+    return billState;
+  }
+
+  public void setBillState(long billState) {
+    this.billState = billState;
+  }
+
+  public long getCarId() {
+    return carId;
+  }
+
+  public void setCarId(long carId) {
+    this.carId = carId;
+  }
+
   @Override
   public String toString() {
     return "TbBill{" +
@@ -84,6 +117,8 @@ public class TbBill {
             ", billNum='" + billNum + '\'' +
             ", billMoney='" + billMoney + '\'' +
             ", comboId=" + comboId +
+            ", billState=" + billState +
+            ", carId=" + carId +
             ", comboName='" + comboName + '\'' +
             ", userName='" + userName + '\'' +
             '}';

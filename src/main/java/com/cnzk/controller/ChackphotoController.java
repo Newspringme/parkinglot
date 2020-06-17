@@ -131,4 +131,55 @@ public class ChackphotoController
 
 	}
 
+	@RequestMapping("/search")
+	@ResponseBody
+	public String search(String carnum){
+		String ParkSpace=chackphotoService.parkspacemsg(carnum);//查重
+		if(ParkSpace==null){
+			return  "HAVEING";
+		}
+
+		SimpleDateFormat sdf =   new SimpleDateFormat( " yyyy-MM-dd HH:mm:ss " );
+		String exittime = sdf.format(new Date());//查车找人
+
+		String username=chackphotoService.finduser(carnum);
+		System.out.println("入场用户-----------"+username);
+		//出场插入数据
+		//车辆情况查询 是临时还是有身份
+		String state;
+		if ("临时用户".equals(username)){
+			state = "临时车";
+		} else {
+			state=chackphotoService.findcarvip(carnum);
+		}
+		System.out.println("车辆情况---------"+state);
+		//查询入场时间
+		String entertime=chackphotoService.findentertime(carnum);
+		System.out.println("查询入场时间"+entertime);
+
+		if (entertime==null){
+			return  "HAVEING";
+		}
+//		查询计费规则
+		TbRates tbRates = adminService.queryPrice();
+		Map map = new HashMap();
+		try
+		{
+			map = PriceUtils.getBill(entertime,exittime,tbRates);
+		} catch (ParseException e)
+		{
+			e.printStackTrace();
+		}
+
+		//车位查询
+		String ps=chackphotoService.carfindps(carnum);
+		Double money= Double.valueOf(map.get("bill")+"");
+		String time=map.get("time").toString();;
+		String date= carnum+","+username+","+state+","+ps+","+entertime+","+exittime+","+time+","+money;
+		System.out.println("车牌："+carnum+"用户名："+username+"车状态："+state+"车位："+ps+"进场时间："+entertime+"出场时间："+exittime+"总时长："+time+"收费："+money);
+		//		Object obj = new Gson().toJson()
+		return date;
+
+	}
+
 }

@@ -40,7 +40,7 @@
                         <div class="layui-inline">
                             <label class="layui-form-label">操作日期</label>
                             <div class="layui-input-inline">
-                                <input type="text" name="startTime" id="startTime"  placeholder="开始日期" autocomplete="off" class="layui-input">
+                                <input type="text" name="billTime" id="billTime"  placeholder="开始日期" autocomplete="off" class="layui-input">
                             </div>
                         </div>
 
@@ -67,7 +67,7 @@
         var path = $("#path").val();
         //日期
         laydate.render({
-            elem: '#startTime'
+            elem: '#billTime'
         });
 
         table.render({
@@ -101,7 +101,7 @@
                 }
                 , where: {
                     billNum: data.field.billNum,
-                    billTime:data.field.billTime,
+                    billTime:data.field.billTime
                 }
             }, 'data');
 

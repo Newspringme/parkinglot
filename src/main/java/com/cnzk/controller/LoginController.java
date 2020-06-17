@@ -26,6 +26,7 @@ public class LoginController {
     @ResponseBody
     public Map<String, Object> menu(HttpServletRequest request, HttpServletResponse response) {
         Admin admin = (Admin) request.getSession().getAttribute("tbAdmin");
+        System.out.println("admin-------------"+admin.toString());
         return menuService.menu(admin.getRoleId());
     }
 

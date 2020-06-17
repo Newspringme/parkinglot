@@ -15,7 +15,7 @@
             <if test="adminName!=null and adminName!=''">and admin_name like concat('%',#{adminName},'%')</if>
             <if test="startTime!=null and startTime!=''">and reg_time &gt;=#{startTime}</if>
             <if test="endTime!=null and endTime!=''">and reg_time &lt;= #{endTime}</if>
-            or role_id = 1 or role_id = 2
+            and role_id != 3
         </where>
     </select>
     <!--带条件查询管理员-->
@@ -29,7 +29,7 @@
             <if test="admin.startTime!=null and admin.startTime!=''">and reg_time &gt;=#{admin.startTime}
             </if>
             <if test="admin.endTime!=null and admin.endTime!=''">and reg_time &lt;= #{admin.endTime}</if>
-            or a.role_id = 1 or a.role_id = 2
+            and a.role_id != 3
         </where>
         limit #{start},#{pageSize};
     </select>
@@ -56,6 +56,14 @@
         </set>
         where admin_id=#{adminId}
     </update>
+<!-- 上传头像-->
+    <update id="uploadAdminImg">
+        update tb_admin set head_img=#{headImg} where admin_name=#{adminName};
+    </update>
 
+    <!--更新状态-->
+    <update id="updateState" parameterType="com.cnzk.pojo.Admin">
+        update tb_admin set admin_state = #{adminState} where admin_name = #{adminName}
+    </update>
 
 </mapper>

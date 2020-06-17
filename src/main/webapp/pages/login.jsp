@@ -85,7 +85,7 @@
                     </div>
                     <div class="layui-form-item" style="margin-bottom: 20px;">
                         <a class="layadmin-user-jump-change layadmin-link" style="margin-top: 7px;"
-                           href=<%=path + "/adminFace/path/adminFaceLogin"%>>人脸识别登录&nbsp;&nbsp;</a>
+                           href=<%=path + "/pages/adminFaceLogin.jsp"%>>人脸识别登录&nbsp;&nbsp;</a>
                     </div>
                     <div class="layui-form-item" style="margin-bottom: 20px;">
                         <a class="layadmin-user-jump-change layadmin-link" style="margin-top: 7px;"

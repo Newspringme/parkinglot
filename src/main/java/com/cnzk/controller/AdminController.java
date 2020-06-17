@@ -28,6 +28,7 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -164,6 +165,7 @@ public class AdminController
 	//	添加管理员
 	@RequestMapping("/addAdmin")
 	@ResponseBody
+	@Log(operationThing = "添加管理员",operationType = "添加")
 	public Object addAdmin(String msg)
 	{
 		Admin admin = JSON.parseObject(msg, Admin.class);
@@ -181,6 +183,7 @@ public class AdminController
 	//	删除管理员
 	@RequestMapping("/deleteAdmin")
 	@ResponseBody
+	@Log(operationThing = "删除管理员信息",operationType = "删除")
 	public Object deleteAdmin(String delList, String adminId)
 	{
 		int num = 0;
@@ -213,8 +216,8 @@ public class AdminController
 
 	//	更新管理员信息
 	@RequestMapping("/updateAdmin")
-	public @ResponseBody
-	String updateAdmin(String msg)
+	@Log(operationThing = "更新管理员信息",operationType = "修改")
+	public @ResponseBody String updateAdmin(String msg)
 	{
 		Admin admin = null;
 		boolean bool = false;
@@ -235,6 +238,7 @@ public class AdminController
 	//	上传头像
 	@RequestMapping("/upload")
 	@ResponseBody
+	@Log(operationThing = "上传管理员头像",operationType = "添加")
 	public Object fileUpload(String msg, MultipartFile file, HttpServletRequest request) throws IOException
 	{
 		//获取上传文件名 : file.getOriginalFilename();
@@ -255,13 +259,34 @@ public class AdminController
 		System.out.println("文件保存路径================" + projectPath);
 
 		LayuiData layuiData = new LayuiData();
-//		if (num > 0)
+		int num=adminService.uploadAdminImg(projectPath,msg);
+		if (num > 0)
 		{
 			layuiData.setCode(0);
 			layuiData.setMsg("上传成功");
 			System.out.println("--------------------上传成功");
 		}
 		return layuiData;
+	}
+	//更改管理员状态
+	@ResponseBody
+    @RequestMapping("updateState")
+	public void updateState(HttpServletRequest request, HttpServletResponse response) throws Exception{
+		response.setCharacterEncoding("UTF-8");
+		response.setContentType("text/html;charset=UTF-8");
+		System.out.println("doPost");
+
+		Admin admin = new Admin();
+
+		admin.setAdminName(request.getParameter("adminName"));
+		admin.setAdminState(request.getParameter("adminState"));
+
+		int i = adminService.updateState(admin);
+		if (i>0){
+			response.getWriter().write("true");
+		}else{
+			response.getWriter().write("false");
+		}
 	}
 
 	//查角色列表
@@ -466,5 +491,63 @@ public Object addCombo(TbCombo tbCombo){
 		return layuiData;
 	}
 
+	@ResponseBody
+	@RequestMapping("queryParam")
+	public Object queryParam(String page,String limit){
+		int startPage=Integer.parseInt(page);//获取页码;
+		int pageSize=Integer.parseInt(limit);//每页数量
+		int start = (startPage-1)*pageSize;//计算出起始查询位置
+		LayuiData layuiData=adminService.queryParam(start,pageSize);
+		System.out.println("layuiData = " + JSON.toJSONString(layuiData));
+		return layuiData;
+	}
+
+	@ResponseBody
+	@RequestMapping("editParam")
+	public Object editParam(TbParam tbParam){
+		if (adminService.editParam(tbParam)!=0){
+			System.out.println("修改成功");
+			return "true";
+		}else {
+			System.out.println("修改失败");
+			return "false";
+		}
+	}
+
+
+	//用户统计
+	@RequestMapping("/showBillStatistics")
+	@ResponseBody
+	public void showBillStatistics(HttpServletRequest request, HttpServletResponse response) throws IOException, ParseException {
+		System.out.println("showBillStatistics");
+		String mystatic = request.getParameter("mystatic");
+		System.out.println(mystatic);
+		//存带有值得条件
+		HashMap<String,Object> condition = new HashMap<>();
+		if(null!=mystatic&&!"".equals(mystatic.trim())) {
+			condition.put("mystatic",mystatic);
+		}
+		HashMap<String,Object> statisticsMap =  adminService.showBillStatistics(condition);
+		StatisticsData statisticsData = new StatisticsData(statisticsMap);
+		if (null!=statisticsMap){
+			ResponseUtils.outJson(response, statisticsData);
+		}else{
+			response.getWriter().print("error");
+		}
+	}
+
+	//	月缴统计
+	@RequestMapping("/showPieComboStatistics")
+	@ResponseBody
+	public void showPieComboStatistics(HttpServletRequest request, HttpServletResponse response) throws IOException {
+		System.out.println("showPieComboStatistics");
+		HashMap<String,Object> statisticsMap =  adminService.showPieComboStatistics();
+		StatisticsData statisticsData = new StatisticsData(statisticsMap);
+		if (null!=statisticsMap){
+			ResponseUtils.outJson(response, statisticsData);
+		}else{
+			response.getWriter().print("error");
+		}
+	}
 
 }

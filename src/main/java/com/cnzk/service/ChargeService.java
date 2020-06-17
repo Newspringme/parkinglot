@@ -35,4 +35,6 @@ public interface ChargeService {
 
     //更新收费员
     Integer updateCharge(Charge charge);
+//    实时出场
+    String realTimeExit(String msg);
 }

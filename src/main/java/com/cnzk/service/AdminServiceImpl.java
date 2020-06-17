@@ -1,17 +1,17 @@
 package com.cnzk.service;
 
-import com.cnzk.mapper.AdminMapper;
-import com.cnzk.mapper.BillMapper;
-import com.cnzk.mapper.ComboMapper;
-import com.cnzk.mapper.RatesMapper;
+import com.cnzk.mapper.*;
 import com.cnzk.pojo.*;
 import com.cnzk.utils.MD5;
+import com.cnzk.utils.TimeUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpSession;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 
@@ -30,6 +30,8 @@ public class AdminServiceImpl implements AdminService
 	private ComboMapper comboMapper;
 	@Resource
 	private BillMapper billMapper;
+	@Resource
+	private ParamMapper paramMapper;
     //登陆
 	//登陆
 
@@ -99,6 +101,12 @@ public class AdminServiceImpl implements AdminService
 		int num = adminMapper.updateAdmin(admin);
 		return num;
 	}
+	//	上传头像
+	@Override
+	public int uploadAdminImg(String headImg, String adminName)
+	{
+		return adminMapper.uploadAdminImg(headImg,adminName);
+	}
 
 
 	//查计费规则列表
@@ -150,6 +158,12 @@ public class AdminServiceImpl implements AdminService
 	public Integer editCombo(TbCombo tbCombo) {
 		return comboMapper.editCombo(tbCombo);
 	}
+
+	@Override
+	public Integer updateState(Admin admin) {
+		return adminMapper.updateState(admin);
+	}
+
 	//	查收支明细
 	@Override
 	public LayuiData queryBill(String page, String limit, String billNum, String billTime) {
@@ -180,5 +194,165 @@ public class AdminServiceImpl implements AdminService
 		layuiData.setData(list);
 		return layuiData;
 	}
+//渠道量统计
+	@Override
+	public HashMap<String, Object> showBillStatistics(HashMap<String, Object> condition) throws ParseException {
+		HashMap<String,Object> statisticsMap = new HashMap<>();
+		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM");//设置日期格式
+		String date = df.format(new Date());//获取当前时间
+		List dateSection = new ArrayList();
+		if (condition.size()>0) {
+			if ("1".equals(condition.get("mystatic"))) {
+//                获取用户数量
+				Integer appccount = billMapper.findWeekAllCount();
+				System.out.println("本周的总金额" + appccount);
+				List XList = new ArrayList<String>(Arrays.asList("周一", "周二", "周三", "周四", "周五", "周六","周日"));
+				List tempList = new ArrayList();
+				List comboList = new ArrayList();
+				for (int i = 1; i < 8; i++) {
+					condition.put("dayid", i);
+					Integer tempDayCount = billMapper.showWeekTempStatistics(condition);
+					if (tempDayCount==null){
+						tempDayCount=0;
+					}
+					System.out.println("星期" + i + "临时收入金额为" + tempDayCount);
+					tempList.add(tempDayCount);
+					Integer comboDayCount = billMapper.showWeekComboStatistics(condition);
+					if (comboDayCount==null){
+						comboDayCount=0;
+					}
+					System.out.println("星期" + i + "月缴收入金额为" + comboDayCount);
+					comboList.add(comboDayCount);
+				}
+				statisticsMap.put("appccount", appccount);
+				statisticsMap.put("XList", XList);
+				statisticsMap.put("tempList", tempList);
+				statisticsMap.put("comboList", comboList);
+			} else if ("2".equals(condition.get("mystatic"))) {
+				dateSection = TimeUtils.getDateSection(date);
+				Integer appccount = billMapper.findMonthAllCount();
+				System.out.println("本月的总金额" + appccount);
+				List XList = TimeUtils.weeklist;
+				List tempList = new ArrayList();
+				List comboList = new ArrayList();
+				for (int i = 0; i < dateSection.size(); i = i + 2) {
+					condition.put("daytime1", dateSection.get(i));
+					condition.put("daytime2", dateSection.get(i + 1));
+					Integer tempWeekCount = billMapper.showMonthTempStatistics(condition);
+					if (tempWeekCount==null){
+						tempWeekCount=0;
+					}
+					System.out.println("临时周金额为" + tempWeekCount);
+					tempList.add(tempWeekCount);
+					Integer comboWeekCount = billMapper.showMonthComboStatistics(condition);
+					if (comboWeekCount==null){
+						comboWeekCount=0;
+					}
+					System.out.println("月缴周金额为" + comboWeekCount);
+					comboList.add(comboWeekCount);
+				}
+				statisticsMap.put("appccount", appccount);
+				statisticsMap.put("XList", XList);
+				statisticsMap.put("tempList", tempList);
+				statisticsMap.put("comboList", comboList);
+			} else if ("3".equals(condition.get("mystatic"))) {
+				List dateSection1 = TimeUtils.getYearSection();
+				condition.put("monthtime1", dateSection1.get(0));
+				condition.put("monthtime2", dateSection1.get(6));
+				Integer appccount = billMapper.findYearAllCount(condition);
+				System.out.println("近半年的总金额为" + appccount);
+				List XList = TimeUtils.moulist;
+				List tempList = new ArrayList();
+				List comboList = new ArrayList();
 
+				for (int i = 0; i < dateSection1.size(); i++) {
+					if(i<6) {
+						condition.put("daytime3", dateSection1.get(i));
+						condition.put("daytime4", dateSection1.get(i + 1));
+
+						Integer tempMouthCount = billMapper.showYearTempStatistics(condition);
+						if (tempMouthCount==null){
+							tempMouthCount=0;
+						}
+
+						Integer comboMonthCount = billMapper.showYearComboStatistics(condition);
+						if (comboMonthCount==null){
+							comboMonthCount=0;
+						}
+
+						if (i==5){
+                            System.out.println("condition="+condition);
+							condition.put("lacktime", dateSection1.get(i + 1));
+                            System.out.println("condition="+condition);
+                            Integer tempMouthCount1 = billMapper.lackTempMoney(condition);
+                            Integer comboMonthCount1 = billMapper.lackComboMoney(condition);
+                            if (tempMouthCount1!=null){
+                                tempMouthCount += billMapper.lackTempMoney(condition);
+                            }
+                            if (comboMonthCount1!=null){
+                                comboMonthCount += billMapper.lackComboMoney(condition);
+                            }
+						}
+						System.out.println("临时月金额为" + tempMouthCount);
+						System.out.println("月缴月金额为" + comboMonthCount);
+						tempList.add(tempMouthCount);
+						comboList.add(comboMonthCount);
+					}
+				}
+				statisticsMap.put("appccount", appccount);
+				statisticsMap.put("XList", XList);
+				statisticsMap.put("tempList", tempList);
+				statisticsMap.put("comboList", comboList);
+			}
+		}
+		System.out.println(statisticsMap.toString());
+		return statisticsMap;
+	}
+
+
+
+	@Override
+	public LayuiData queryParam( int start, int pageSize) {
+		List<TbParam> list = paramMapper.queryParam( start, pageSize);
+		int count = paramMapper.queryParamCount();
+		LayuiData layuiData = new LayuiData();
+		layuiData.setCode(0);
+		layuiData.setCount(count);
+		layuiData.setData(list);
+		return layuiData;
+	}
+
+	@Override
+	public Integer editParam(TbParam tbParam) {
+		return paramMapper.editParam(tbParam);
+	}
+
+
+	@Override
+	public HashMap<String, Object> showPieComboStatistics() {
+		HashMap<String, Object> statisticsMap = new HashMap<>();
+//      获取用户数量
+		List<TbCombo> tbComboList = comboMapper.queryComboNameList();
+		List legendList = new ArrayList();
+		for (TbCombo tbCombo : tbComboList) {
+			legendList.add(tbCombo.getComboName());
+		}
+		statisticsMap.put("legendList", legendList);
+		System.out.println("legendList="+legendList);
+
+		List<PieStatisticsData> outPieDataList = comboMapper.queryComboMoney();
+		List<PieStatisticsData> inPieDataList = new ArrayList<>();
+//		饼图中心只有三个
+		for (int i=0;i<3;i++) {
+			if (i==0){
+				outPieDataList.get(i).setSelected(true);
+			}
+			inPieDataList.add(outPieDataList.get(i));
+		}
+		System.out.println("inPieDataList="+inPieDataList);
+		statisticsMap.put("inPieDataList",inPieDataList);
+		statisticsMap.put("outPieDataList", outPieDataList);
+		System.out.println("outPieDataList="+outPieDataList);
+		return statisticsMap;
+	}
 }
