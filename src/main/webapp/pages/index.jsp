@@ -81,7 +81,7 @@
                             <hr>
                         </dd>
                         <dd>
-                            <a href="javascript:;" class="login-out">退出登录</a>
+                            <a href="javascript:;" class="login-out"  >退出登录</a>
                         </dd>
                     </dl>
                 </li>
@@ -169,8 +169,24 @@
         });
 
         $('.login-out').on("click", function () {
-            layer.msg('退出登录成功', function () {
-                window.location = 'page/login-1.html';
+            // layer.msg('退出登录成功', function () {
+            //    window.location = 'page/login-1.html';
+            // });
+            layer.confirm('确定要推出登陆吗?', function(index){
+                $.ajax({
+                    url:"${pageContext.request.contextPath}/AdminController/outLogin",
+
+                    type:'post',
+                    // data:{'roleId'},
+                    success:function (msg) {
+                        layer.msg('退出成功');
+                        window.location.href ="${pageContext.request.contextPath}/url/welcome";
+                        //重载表格
+                    },
+                    error:function () {
+                        layer.msg('网络开小差啦',{icon:5});
+                    }
+                })
             });
         });
     });

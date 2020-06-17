@@ -8,6 +8,7 @@ public class TbPark {
   private String parkState;
   private String carNum;
   private long coordinateId;
+  private long eventId;
 
   private TbCoordinate tbCoordinate;
 
@@ -87,5 +88,13 @@ public class TbPark {
 
     public void setTbCoordinate(TbCoordinate tbCoordinate) {
         this.tbCoordinate = tbCoordinate;
+    }
+
+    public long getEventId() {
+        return eventId;
+    }
+
+    public void setEventId(long eventId) {
+        this.eventId = eventId;
     }
 }
