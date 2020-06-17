@@ -137,10 +137,11 @@ public class ChackphotoServiceImpl implements ChackphotoService
 		return null;
 	}
 	@Override
-	public String file2(MultipartFile file2)//出场图片确认
+	public HashMap<String, Object> file2(MultipartFile file2)//出场图片确认
 	{
-
+		HashMap<String,Object> condition = new HashMap<>();
 		String change64=ChangeBase64.multipartFileToBASE64(file2);
+//		condition.put("change64",change64);
 		System.out.println("change64==============================================================");
 		System.out.println("change64:"+change64);
 		String host = "https://ocrcp.market.alicloudapi.com";
@@ -233,7 +234,9 @@ public class ChackphotoServiceImpl implements ChackphotoService
 			}else{
 				System.out.println(res_obj.toJSONString());
 			}
-			return arr2[0];
+			String carNum =  arr2[0];
+			condition.put("carNum",carNum);
+			return condition;
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

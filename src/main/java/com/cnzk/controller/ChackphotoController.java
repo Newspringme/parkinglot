@@ -87,7 +87,9 @@ public class ChackphotoController
 	@ResponseBody
 	public String file2(@RequestParam("file2")MultipartFile file2){
 
-		String carNum = chackphotoService.file2(file2);
+		HashMap<String,Object> condition = chackphotoService.file2(file2);
+		String img_str = condition.get("change64").toString();
+		String carNum = condition.get("carNum").toString();
 		System.out.println("车牌-----------:"+carNum);
 
 		SimpleDateFormat sdf =   new SimpleDateFormat( " yyyy-MM-dd HH:mm:ss " );
@@ -124,8 +126,8 @@ public class ChackphotoController
 		String ps=chackphotoService.carfindps(carNum);
 		Double money= Double.valueOf(map.get("bill")+"");
 		String time=map.get("time").toString();;
-		String date= carNum+","+username+","+state+","+ps+","+entertime+","+exittime+","+time+","+money;
-		System.out.println("车牌："+carNum+"用户名："+username+"车状态："+state+"车位："+ps+"进场时间："+entertime+"出场时间："+exittime+"总时长："+time+"收费："+money);
+		String date= carNum+","+username+","+state+","+ps+","+entertime+","+exittime+","+time+","+money+","+img_str;
+		System.out.println("车牌："+carNum+"用户名："+username+"车状态："+state+"车位："+ps+"进场时间："+entertime+"出场时间："+exittime+"总时长："+time+"收费："+money+"图片："+img_str);
 		//		Object obj = new Gson().toJson()
 		return date;
 
