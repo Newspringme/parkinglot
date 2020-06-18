@@ -137,9 +137,7 @@
 
         // 接收信息
         function setMessageInHtml(message) {
-            console.log(message.data);
             if (message.data.split(",")[0] == "success") {
-
                 carnumber = message.data.split(",")[1];
                 username = message.data.split(",")[2];
                 state = message.data.split(",")[3];
@@ -158,9 +156,10 @@
                 document.getElementById("exittime").innerHTML = exittime;
                 document.getElementById("time").innerHTML = time;
                 document.getElementById("money").innerHTML = money;
-            } else if(message.split(",")[0] == "refresh"){
-
-                layer.msg("支付成功", {icon: 6});
+            } else if(message.data.split(",")[0] == "carexit"){
+                layer.alert('支付成功', {icon: 6}, function () {
+                    location.reload(true);
+                });
             }else {
                 layer.msg("暂无车辆出场", {icon: 5});
             }
@@ -195,9 +194,10 @@
     }
     //在线收费
     function onlinePay() {
+        var path = $('#path').val();
         if (carnumber==null){
             layer.msg('当前无车辆出场',{icon:5})
-        }else if(money==0){
+        }else if(money==0.0){
             layer.msg('免费停车',{icon:6})
             $.ajax({
                 url: path+"/ChargeController/freePay",
@@ -220,7 +220,7 @@
             });
         }
         else {
-            window.open("${pageContext.request.contextPath}/alipay?enter="+entertime+"&exit="+exittime+"&carNum="+carnumber+"&username="+username);
+            window.open("${pageContext.request.contextPath}/alipay?type=car:&enter="+entertime+"&exit="+exittime+"&carNum="+carnumber+"&username="+username);
         }
     }
     //现金收费
@@ -228,7 +228,28 @@
         var path = $('#path').val();
         if (carnumber==null){
             layer.msg('当前无车辆出场',{icon:5})
-        }else{
+        }else if(money==0.0) {
+            layer.msg('免费停车', {icon: 6})
+            $.ajax({
+                url: path + "/ChargeController/freePay",
+                async: true,
+                type: 'POST',
+                data: {"exittime": exittime, "carnumber": carnumber, "username": username, "money": money},
+                success: function (data) {
+                    if (data == "success") {
+                        layer.alert('出库成功', {icon: 6}, function () {
+                            location.reload(true);
+                        });
+                    } else {
+                        layer.msg('出库失败，请重试', {icon: 5})
+                    }
+                },
+                error: function () {
+                    layer.msg('网络繁忙', {icon: 2});
+                    window.parent.location.href = path + "/url/login";
+                }
+            });
+        } else {
             layer.confirm('是否支付完成？',{icon:7},function (index) {
                 layer.close(index);
                 $.ajax({

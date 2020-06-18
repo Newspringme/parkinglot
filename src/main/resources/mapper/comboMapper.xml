@@ -6,12 +6,12 @@
 <mapper namespace="com.cnzk.mapper.ComboMapper">
     <!--规则集合-->
     <select id="queryComboList" parameterType="java.util.Map" resultType="TbCombo">
-        select * from tb_combo limit #{start},#{pageSize};
+        select * from tb_combo where combo_name!='白名单' limit #{start},#{pageSize};
     </select>
 
     <!--规则集合数量-->
     <select id="queryCount" parameterType="java.util.Map" resultType="java.lang.Integer">
-        select COUNT(*) from tb_combo;
+        select COUNT(*) from tb_combo where combo_name!='白名单';
     </select>
 
     <!--添加新的套餐-->
