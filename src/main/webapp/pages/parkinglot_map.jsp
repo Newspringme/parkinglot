@@ -144,7 +144,6 @@
         margin: 0 0 0 14px;
         font-size: 13px;
         -webkit-appearance: none;
-    }
     #router {
         position: absolute;
         padding: 20px;
@@ -211,6 +210,7 @@
         position: absolute;
         top: 46px;
         left: 338px;
+
     }
 </style>
 <body ms-controller = "ctrl" class="ms-controller">
@@ -256,9 +256,11 @@
         </button>
     </div>
 </div>
+<%--3D/2D切换--%>
 <div class="viewmode-group">
     <button id="btn3D" class="btn btn-default"></button>
 </div>
+<%--车位情况--%>
 <div class="parking fix" id="parking"><span id="park_id"></span>车位情况：<span id="park_state"></span></div>
 <div class="codition fix">
     <ul>
@@ -266,6 +268,7 @@
         <li><span class="codition-second"></span>未停车</li>
     </ul>
 </div>
+<%--停车场车位余量--%>
 <div class="i-test-tip fix" id="i-test-tip">
     <div class="test-tip">
         停车场车位总数：<span id="total"></span>个，当前剩余车位数 <span id="free"></span>。
@@ -282,7 +285,6 @@
     var map;
     var esmapID = 'cai_niao_parkinglot';
     var styleid = 1005;
-    var startNavi = false;
     var floorControl; // 楼层控制控件配置参数（几楼）
     var ctlOpt = new esmap.ESControlOptions({
         position: esmap.ESControlPositon.RIGHT_TOP,
@@ -298,16 +300,6 @@
         },
         imgURL: "${pageContext.request.contextPath}/static/Case/image/wedgets/"
     });
-    var locateMarkLayer = null;
-    var lineStyle = { // 配置线
-        color: '#f40000',
-        lineWidth: 8,
-        alpha: 1.0,
-        dash: {
-            size: 1,
-            gap: 1 //0：双向，实线。    1：单向，虚线。
-        }
-    }
     var dataSrc = "${pageContext.request.contextPath}/static/Case/data";
     var themeSrc = "${pageContext.request.contextPath}/static/Case/data/theme";
     map = new esmap.ESMap({
@@ -328,7 +320,6 @@
 
     var parkData;
     var color = ["#ff0000", "#00ff00"];
-    var statusname=["已停车","未停车"];
     //地图加载完成回调
     map.on("loadComplete", function () {
         floorControl = new esmap.ESScrollFloorsControl(map, ctlOpt);
@@ -338,7 +329,7 @@
         // //先执行显示一次
         setTimeout(function () {getParkData();},10);
         //开启定时器从后台获取数据
-        setInterval(function () {getParkData();}, 10000);});
+        setInterval(function () {getParkData();}, 15000);});
 
     function getParkData() {
         $.getJSON("${pageContext.request.contextPath}/parkController/getParkData",function (data) {
@@ -393,6 +384,7 @@
         for (var i = 0; i < parkData.length; ++i) {
             if (event.ID == parkData[i].eventId) {
                 $("#park_state").html(parkData[i].parkState);
+
             }
         }
     });

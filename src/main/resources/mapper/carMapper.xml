@@ -51,5 +51,8 @@
        insert into tb_exit (car_num) values (#{carnum})
     </insert>
 
-
+<!--车辆出场记录查询-->
+    <select id="queryExit" resultType="com.cnzk.pojo.TbExit">
+        select * from tb_exit order by exit_time desc limit #{start} , #{end}
+    </select>
 </mapper>
