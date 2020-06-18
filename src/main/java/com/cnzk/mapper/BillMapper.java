@@ -45,4 +45,9 @@ public interface BillMapper {
     int updateBill (TbBill bill);
 
     TbBill getCarNum(TbBill bill);
+
+//    现金支付添加订单
+    Integer insertCashBill (TbBill bill);
+
+
 }

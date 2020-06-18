@@ -14,32 +14,24 @@
 
  </style>
 <head>
-    <title>入库显示界面</title>
+    <title>车闸</title>
     <%String path = request.getContextPath();%>
     <script rel="script" src=<%=path + "/static/js/jquery-3.4.1.js"%>></script>
 </head>
 <body style="margin: 0">
 <div style="height: 100%;width: 19%;float: left;border: 1px solid #92B8B1">
-    <img src="https://i.loli.net/2020/06/09/dPjLE2aeGVKhADT.jpg" style="width: 100%;">
-    <div style="width: 100%;height: 57%;background-color: black">
+    <img src="https://i.loli.net/2020/04/09/2SBdcZ6i1GIgDMT.png" style="width: 100%;">
+    <div style="width: 100%;">
         <br><br>
         <br><br>
-        <a style="font-size:35px;font-family: '微软雅黑 Light';font-weight: bold ;color: yellow">菜鸟停车场</a>
-        <br>
-        <a style="font-size:50px;font-family: '微软雅黑 Light';font-weight: bold ;color: white">&nbsp&nbsp&nbsp入口</a>
-        <br>
-        <a style="font-size:50px;font-family: '微软雅黑 Light';font-weight: bold ;color: white">&nbspENTER</a>
-        <br>
-        <a style="font-size:75px;font-family: 方正舒体;color: dodgerblue">欢&nbsp迎&nbsp</a>
-        <a style="font-size:75px;font-family: 方正舒体;color: dodgerblue">&nbsp光临</a>
+        <a>智能停车场</a><br><br>
+        <a>&nbsp;&nbsp;欢迎您</a>
     </div>
 </div>
 
+<div style="height: 100%;width: 80%;float:right;background:white">
 
-
-<div  style="height: 100%;width: 80%;float:right;background-color: gray;background-image: url('${pageContext.request.contextPath}/static/img/bg.jpg')">
-
-    <div id="img" style="margin: 4% auto;width: 60%;height: 40%;background-repeat:no-repeat ;background-size:100% 100%;background-image: url('${pageContext.request.contextPath}/static/img/CAINIAOLOG.jpg')">
+    <div id="img" style="margin: 4% auto;width: 60%;height: 40%;background: #c9c9c9">
         <input type="file" name="fileaot" id="fileaot"  onchange="preImg('fileaot','imgPre')"
                style="margin-top: -50px">
         <input type="button" value="确定" onclick="add()" id="btn"
@@ -47,7 +39,7 @@
         <img src="" id="imgPre" style="width: 100%;height: 100%;margin-top:-20px">
     </div>
 
-    <div id="msg" style="margin: 0 auto;width: 70%;height: 40%;background:wheat;border:1px solid cornflowerblue">
+    <div id="msg" style="margin: 0 auto;width: 70%;height: 40%;background:white;border:1px solid cornflowerblue">
         <div style="width: 20%;height: 100%;background: chocolate;float: left">
             <div style="margin: 0 auto;width: 30%;height: 100%">
                 <h1>用</h1>
@@ -138,15 +130,11 @@
 	                document.getElementById("carnumber").innerHTML = "车牌号 :  " + carnum;
 	                document.getElementById("state").innerHTML = "车辆情况 :  " + state;
 	                document.getElementById("time").innerHTML = "入库时间 :  " + time1;
-	                document.getElementById("ps").innerHTML = "当前剩余停车位:  " + ps;
+	                document.getElementById("ps").innerHTML = "停车位:  " + ps;
                 }
             }
         })
 
     }
-
-
-
 </script>
-
 </html>

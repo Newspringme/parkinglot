@@ -4,6 +4,7 @@ import com.cnzk.pojo.TbCar;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+import javax.websocket.server.PathParam;
 import java.util.List;
 
 /**
@@ -40,5 +41,7 @@ public interface CarMapper
 	//	办理续费
 	int handleRenew(TbCar tbCar);
 
+//车辆出场（添加出库表数据）
+	Integer carexit(@PathParam("carnum") String carnum);
 
 }

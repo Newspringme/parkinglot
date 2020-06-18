@@ -23,7 +23,7 @@
 </head>
 <body style="margin: 0">
 <div style="height: 100%;width: 19%;float: left;border: 1px solid #92B8B1">
-<%--    <img src="https://i.loli.net/2020/06/09/dPjLE2aeGVKhADT.jpg" style="width: 100%;">--%>
+    <%--    <img src="https://i.loli.net/2020/06/09/dPjLE2aeGVKhADT.jpg" style="width: 100%;">--%>
     <div class="layui-form layuimini-form">
         <div class="layui-form-item">
             <label class="layui-form-label required">车牌号</label>
@@ -41,6 +41,8 @@
                 <input type="hidden" class="enter">
                 <input type="hidden" class="exit">
                 <input type="hidden" class="carnum">
+                <input type="hidden" class="username">
+                <input type="hidden" class="money">
                 <button class="layui-btn layui-btn-normal" lay-submit onclick="zhifu()">出库</button>
             </div>
         </div>
@@ -101,21 +103,28 @@
     /**
      * 将本地图片 显示到浏览器上
      */
+
+    var img_str;
     function preImg(sourceId, targetId) {
         <%--$.ajax({--%>
-        <%--            url:"${pageContext.request.contextPath}/gate/img",--%>
+        <%--            url:"${pageContext.request.contextPath}/ChackphotoController/img",--%>
         <%--            async: "true",--%>
         <%--            type: "Post",--%>
         <%--            data: "",--%>
         <%--            dataType: "text",--%>
         <%--            success: function (res) {--%>
+        <%--                alert(res);--%>
+
         <%--                var imgPre = document.getElementById('imgPre');--%>
+        <%--                alert(imgPre.src);--%>
         <%--                imgPre.src ="data:image/png;base64,"+ res;--%>
+        <%--                alert(imgPre.src);--%>
         <%--            },--%>
         <%--            error: function () {--%>
         <%--            }--%>
         <%--        }--%>
         <%--);--%>
+
         var url = getFileUrl(sourceId);
         var imgPre = document.getElementById(targetId);
         imgPre.src = url;
@@ -177,11 +186,17 @@
                     $(".enter").val(entertime);
                     $(".exit").val(exittime);
                     $(".carnum").val(carnumber);
+                    $(".username").val(username);
+                    $(".money").val(money);
+
+
                 }
             }
         })
 
     }
+
+
     layui.use(['form'], function () {
         var form = layui.form,
             layer = layui.layer,
@@ -227,6 +242,8 @@
                         $(".enter").val(entertime);
                         $(".exit").val(exittime);
                         $(".carnum").val(carnumber);
+                        $(".username").val(username);
+                        $(".money").val(money);
                     }
                 }
             })
@@ -235,7 +252,80 @@
 
     });
     function zhifu() {
-        window.open("${pageContext.request.contextPath}/alipay?enter="+$(".enter").val()+"&exit="+$(".exit").val()+"&carNum="+$(".carnum").val());
+        if ($(".money").val()==0){
+
+        }else {
+            window.open("${pageContext.request.contextPath}/alipay?enter="+$(".enter").val()+"&exit="+$(".exit").val()+"&carNum="+$(".carnum").val()+"&username="+$(".username").val());
+        }
+
     }
+
+</script>
+<script>//websocket
+var websocket = null;
+if('WebSocket' in window){
+    websocket = new WebSocket("ws://127.0.0.1:8080/parkinglot/websocket/ip");
+}
+else{
+    alert("您的浏览器不支持websocket");
+}
+
+websocket.onerror = function(){
+    setMessageInHtml("send error！");
+}
+
+websocket.onopen = function(){
+    setMessageInHtml("connection success!")
+}
+
+websocket.onmessage  = function(event){
+    setMessageInHtml(event.data);
+    console.log(event);
+}
+
+websocket.onclose = function(){
+    setMessageInHtml("closed websocket!")
+}
+
+window.onbeforeunload = function(){
+    clos();
+}
+
+// 接收信息
+function setMessageInHtml(message){
+    document.getElementById('message').innerHTML += message;
+}
+
+//关闭连接
+function clos(){
+    websocket.close(3000,"强制关闭");
+}
+
+//发送信息
+function send(msg){
+    alert(msg);
+    websocket.send(msg);
+}
+
+function upcarimg(index) {
+
+    var upload = layui.upload;
+    console.log(upload);
+    //执行实例
+    var uploadInst = upload.render({
+        elem: '#upload' //绑定元素
+        ,url: '${pageContext.request.contextPath}/AdminController/uploadcarImg' //上传接口
+        ,data:{adminId:obj}
+        ,done: function(res){
+            layer.alert(res);
+        }
+        ,error: function(){
+            //请求异常回调
+        }
+        ,accept: 'images'
+        ,size: 5120 //限制文件大小，单位 KB
+    });
+
+}
 </script>
 </html>

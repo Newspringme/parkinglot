@@ -24,7 +24,7 @@
 
     <script charset="UTF-8" src="<%=path%>/static/js/jquery-3.4.1.js" charset="utf-8"></script>
     <script charset="UTF-8" src="<%=path%>/static/js/json2.js" type="text/javascript" ></script>
-
+    <script src="<%=path%>/static/lib/layui-v2.5.5/layui.js" charset="utf-8"></script>
     <style>
         .main_btn > p {height:40px;}
         .main_btn > label {height:20px;}
@@ -32,7 +32,7 @@
             float: none;
             display: block;
             padding: 8px 15px;
-            width: 200px;
+            width: 370px;
             font-weight: 400;
             line-height: 20px;
             text-align: left;
@@ -51,7 +51,7 @@
             <div class="layui-row layui-col-space10">
                 <div class="layui-col-md12">
                     <blockquote class="layui-elem-quote main_btn" style="text-align: center">
-                        <img src="<%=path%>/static/img/u0.jpg" alt="">
+                        <img id="img" src="" alt="">
                     </blockquote>
                 </div>
             </div>
@@ -73,10 +73,9 @@
                     <br><br><br>
                     <div class="layui-timeline-content layui-text" style="text-align: center">
                         <div class="layui-timeline-title">
-                            <button type="button" class="layui-btn" onclick="">异常出库</button>
-                            <button type="button" class="layui-btn" onclick="">确认出库</button>
-                            <button type="button" class="layui-btn" onclick="">在线收费</button>
-                            <button type="button" class="layui-btn" onclick="">现金收费</button>
+                            <button type="button" class="layui-btn" onclick="abnormalOut()">异常出库</button>
+                            <button type="button" class="layui-btn" onclick="onlinePay()">在线收费</button>
+                            <button type="button" class="layui-btn" onclick="cashPay()">现金收费</button>
                         </div>
                     </div>
                 </div>
@@ -87,9 +86,7 @@
 
 <script src="<%=path%>/static/lib/layui-v2.5.5/layui.js" charset="utf-8"></script>
 
-
 <script>
-
     var carnumber;
     var username;
     var state;
@@ -98,101 +95,144 @@
     var exittime;
     var time;
     var money;
-    // window.onload = function () {
-    //     var path = $("#path").val();
-    //     uprice = document.getElementById("uprice");
-    //     maxprice = document.getElementById("maxprice");
-    //
-    //     $.ajax({
-    //         url: path+"/AdminController/queryPrice",
-    //         async: true,
-    //         type: "POST",
-    //         success: function (data) {
-    //             if (data != "error") {
-    //                 console.log(data);
-    //                 uprice.innerHTML = data.ratesUprice;
-    //                 maxprice.innerHTML = data.ratesMaxprice;
-    //             } else {
-    //                 layer.msg("暂无计费规则",{icon:5});
-    //             }
-    //         },
-    //         error: function () {
-    //             layer.msg('当前网络繁忙',{icon:2});
-    //             window.parent.location.href=path+"/url/login";
-    //             }
-    //         });
-    //
-    //     //layui.use加载模块
-    //     layui.use(['form', 'table'], function () {
-    //
-    //         var table = layui.table,
-    //             form = layui.form,
-    //             $ = layui.jquery;
-    //
-    //         var path = $('#path').val();
-    //
-    //         tableIns = table.render({
-    //             elem: '#ratesMsgTbl',   //表格的id
-    //             url: path+'/AdminController/queryRatesList',
-    //             defaultToolbar: ['filter', 'exports', 'print', {
-    //                 title: '提示',
-    //                 layEvent: 'LAYTABLE_TIPS',
-    //                 icon: 'layui-icon-tips'
-    //             }],
-    //             cols: [[
-    //                 {field: 'ratesId', width: 150, title: 'ID', sort: true},
-    //                 {field: 'ratesUprice', maxwidth: 765,minWidth: 100, title: '小时/单价'},
-    //                 {field: 'ratesMaxprice', maxwidth: 765,minWidth: 100, title: '天/最高金额'},
-    //             ]],
-    //             limits: [10, 15, 20, 25, 50, 100],
-    //             limit: 10,
-    //             page: true,
-    //             skin: 'line',
-    //         });
-    //         table.on('tool(currentTableFilter)', function(obj) {
-    //             var data = obj.data;
-    //             //obj点击那行的所有字段属性
-    //             var tr = obj.tr; //获得当前行 tr 的DOM对象
-    //             ratesId = tr.children("td").eq(0).text();
-    //             console.log("++++"+ratesId);
-    //         });
-    //
-    //     });
-    // }
-    //
-    //
-    // //刷新表格
-    // function updata() {
-    //     tableIns.reload()
-    // };
-    //
-    // function updataPrice() {
-    //     var path = $('#path').val();
-    //     var ratesUprice = $('.ratesUprice').val();
-    //     var ratesMaxprice = $('.ratesMaxprice').val();
-    //     var ratesId = 1;
-    //     $.ajax({
-    //         url: path+"/AdminController/editRates",
-    //         async: true,
-    //         type: 'POST',
-    //         data: {"ratesId":ratesId,"ratesUprice": ratesUprice, "ratesMaxprice": ratesMaxprice},
-    //         success: function (data) {
-    //             if (data=="success") {
-    //                 layer.msg('修改成功',{icon:6})
-    //                 uprice.innerHTML = ratesUprice;
-    //                 maxprice.innerHTML = ratesMaxprice;
-    //                 updata();
-    //             }else{
-    //                 layer.msg('修改失败，请重试',{icon:5})
-    //             }
-    //         },
-    //         error: function () {
-    //             layer.msg('网络繁忙',{icon:2});
-    //             window.parent.location.href=path+"/url/login";
-    //         }
-    //     });
-    // }
+    var img_str;
+    //layui.use加载模块
+    layui.use(['form', 'table'], function () {
+        var $ = layui.jquery;
+        var layer = layui.layer;
+        var websocket = null;
+        if ('WebSocket' in window) {
+            websocket = new WebSocket("ws://127.0.0.1:8080/parkinglot/websocket/ip");
+        } else {
+            alert("您的浏览器不支持websocket");
+        }
+        websocket.onerror = function () {
+            setMessageInHtml("send error！");
+        }
+        websocket.onopen = function () {
+            setMessageInHtml("connection success！")
+        }
 
+        websocket.onmessage = function (event) {
+            setMessageInHtml(event);
+            // console.log(event);
+        }
+        websocket.onclose = function () {
+            setMessageInHtml("closed websocket!")
+        }
+        window.onbeforeunload = function () {
+            clos();
+        }
+
+        //关闭连接
+        function clos() {
+            websocket.close(3000, "强制关闭");
+        }
+
+        //发送信息
+        function send() {
+            var msg = document.getElementById('text').value;
+            websocket.send(msg);
+        }
+
+        // 接收信息
+        function setMessageInHtml(message) {
+            console.log(message.data);
+            if (message.data.split(",")[0] == "success") {
+
+                carnumber = message.data.split(",")[1];
+                username = message.data.split(",")[2];
+                state = message.data.split(",")[3];
+                ps = message.data.split(",")[4];
+                entertime = message.data.split(",")[5];
+                exittime = message.data.split(",")[6];
+                time = message.data.split(",")[7];
+                money = message.data.split(",")[8];
+                img_str = message.data.split(",")[9];
+                $("#img").attr("src", "data:image/png; base64," + img_str);
+                document.getElementById("carnumber").innerHTML = carnumber;
+                document.getElementById("username").innerHTML = username;
+                document.getElementById("state").innerHTML = state;
+                document.getElementById("ps").innerHTML = ps;
+                document.getElementById("entertime").innerHTML = entertime;
+                document.getElementById("exittime").innerHTML = exittime;
+                document.getElementById("time").innerHTML = time;
+                document.getElementById("money").innerHTML = money;
+            } else if(message.split(",")[0] == "refresh"){
+
+                layer.msg("支付成功", {icon: 6});
+            }else {
+                layer.msg("暂无车辆出场", {icon: 5});
+            }
+
+
+        }
+    })
+
+    //异常出库
+    function abnormalOut() {
+        var path = $('#path').val();
+        $.ajax({
+            url: path+"/AdminController/editRates",
+            async: true,
+            type: 'POST',
+            data: {"ratesId":ratesId,"ratesUprice": ratesUprice, "ratesMaxprice": ratesMaxprice},
+            success: function (data) {
+                if (data=="success") {
+                    layer.msg('修改成功',{icon:6})
+                    uprice.innerHTML = ratesUprice;
+                    maxprice.innerHTML = ratesMaxprice;
+                    updata();
+                }else{
+                    layer.msg('修改失败，请重试',{icon:5})
+                }
+            },
+            error: function () {
+                layer.msg('网络繁忙',{icon:2});
+                window.parent.location.href=path+"/url/login";
+            }
+        });
+    }
+    //在线收费
+    function onlinePay() {
+        if ($(".money").val()==0){
+
+        }else {
+            window.open("${pageContext.request.contextPath}/alipay?enter="+entertime+"&exit="+exittime+"&carNum="+carnumber+"&username="+username);
+        }
+    }
+    //现金收费
+    function cashPay() {
+        var path = $('#path').val();
+        if (carnumber==null){
+            layer.msg('当前无车辆出场',{icon:5})
+        }else{
+            layer.confirm('是否支付完成？',{icon:7},function (index) {
+                layer.close(index);
+                $.ajax({
+                    url: path+"/ChargeController/cashPay",
+                    async: true,
+                    type: 'POST',
+                    data: {"exittime":exittime,"carnumber": carnumber, "username": username,"money":money},
+                    success: function (data) {
+                        if (data=="success") {
+                            layer.alert('支付成功',{icon:6},function () {
+                                location.reload(true);
+                            });
+                        }else{
+                            layer.msg('支付失败，请重试',{icon:5})
+                        }
+                    },
+                    error: function () {
+                        layer.msg('网络繁忙',{icon:2});
+                        window.parent.location.href=path+"/url/login";
+                    }
+                });
+            });
+        }
+
+
+    }
 </script>
 </body>
 </html>

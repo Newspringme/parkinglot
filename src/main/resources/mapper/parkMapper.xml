@@ -4,20 +4,20 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.cnzk.mapper.ParkMapper">
 
-    <select id="queryPark" resultMap="coordinateMap">
+    <select id="queryPark" resultType="com.cnzk.pojo.TbPark">
         select * from tb_park
     </select>
 
-    <resultMap id="coordinateMap" type="com.cnzk.pojo.TbPark">
-        <result property="coordinateId" column="coordinate_id"></result>
-        <association property="TbCoordinate" column="coordinate_id" javaType="com.cnzk.pojo.TbCoordinate" select="queryCoordinate"></association>
-    </resultMap>
+    <!--<resultMap id="coordinateMap" type="com.cnzk.pojo.TbPark">-->
+        <!--<result property="coordinateId" column="coordinate_id"></result>-->
+        <!--<association property="tbCoordinate" column="coordinate_id" javaType="com.cnzk.pojo.TbCoordinate" select="queryCoordinate"></association>-->
+    <!--</resultMap>-->
 
-    <select id="queryCoordinate" parameterType="java.lang.Integer" resultType="com.cnzk.pojo.TbCoordinate">
-        select * from tb_coordinate where coordinate_id = #{coordinateId}
-    </select>
+    <!--<select id="queryCoordinate" resultType="com.cnzk.pojo.TbCoordinate">-->
+        <!--select * from tb_coordinate where coordinate_id = #{coordinateId}-->
+    <!--</select>-->
 
     <update id="carExit"  parameterType="com.cnzk.pojo.TbBill">
-       update tb_park set car_num=null where car_num=#{carNum};
+       update tb_park set car_num=null,park_state='未停车' where car_num=#{carNum};
     </update>
 </mapper>

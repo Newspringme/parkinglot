@@ -44,6 +44,10 @@
     <insert id="addUser" keyProperty="userId" useGeneratedKeys="true">
         insert into tb_user (user_name,user_tel)values(#{userName},#{userTel});
     </insert>
+
+    <insert id="addimgurl" >
+        insert into tb_carimg (carimg_carnum,carimg_url)values(#{carnum},#{url});
+    </insert>
     <!--根据车牌查询用户-->
     <select id="queryUserByCarNum" resultType="com.cnzk.pojo.TbUser">
         select * from tb_car where car_num=#{carNum};

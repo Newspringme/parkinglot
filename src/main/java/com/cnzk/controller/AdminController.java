@@ -10,6 +10,7 @@ import com.cnzk.service.MenuService;
 import com.cnzk.service.RoleServeice;
 import com.cnzk.utils.MD5;
 import com.cnzk.utils.ResponseUtils;
+import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
@@ -548,6 +549,16 @@ public Object addCombo(TbCombo tbCombo){
 		}else{
 			response.getWriter().print("error");
 		}
+	}
+//		退出登录
+	@RequestMapping("/outLogin")
+	@ResponseBody
+	@Log(operationThing = "退出登录",operationType = "退出")
+	public String outLogin(HttpServletRequest request)
+	{
+		request.getSession().invalidate();
+//		Boolean out = true;
+		return "success";
 	}
 
 }

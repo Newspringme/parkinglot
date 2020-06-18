@@ -8,6 +8,7 @@ import com.cnzk.service.ChargeService;
 import com.cnzk.utils.MD5;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -16,11 +17,12 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.UUID;
+import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import javax.servlet.http.HttpSession;
-import java.util.Map;
 
 @Controller
 @RequestMapping("/ChargeController")
@@ -184,14 +186,42 @@ public class ChargeController {
             response.getWriter().write("true");
         }
     }
-
-
+    //    实时出场现金支付
     @ResponseBody
-    @RequestMapping("realTimeExit")
-    public String realTimeExit(String msg){
-        System.out.println("+++++++++++++++++++++++++++++++++++++"+msg);
-        return "";
-    }
+    @RequestMapping("cashPay")
+//    @Log(operationThing = "车辆出场",operationType = "现金支付")
+    public void cashPay(HttpServletRequest request, HttpServletResponse response,String exittime,String carnumber,String username,String money) throws IOException {
+        System.out.println("现金支付");
+        System.out.println(exittime);
+        System.out.println(carnumber);
+        System.out.println(money);
+        System.out.println(username);
+        HashMap<String,Object> hashMap = new HashMap<>();
+//        产生3个随机数
+        String sjs="";
+        for (int i = 0; i < 3; i++) {
+            int max=9,min=0;
+            int ran2 = (int) (Math.random()*(max-min)+min);
+            sjs=ran2+sjs;
+        }
+//        利用正则提取时间数字
+        String regEx="[^0-9]";
+        Pattern p = Pattern.compile(regEx);
+        Matcher m = p.matcher(exittime);
+        System.out.println( m.replaceAll("").trim());
 
+        String billNum = m.replaceAll("").trim()+sjs;
+        hashMap.put("billNum",billNum);
+        hashMap.put("carnumber",carnumber);
+        hashMap.put("money",money);
+        hashMap.put("username",username);
+        Integer row = chargeService.cashPay(hashMap);
+
+        if (row != 0) {
+            response.getWriter().write("success");
+        } else {
+            response.getWriter().write("error");
+        }
+    }
 
 }

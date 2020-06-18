@@ -34,7 +34,7 @@ public interface UserMapper
 
 	String carfindps(@PathParam("carNum") String carNum);
 
-
+	void addimgurl(@PathParam("carnum") String carnum, @PathParam("url") String url);
 
 	//	添加用户
 	int addUser(TbUser tbUser);
