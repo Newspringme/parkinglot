@@ -25,4 +25,9 @@ public class BillServiceImpl  implements  BillService{
     public TbBill getCarNum(TbBill bill) {
         return billMapper.getCarNum(bill);
     }
+
+    @Override
+    public Integer isSucceed(TbBill bill) {
+        return billMapper.isSucceed(bill);
+    }
 }

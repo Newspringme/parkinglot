@@ -48,6 +48,7 @@ public interface BillMapper {
 
 //    现金支付添加订单
     Integer insertCashBill (TbBill bill);
-
+//	查订单是否完成
+    Integer isSucceed(TbBill bill);
 
 }

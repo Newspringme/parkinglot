@@ -155,19 +155,31 @@ public class PayController {
                 //如果没有做过处理，根据订单号（out_trade_no）在商户网站的订单系统中查到该笔订单的详细，并执行商户的业务程序
                 //请务必判断请求时的total_fee、seller_id与通知时获取的total_fee、seller_id为一致的
                 //如果有做过处理，不执行商户的业务程序
-                TbBill bill = new TbBill();
-                bill.setBillNum(out_trade_no);
-                //付款完成
-                billService.updateBill(bill);
-                bill=billService.getCarNum(bill);
-                //车位清空
-                parkService.carExit(bill);
-                //车出库
-                userService.carexit(bill.getCarNum());
-                //注意：
-                //如果签约的是可退款协议，那么付款完成后，支付宝系统发送该交易状态通知。
-            }
+                if("car".equals(out_trade_no.split(":")[0])){
+                    TbBill bill = new TbBill();
+                    bill.setBillNum(out_trade_no);
 
+                    int billState = billService.isSucceed(bill);
+                    if (billState==0){
+                        //付款完成
+                        billService.updateBill(bill);
+                        bill=billService.getCarNum(bill);
+                        //车位清空
+                        parkService.carExit(bill);
+                        //车出库
+                        userService.carexit(bill.getCarNum());
+                    }
+
+                }else if("combo".equals(out_trade_no.split(":")[0])){
+
+
+                }
+
+
+
+            }
+            //注意：
+            //如果签约的是可退款协议，那么付款完成后，支付宝系统发送该交易状态通知。
             //——请根据您的业务逻辑来编写程序（以上代码仅作参考）——
 //            out.clear();
 //            out.println("success");	//请不要修改或删除
@@ -224,13 +236,17 @@ public class PayController {
             if("car".equals(out_trade_no.split(":")[0])){
                 TbBill bill = new TbBill();
                 bill.setBillNum(out_trade_no);
-                //付款完成
-                billService.updateBill(bill);
-                bill=billService.getCarNum(bill);
-                //车位清空
-                parkService.carExit(bill);
-                //车出库
-                userService.carexit(bill.getCarNum());
+
+                int billState = billService.isSucceed(bill);
+                if (billState==0){
+                    //付款完成
+                    billService.updateBill(bill);
+                    bill=billService.getCarNum(bill);
+                    //车位清空
+                    parkService.carExit(bill);
+                    //车出库
+                    userService.carexit(bill.getCarNum());
+                }
                 if(WebSocket.electricSocketMap.get("ip")!=null){
                     for (Session session:WebSocket.electricSocketMap.get("ip"))
                     {
