@@ -195,9 +195,31 @@
     }
     //在线收费
     function onlinePay() {
-        if ($(".money").val()==0){
-
-        }else {
+        if (carnumber==null){
+            layer.msg('当前无车辆出场',{icon:5})
+        }else if(money==0){
+            layer.msg('免费停车',{icon:6})
+            $.ajax({
+                url: path+"/ChargeController/freePay",
+                async: true,
+                type: 'POST',
+                data: {"exittime":exittime,"carnumber": carnumber, "username": username,"money":money},
+                success: function (data) {
+                    if (data=="success") {
+                        layer.alert('出库成功',{icon:6},function () {
+                            location.reload(true);
+                        });
+                    }else{
+                        layer.msg('出库失败，请重试',{icon:5})
+                    }
+                },
+                error: function () {
+                    layer.msg('网络繁忙',{icon:2});
+                    window.parent.location.href=path+"/url/login";
+                }
+            });
+        }
+        else {
             window.open("${pageContext.request.contextPath}/alipay?enter="+entertime+"&exit="+exittime+"&carNum="+carnumber+"&username="+username);
         }
     }

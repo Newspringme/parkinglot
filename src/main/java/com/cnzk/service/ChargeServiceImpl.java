@@ -114,5 +114,21 @@ public class ChargeServiceImpl implements ChargeService {
         return row;
     }
 
+    @Override
+    public Integer freePay(HashMap<String, Object> hashMap) {
+        Integer row = 0;
+        TbBill tbBill = new TbBill();
+        tbBill.setBillNum(hashMap.get("billNum").toString());
+        tbBill.setCarNum(hashMap.get("carnumber").toString());
+        tbBill.setUserName(hashMap.get("username").toString());
+        tbBill.setBillMoney(hashMap.get("money").toString());
+        tbBill.setBillState(1);
+        System.out.println("cashPay_tbBill="+tbBill);
+        row += carMapper.carexit(hashMap.get("carnumber").toString());
+        row += parkMapper.carExit(tbBill);
+        System.out.println(row);
+        return row;
+    }
+
 
 }

@@ -189,7 +189,7 @@ public class ChargeController {
     //    实时出场现金支付
     @ResponseBody
     @RequestMapping("cashPay")
-//    @Log(operationThing = "车辆出场",operationType = "现金支付")
+    @Log(operationThing = "车辆出场",operationType = "现金支付")
     public void cashPay(HttpServletRequest request, HttpServletResponse response,String exittime,String carnumber,String username,String money) throws IOException {
         System.out.println("现金支付");
         System.out.println(exittime);
@@ -224,4 +224,32 @@ public class ChargeController {
         }
     }
 
+
+
+    //    实时出场免费出场
+    @ResponseBody
+    @RequestMapping("freePay")
+    @Log(operationThing = "车辆出场",operationType = "免费出场")
+    public void freePay(HttpServletRequest request, HttpServletResponse response,String exittime,String carnumber,String username,String money) throws IOException {
+        System.out.println(exittime);
+        System.out.println(carnumber);
+        System.out.println(money);
+        System.out.println(username);
+        HashMap<String,Object> hashMap = new HashMap<>();
+
+        //商户订单号，商户网站订单系统中唯一订单号，必填
+        //生成随机Id
+        String out_trade_no = UUID.randomUUID().toString();
+
+        hashMap.put("billNum",out_trade_no);
+        hashMap.put("carnumber",carnumber);
+        hashMap.put("money",money);
+        hashMap.put("username",username);
+        Integer row = chargeService.freePay(hashMap);
+        if (row != 0) {
+            response.getWriter().write("success");
+        } else {
+            response.getWriter().write("error");
+        }
+    }
 }
