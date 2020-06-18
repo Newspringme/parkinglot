@@ -6,7 +6,7 @@ import java.sql.Timestamp;
 public class TbExit {
 
   private long exitId;
-  private java.sql.Timestamp exitTime;
+  private String exitTime;
   private String exitImg;
   private String carNum;
 
@@ -20,11 +20,11 @@ public class TbExit {
   }
 
 
-  public java.sql.Timestamp getExitTime() {
+  public String getExitTime() {
     return exitTime;
   }
 
-  public void setExitTime(java.sql.Timestamp exitTime) {
+  public void setExitTime(String exitTime) {
     this.exitTime = exitTime;
   }
 
@@ -50,7 +50,7 @@ public class TbExit {
   {
   }
 
-  public TbExit(long exitId, Timestamp exitTime, String exitImg, String carNum)
+  public TbExit(long exitId, String exitTime, String exitImg, String carNum)
   {
     this.exitId = exitId;
     this.exitTime = exitTime;

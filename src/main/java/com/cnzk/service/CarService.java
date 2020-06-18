@@ -1,7 +1,9 @@
 package com.cnzk.service;
 
 import com.cnzk.pojo.TbCar;
+import com.cnzk.pojo.TbExit;
 import com.cnzk.pojo.TbUser;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -34,5 +36,8 @@ public interface CarService
 
 	//	办理续费
 	int handleRenew(TbCar tbCar);
+
+	//查询车辆出场记录
+	List<TbExit> queryExit(@Param("start") int start, @Param("end") int end);
 
 }
