@@ -40,16 +40,17 @@
 
     <!--	//删除所选角色的角色菜单关联表里的所有菜单-->
     <delete id="deleRolesMenu" parameterType="java.lang.Integer">
-		delete from tb_role_menu where role_id = #{roleId}
+		delete from tb_role_menu where role_id = #{roleId} and isthree_menu = 0
 	</delete>
 
     <!--	//重新添加所选角色的角色菜单-->
     <insert id="addRolesMenu" parameterType="java.util.List">
-        insert into tb_role_menu(role_id,menu_id) values
+        insert into tb_role_menu(role_id,menu_id,isthree_menu) values
         <foreach collection="list" item="menu" index="index" separator=",">
             (
             #{menu.roleId}
             ,#{menu.menuId}
+            ,#{menu.isthreeMenu}
             )
         </foreach>
     </insert>

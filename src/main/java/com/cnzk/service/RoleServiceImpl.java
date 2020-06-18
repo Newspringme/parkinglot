@@ -5,6 +5,7 @@ import com.cnzk.mapper.RoleMapper;
 import com.cnzk.pojo.*;
 import com.google.gson.Gson;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
@@ -61,12 +62,11 @@ public class RoleServiceImpl implements RoleServeice{
     }
 
     @Override
+    @Transactional
     public Integer updateMenuTree(String treeStr, Integer roleId) {
         Integer row = 0;
         Gson gson = new Gson();
         TreeData[] treeData = gson.fromJson(treeStr, TreeData[].class);
-        System.out.println("++++++++++++++");
-        System.out.println(treeData.toString());
         List<TbMenu> menutblList = new ArrayList<>();
         for (int i=0;i<treeData.length;i++){
             for (int j=0;j<treeData[i].getChildren().size();j++){
@@ -74,6 +74,7 @@ public class RoleServiceImpl implements RoleServeice{
                     TbMenu tbMenu = new TbMenu();
                     tbMenu.setMenuId(treeData[i].getChildren().get(j).getChildren().get(z).getId());
                     tbMenu.setRoleId(roleId);
+                    tbMenu.setIsthreeMenu(0);
                     menutblList.add(tbMenu);
                 }
             }

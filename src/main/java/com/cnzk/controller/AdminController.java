@@ -61,10 +61,10 @@ public class AdminController
 		System.out.println("===============================管理员登陆=============================");
 		String vcode = session.getAttribute("vcode").toString();//获取session上的验证码
 		System.out.println("验证码：" + vcode);
-//		if(vcode.equalsIgnoreCase(param.get("adminvcode").toString())){
+		if(vcode.equalsIgnoreCase(param.get("adminvcode").toString())){
 		return adminService.adminlogin(param, session);//获取service层返回的信息
-//		}
-//		return "验证码错误";
+		}
+		return "验证码错误";
 	}
 	//验证码
 
@@ -345,20 +345,18 @@ public class AdminController
 
 	//  修改权限
 	@RequestMapping("/updateMenuTree")
-	@Transactional
 	@ResponseBody
 	@Log(operationThing = "修改权限", operationType = "修改")
-	public void updateMenuTree(HttpServletRequest request, HttpServletResponse response)
-	{
+	public void updateMenuTree(HttpServletRequest request, HttpServletResponse response) {
 		Integer rolesid = Integer.valueOf(request.getParameter("roleId"));
 		String treeStr = request.getParameter("checkData");
+		System.out.println("updateMenuTree_rolesid:"+rolesid);
+		System.out.println("updateMenuTree_treeStr:"+treeStr);
 		Integer row = roleServeice.updateMenuTree(treeStr, rolesid);
-		if (row != 0)
-		{
+		if (row != 0) {
 			ResponseUtils.outHtml(response, "success");
 		}
-		else
-		{
+		else {
 			ResponseUtils.outHtml(response, "error");
 		}
 	}
