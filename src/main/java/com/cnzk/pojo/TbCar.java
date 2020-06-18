@@ -16,6 +16,7 @@ public class TbCar
 	private String userTel;
 	private int vipId;
 	private int comboId;
+	private String comboName;
 	private String endTime;
 	private int months;
 
@@ -23,7 +24,7 @@ public class TbCar
 	{
 	}
 
-	public TbCar(int carId, String carNum, String carColor, String carType, String carBrand, int userId, String userName, String userTel, int vipId, int comboId, String endTime, int months)
+	public TbCar(int carId, String carNum, String carColor, String carType, String carBrand, int userId, String userName, String userTel, int vipId, int comboId, String comboName, String endTime, int months)
 	{
 		this.carId = carId;
 		this.carNum = carNum;
@@ -35,8 +36,20 @@ public class TbCar
 		this.userTel = userTel;
 		this.vipId = vipId;
 		this.comboId = comboId;
+		this.comboName = comboName;
 		this.endTime = endTime;
 		this.months = months;
+	}
+
+
+	public String getComboName()
+	{
+		return comboName;
+	}
+
+	public void setComboName(String comboName)
+	{
+		this.comboName = comboName;
 	}
 
 	public int getMonths()
