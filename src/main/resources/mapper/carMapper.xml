@@ -24,7 +24,7 @@
     </update>
     <!-- 根据车牌查询车表记录-->
     <select id="queryCarByCarNum" resultType="com.cnzk.pojo.TbCar">
-        select * from tb_car where car_num=#{carNum};
+        select c.*,b.combo_name from tb_car c left join tb_combo b on b.combo_id=c.combo_id where car_num=#{carNum};
     </select>
     <!-- 添加车辆信息-->
     <insert id="addCar" keyProperty="carId" useGeneratedKeys="true">

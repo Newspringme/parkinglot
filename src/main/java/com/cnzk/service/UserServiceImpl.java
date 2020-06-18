@@ -20,7 +20,7 @@ public class UserServiceImpl implements UserService
 	@Override
 	public int addUser(TbUser tbUser)
 	{
-		return 0;
+		return userMapper.addUser(tbUser);
 	}
 
 	//根据车牌号查询用户

@@ -166,7 +166,7 @@
 				var data = obj.data; //获得当前行数据
 				var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
 				if (layEvent == 'delete') { //删除
-					$.post("${pageContext.request.contextPath}/CarController/deleteWhiteList?msg=" + encodeURI(data.carNum), function (msg) {
+					$.post("${pageContext.request.contextPath}/CarController/deleteWhiteList?carNum=" + encodeURI(data.carNum), function (msg) {
 							msg = msg + '';
 						if (msg == 'true') {
 							layer.alert('删除成功', {icon: 6}, function (index) {

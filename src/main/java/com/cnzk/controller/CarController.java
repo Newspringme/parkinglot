@@ -38,17 +38,13 @@ public class CarController
 	@ResponseBody
 	public Object queryWhiteList(String page, String limit)
 	{
-
-
 //		获取起始页码
 		int startPage = Integer.parseInt(page);
 //		每页数量
 		int pageSize = Integer.parseInt(limit);
 //		计算查询位置
 		int start = (startPage - 1) * pageSize;
-
 		List<TbCar> list = carService.queryWhiteList(start, pageSize);
-
 		LayuiData layuiData = new LayuiData();
 		layuiData.setCode(0);
 		layuiData.setCount(carMapper.queryWhitListCount());
@@ -77,10 +73,13 @@ public class CarController
 			tbUser1.setUserName(tbCar.getUserName());
 			tbUser1.setUserTel(tbCar.getUserTel());
 			int num = userService.addUser(tbUser1);
-
+			if(num>0){
+				System.out.println("用户添加成功") ;
+			}
 		}
 		System.out.println("白名单用户tbUser1 ====== " + tbUser1);
 		TbCar tbCar1 = carService.queryCarByCarNum(tbCar.getCarNum());
+		System.out.println("tbCar1 ========== " + tbCar1);
 		boolean bool = false;
 		if (tbCar1 != null)
 		{
@@ -99,7 +98,7 @@ public class CarController
 			int num1 = carService.addUserCar(tbCar);
 			if (num1 > 0)
 			{
-				System.out.println("添加成功");
+				System.out.println("用户与车关系添加成功");
 				bool = true;
 			}
 		}
@@ -133,9 +132,11 @@ public class CarController
 	//  开通新月缴
 	@ResponseBody
 	@RequestMapping("handlePackage")
-	public Object handlePackage(String msg)
+	public Object handlePackage(String carNum, String comboId)
 	{
-		TbCar tbCar = JSON.parseObject(msg, TbCar.class);
+		TbCar tbCar = new TbCar();
+		tbCar.setCarNum(carNum);
+		tbCar.setComboId(Integer.parseInt(comboId));
 		Date date = new Date();
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTime(date);
@@ -173,26 +174,28 @@ public class CarController
 	//  办理续费
 	@ResponseBody
 	@RequestMapping("handleRenew")
-	public Object handleRenew(String msg) throws ParseException
+	public Object handleRenew(String carNum,String addTime) throws ParseException
 	{
-		TbCar tbCar = JSON.parseObject(msg, TbCar.class);
-		String str=tbCar.getEndTime();
-		SimpleDateFormat sd=new SimpleDateFormat("yyyy-MM-dd");
-		Date date=sd.parse(str);
-		Calendar calendar=Calendar.getInstance();
-		calendar.setTime(date);
-		calendar.add(Calendar.MONTH,tbCar.getMonths());
-		String endTime=calendar.getTime()+"";
-		System.out.println("续费时间endTime = " + endTime);
-		tbCar.setEndTime(endTime);
-		int num = carService.handleRenew(tbCar);
-		boolean bool = false;
-		if (num > 0)
-		{
-			bool = true;
-			System.out.println(" 续费办理成功");
+		TbCar tbCar = carService.queryCarByCarNum(carNum);
+		if(tbCar==null){
+		    return "isNull";
+		}else {
+			String str = tbCar.getEndTime();
+			SimpleDateFormat sd = new SimpleDateFormat("yyyy-MM-dd");
+			Date date = sd.parse(str);
+			Calendar calendar = Calendar.getInstance();
+			calendar.setTime(date);
+			calendar.add(Calendar.MONTH, Integer.parseInt(addTime));
+			tbCar.setEndTime(sd.format(calendar.getTime()));
+			int num = carService.handleRenew(tbCar);
+			boolean bool = false;
+			if (num > 0)
+			{
+				bool = true;
+				System.out.println(" 续费办理成功");
+			}
+			return bool;
 		}
-		return bool;
 	}
 
 
