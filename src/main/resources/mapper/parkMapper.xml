@@ -4,10 +4,38 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.cnzk.mapper.ParkMapper">
 
+    <!--查询车位情况-->
     <select id="queryPark" resultType="com.cnzk.pojo.TbPark">
         select * from tb_park
     </select>
 
+
+    <!--获取车位列表-->
+    <select id="getParkList" resultType="com.cnzk.pojo.TbPark">
+        select * from tb_park
+        <where>
+            <if test="tbPark.carNum != null and tbPark.carNum != ''">
+                and car_num like concat('%',#{tbPark.carNum},'%')
+            </if>
+            <if test="tbPark.parkName != null and tbPark.parkName != ''">
+                and park_name like concat('%',#{tbPark.parkName},'%')
+            </if>
+        </where>
+        limit #{start},#{pageSize};
+    </select>
+
+    <!--获取车位数量-->
+    <select id="getParkCount" resultType="int">
+        select count(*) from tb_park
+        <where>
+            <if test="carNum != null and carNum != ''">
+                and car_num like concat('%',#{carNum},'%')
+            </if>
+            <if test="parkName != null and parkName != ''">
+                and park_name like concat('%',#{parkName},'%')
+            </if>
+        </where>
+    </select>
     <!--<resultMap id="coordinateMap" type="com.cnzk.pojo.TbPark">-->
         <!--<result property="coordinateId" column="coordinate_id"></result>-->
         <!--<association property="tbCoordinate" column="coordinate_id" javaType="com.cnzk.pojo.TbCoordinate" select="queryCoordinate"></association>-->

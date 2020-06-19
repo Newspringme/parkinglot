@@ -52,8 +52,7 @@
     //websocket
     var websocket = null;
     if('WebSocket' in window){
-        websocket = new WebSocket("ws://39.102.35.36:8080/parkinglot/websocket/ip");
-        // websocket = new WebSocket("ws://localhost:8080/parkinglot/websocket/ip");
+        websocket = new WebSocket("ws://localhost:8080/parkinglot/websocket/ip");
     }
     else{
         alert("您的浏览器不支持websocket");
@@ -83,6 +82,7 @@
     // 接收信息
     function setMessageInHtml(message){
         if (message.data.split(",")[0]=="new") {
+            alert("xxx");
             window.reload(true);
         }
     }
