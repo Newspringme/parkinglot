@@ -475,16 +475,22 @@
             }
             else if (layEvent==='showHead') {
                     var pathUrl = "${pageContext.request.contextPath}";
-                    //页面层-图片
-                    layer.open({
-                        type: 1,
-                        title: false,
-                        closeBtn: 0,
-                        area: ['500px','500px'],
-                        skin: 'layui-layer-nobg', //没有背景色
-                        shadeClose: true,
-                        content: '<img src="'+ pathUrl + data.headImg +'">',
-                    });
+                    var imgUrl = data.headImg;
+                    if (imgUrl!=null){
+                        //页面层-图片
+                        layer.open({
+                            type: 1,
+                            title: false,
+                            closeBtn: 0,
+                            area: ['500px','500px'],
+                            skin: 'layui-layer-nobg', //没有背景色
+                            shadeClose: true,
+                            content: '<img src="'+ pathUrl + imgUrl +'" style="height: 500px;width: 500px">',
+                        });
+                    }else{
+                        layer.alert("请先上传一张头像");
+                    }
+
             }
             else if (layEvent==='showDetailForm'){
                 openDetail(obj);
