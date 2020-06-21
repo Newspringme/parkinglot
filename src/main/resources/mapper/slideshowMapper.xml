@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cnzk.mapper.SlideshowMapper">
+    <!--    查询轮播图路径-->
+    <select id="queryImgUrl" resultType="String" >
+        select url from  tb_slideshow
+
+         where   startTime &lt;=#{time}
+            and endTime &gt;= #{time}
+
+         order by weight desc
+    </select>
+
+    <select id="querySlideShow" resultType="TbSlideshow" >
+        select * from  tb_slideshow order by weight desc limit #{start},#{pageSize}
+    </select>
+
+
+    <select id="querySlideShowCount" resultType="int" >
+        select count(*) from  tb_slideshow
+    </select>
+
+    <insert id="addSlideShow" parameterType="TbSlideshow" >
+        insert into tb_slideshow (url,weight,title,starttime,endtime) values (#{url},#{weight},#{title},#{starttime},#{endtime})
+    </insert>
+
+    <delete id="deleteSlideShow" parameterType="TbSlideshow">
+        delete from tb_slideshow  where sid=#{sid};
+    </delete>
+
+    <update id="editSlideShow" parameterType="TbSlideshow">
+       update tb_slideshow set url=#{url},weight=#{weight},title=#{title},starttime=#{starttime},endtime=#{endtime} where sid=#{sid};
+    </update>
+</mapper>

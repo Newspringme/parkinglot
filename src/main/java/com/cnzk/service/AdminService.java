@@ -65,5 +65,14 @@ public interface AdminService
 
 	//参数修改
 	Integer editParam(TbParam tbParam);
+	//查看轮播图
+	LayuiData querySlideShow(int start, int pageSize);
+
+	//增加轮播图
+	Integer addSlideShow(TbSlideshow tbSlideshow);
+	//删除轮播图
+	Integer deleteSlideShow(TbSlideshow tbSlideshow);
+
+	Integer editSlideShow(TbSlideshow tbSlideshow);
 
 }

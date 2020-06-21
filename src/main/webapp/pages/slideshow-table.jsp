@@ -21,6 +21,12 @@
     <link rel="stylesheet" href="<%=path%>/static/lib/layui-v2.5.5/css/layui.css" media="all">
     <link rel="stylesheet" href="<%=path%>/static/css/public.css" media="all">
     <script src="<%=path%>/static/lib/layui-v2.5.5/layui.js" charset="utf-8"></script>
+    <style>
+        .laytable-cell-1-0-2{
+            height: 100%;
+            max-width: 100%;
+        }
+    </style>
 </head>
 <body>
 <div class="layuimini-container">
@@ -31,7 +37,6 @@
         <script type="text/html" id="toolbarDemo">
             <div class="layui-btn-container">
                 <button class="layui-btn layui-btn-normal layui-btn-sm data-add-btn" lay-event="add"> 添加 </button>
-                <button class="layui-btn layui-btn-sm layui-btn-danger data-delete-btn" lay-event="delete"> 删除 </button>
             </div>
         </script>
 
@@ -44,8 +49,12 @@
 
     </div>
 </div>
+<script type="text/html" id="img">
+    <div><img src="{{ d.url }}" style="width: 150px;" onclick="show_img('{{ d.url }}')"></div>
+</script>
 
 <script>
+
     var load=layui.use(['form', 'table'], function () {
         var $ = layui.jquery,
             form = layui.form,
@@ -53,7 +62,7 @@
 
         var getlist=table.render({
             elem: '#currentTableId',
-            url: '/parkinglot/queryRole',
+            url: '/parkinglot/AdminController/querySlideShow',
             toolbar: '#toolbarDemo',
             defaultToolbar: ['filter', 'exports', 'print', {
                 title: '提示',
@@ -61,10 +70,12 @@
                 icon: 'layui-icon-tips'
             }],
             cols: [[
-                {type: "checkbox", width: 50},
-                {field: 'roleId', width: 150, title: 'ID', sort: true},
-                {field: 'roleName', maxwidth: 150,minWidth: 100, title: '用户名'},
-                {field: 'roleSort', maxwidth: 620,minWidth: 100, title: '权限值'},
+                {field: 'sid', width: 150, title: 'ID', sort: true},
+                {field: 'title',  maxwidth:150,minWidth: 100, title: '名称'},
+                {field: 'url',  templet: "#img", title: '图片'},
+                {field: 'weight', maxwidth: 150,minWidth: 100, title: '权限值'},
+                {field: 'starttime', maxwidth: 150,minWidth: 100, title: '开始时间'},
+                {field: 'endtime', maxwidth: 620,minWidth: 100, title: '结束时间'},
                 {title: '操作', minWidth: 150, toolbar: '#currentTableBar', align: "center"}
             ]],
             limits: [10, 15, 20, 25, 50, 100],
@@ -83,13 +94,13 @@
         table.on('toolbar(currentTableFilter)', function (obj) {
             if (obj.event === 'add') {  // 监听添加操作
                 var index = layer.open({
-                    title: '添加用户',
+                    title: '添加轮播图',
                     type: 2,
                     shade: 0.2,
                     maxmin:true,
                     shadeClose: true,
-                    area: ['50%', '50%'],
-                    content: '/parkinglot/pages/table/role-add.jsp',
+                    area: ['100%', '100%'],
+                    content: '/parkinglot/pages/table/slideshow-add.jsp',
                 });
                 $(window).on("resize", function () {
                     layer.full(index);
@@ -117,24 +128,23 @@
                     maxmin:true,
                     shadeClose: true,
                     area: ['100%', '100%'],
-                    content: '/parkinglot/pages/table/role-edit.jsp?roleId='+data.roleId+'&roleName='+data.roleName+'&roleSort='+data.roleSort,
+                    content: '/parkinglot/pages/table/slideshow-edit.jsp?sid='+data.sid+'&title='+data.title+'&url='+data.url+'&weight='+data.weight+'&starttime='+data.starttime+'&endtime='+data.endtime,
                 });
                 $(window).on("resize", function () {
                     layer.full(index);
                 });
                 return false;
             } else if (obj.event === 'delete') {
-                layer.confirm('真的删除'+obj.data.roleName, function (index) {
+                layer.confirm('真的删除'+obj.data.title, function (index) {
                     $.ajax({
-                        url:"${pageContext.request.contextPath}/deleteRole"
+                        url:"${pageContext.request.contextPath}/AdminController/deleteSlideShow"
                         ,type:"POST"
                         ,dataType:"text"
                         ,data:{
-                            roleId:data.roleId
+                            sid:data.sid
                         },
                         success:function (msg) {
                             msg=msg+"";
-                            alert(msg);
                             if (msg=='true'){
                                 layer.alert("删除成功");
                                 obj.del();
@@ -150,6 +160,22 @@
         });
 
     });
+
+    function show_img(t) {
+
+        // 页面层
+        layer.open({
+            type: 1,
+            title: '区域图片',
+            area: ['100%', '100%'], //宽高 t.width() t.height()
+            shadeClose: true, //开启遮罩关闭
+            end: function (index, layero) {
+                return false;
+            },
+            content:  '<div style="text-align:center;width: 100%;height: 100%"><img src="' + t + '" /></div>'
+        });
+    }
+
 </script>
 
 </body>
