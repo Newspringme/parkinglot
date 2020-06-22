@@ -241,6 +241,22 @@ public class ChargeController {
         //生成随机Id
         String out_trade_no = UUID.randomUUID().toString();
 
+
+////        产生3个随机数
+//        String sjs="";
+//        for (int i = 0; i < 3; i++) {
+//            int max=9,min=0;
+//            int ran2 = (int) (Math.random()*(max-min)+min);
+//            sjs=ran2+sjs;
+//        }
+////        利用正则提取时间数字
+//        String regEx="[^0-9]";
+//        Pattern p = Pattern.compile(regEx);
+//        Matcher m = p.matcher(exittime);
+//        System.out.println( m.replaceAll("").trim());
+//
+//        String billNum = m.replaceAll("").trim()+sjs;
+
         hashMap.put("billNum",out_trade_no);
         hashMap.put("carnumber",carnumber);
         hashMap.put("money",money);

@@ -1,9 +1,12 @@
 package com.cnzk.service;
 
 import com.cnzk.mapper.FeedbackMapper;
+import com.cnzk.mapper.BillMapper;
 import com.cnzk.mapper.SlideshowMapper;
 import com.cnzk.mapper.UserMapper;
 import com.cnzk.pojo.TbFeedback;
+import com.cnzk.pojo.LayuiData;
+import com.cnzk.pojo.TbBill;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -18,6 +21,8 @@ public class WeiXinServiceImpl implements WeiXinService{
     private SlideshowMapper slideshowMapper;
     @Resource
     private FeedbackMapper feedbackMapper;
+    @Resource
+    private BillMapper billMapper;
 
 
     @Override
@@ -32,5 +37,33 @@ public class WeiXinServiceImpl implements WeiXinService{
     @Override
     public Integer feedback(TbFeedback feedback) {
         return feedbackMapper.feedback(feedback);
+    }
+
+//    小程序订单查询
+    @Override
+    public LayuiData weiXinQueryBill(String carNum){
+        List<TbBill> list=billMapper.weiXinQueryBill(carNum);
+        for (TbBill tbBill : list) {
+            if (null==tbBill.getComboName()) {
+                tbBill.setComboName("临时停车");
+            }else{
+                tbBill.setComboName("购买"+tbBill.getComboName());
+            }
+        }
+        LayuiData layuiData = new LayuiData();
+        layuiData.setData(list);
+        return layuiData;
+    }
+
+    //    根据订单编号查账单信息
+    @Override
+    public TbBill queryBilldetails(String carNum, String billNum) {
+        TbBill tbBill=billMapper.queryBilldetails(carNum,billNum);
+        if (null==tbBill.getComboName()) {
+            tbBill.setComboName("临时停车");
+        }else{
+            tbBill.setComboName("购买"+tbBill.getComboName());
+        }
+        return tbBill;
     }
 }
