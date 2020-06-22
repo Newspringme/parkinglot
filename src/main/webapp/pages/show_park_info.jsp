@@ -38,10 +38,10 @@
         <div class="layui-input-block">
             <select name="parkName" class="layui-select">
                 <option selected="selected" value="">请选择区域</option>
-                <option value="A">A区</option>
-                <option value="B">B区</option>
-                <option value="C">C区</option>
-                <option value="D">D区</option>
+                <option value="park_A">A区</option>
+                <option value="park_B">B区</option>
+                <option value="park_C">C区</option>
+                <option value="park_D">D区</option>
             </select>
         </div>
     </div>
@@ -52,6 +52,19 @@
         </div>
     </div>
 </form>
+<!--搜索条件结束-->
+<!--弹出层开始-->
+<div id="showCar" class="layui-anim layui-anim-scale">
+    <form id="formCar" class="layui-form">
+        <div class="layui-form-item">
+            <label class="layui-form-label" style="margin-left: 120px;">车牌号：</label>
+            <div class="layui-input-block" style="float: left; margin-left: 20px;width: 200px;">
+
+            </div>
+        </div>
+    </form>
+</div>
+<!--弹出层结束-->
 <fieldset class="layui-elem-field layui-field-title" style="margin-top: 30px;">
     <legend>场内车辆信息</legend>
 </fieldset>
@@ -62,7 +75,7 @@
         var layer = layui.layer;
         var form = layui.form;
         var table = layui.table;
-// 渲染数据表格
+        // 渲染数据表格
         table.render({
             id: 'parkTable'
             ,elem: '#parkTable'
@@ -87,6 +100,40 @@
                 ,{field:'eventId', title:'车位编号',align:'center', width:150}
                 ,{fixed: 'right', title:'操作',align:'center',width:600, toolbar: '#toolBar'}
             ]]
+        });
+        //提交条件查询表单
+        form.on('submit(formSearch)',function (data) {
+            var msg=JSON.stringify(data.field);
+            //表格重载之后就会根据条件参数进行分页
+            table.reload('parkTable',{
+                page:{
+                    curr:1//从第一页开始
+                },
+                where:{
+                    msg:msg//条件
+                },
+                method:'post',
+                url:'${pageContext.request.contextPath}/parkController/showParkInfo'
+            })
+        });
+        //监听行工具条事件
+        table.on('tool(parkTable)',function (obj) {
+            var data = obj.data;
+            var layEvent = obj.event;
+            if (layEvent === 'showCar'){
+                //页面层-自定义
+                layer.open({
+                    type: 1,
+                    title: false,
+                    closeBtn: 0,
+                    shadeClose: true,
+                    skin: 'layui-layer-molv',
+                    content: '#showCar',
+                    success:function () {
+                        form.val("formCar",data);
+                    }
+                });
+            }
         });
     });
 </script>

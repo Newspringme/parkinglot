@@ -493,6 +493,7 @@
 
             }
             else if (layEvent==='showDetailForm'){
+                console.log(obj);
                 openDetail(obj);
             }
         });
