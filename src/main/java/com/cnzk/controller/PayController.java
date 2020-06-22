@@ -43,7 +43,7 @@ public class PayController {
 //    //支付宝同步通知路径,也就是当付款完毕后跳转本项目的页面,可以不是公网地址
     private final String RETURN_URL = "http://39.102.35.36:8080/parkinglot/returnurl";
 //    private final String RETURN_URL = "http://localhost:8080/parkinglot/returnurl";
-    @Autowired
+//    @Autowired
     private AdminService adminService;
     @Resource
     private BillService billService;
