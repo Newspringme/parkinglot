@@ -4,8 +4,10 @@ import com.alibaba.fastjson.JSON;
 import com.alipay.api.AlipayApiException;
 import com.alipay.api.AlipayClient;
 import com.alipay.api.DefaultAlipayClient;
+import com.alipay.api.domain.AlipayTradeWapPayModel;
 import com.alipay.api.internal.util.AlipaySignature;
 import com.alipay.api.request.AlipayTradePagePayRequest;
+import com.alipay.api.request.AlipayTradeWapPayRequest;
 import com.cnzk.mapper.RatesMapper;
 import com.cnzk.pojo.AlipayConfig;
 import com.cnzk.pojo.App;
@@ -25,7 +27,10 @@ import javax.websocket.Session;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Controller
 public class PayController {
@@ -41,9 +46,10 @@ public class PayController {
     //支付宝异步通知路径,付款完毕后会异步调用本项目的方法,必须为公网地址
     private final String NOTIFY_URL = "http://39.102.35.36:8080/parkinglot/exitcar";
 //    //支付宝同步通知路径,也就是当付款完毕后跳转本项目的页面,可以不是公网地址
-    private final String RETURN_URL = "http://39.102.35.36:8080/parkinglot/returnurl";
+    private final String RETURN_URL = "http://localhost:8080/parkinglot/returnurl";
 //    private final String RETURN_URL = "http://localhost:8080/parkinglot/returnurl";
 //    @Autowired
+    @Resource
     private AdminService adminService;
     @Resource
     private BillService billService;
@@ -52,11 +58,11 @@ public class PayController {
     private ParkService parkService;
     @Resource
     private UserService userService;
+    @Resource
+    private ChackphotoService chackphotoService;
 
     @RequestMapping("alipay")
-    public void alipay(HttpServletResponse httpResponse,String type,String enter,String exit,String carNum,String username) throws IOException, ParseException {
-        System.out.println(enter);
-        System.out.println(exit);
+    public void alipay(HttpServletResponse httpResponse,String type,String carNum,String comboid) throws IOException, ParseException {
         Random r=new Random();
         //实例化客户端,填入所需参数
         AlipayClient alipayClient = new DefaultAlipayClient(GATEWAY_URL, APP_ID, APP_PRIVATE_KEY, FORMAT, CHARSET, ALIPAY_PUBLIC_KEY, SIGN_TYPE);
@@ -64,30 +70,20 @@ public class PayController {
         //在公共参数中设置回跳和通知地址
         request.setReturnUrl(RETURN_URL);
         request.setNotifyUrl(NOTIFY_URL);
-
-        TbBill bill = new TbBill();
-
-        //商户订单号，商户网站订单系统中唯一订单号，必填
-        //生成随机Id
-        String out_trade_no = type + UUID.randomUUID().toString();
-        //付款金额，必填
-        Map<String ,String> map = App.getBill(enter,exit,adminService.queryPrice());
-        String total_amount = map.get("bill");
-        //订单名称，必填
-        String subject ="菜鸟停车场"+map.get("stopTime");
-        String timeout_express="5m";
-        bill.setBillNum(out_trade_no);
-        bill.setBillMoney(total_amount);
-        bill.setCarNum(carNum);
-        bill.setUserName(username);
-        billService.insertBill(bill);
-        //商品描述，可空
-        String body = "菜鸟停车场自助缴费"+map.get("stopTime");
-        request.setBizContent("{\"out_trade_no\":\""+ out_trade_no +"\","
-                + "\"total_amount\":\""+ total_amount +"\","
-                + "\"subject\":\""+ subject +"\","
-                + "\"body\":\""+ body +"\","
-                + "\"timeout_express\":\""+ timeout_express+"\","
+        Map<String ,String> map = null;
+        switch (type){
+            case "car":
+                map=carbill(type, carNum);
+                break;
+            case "card":
+                map=cardbill(type, carNum, comboid);
+                break;
+        }
+        request.setBizContent("{\"out_trade_no\":\""+ map.get("out_trade_no") +"\","
+                + "\"total_amount\":\""+ map.get("total_amount") +"\","
+                + "\"subject\":\""+ map.get("subject") +"\","
+                + "\"body\":\""+ map.get("body") +"\","
+                + "\"timeout_express\":\""+ map.get("timeout_express")+"\","
                 + "\"product_code\":\"FAST_INSTANT_TRADE_PAY\"}");
         String form = "";
         try {
@@ -99,6 +95,117 @@ public class PayController {
         httpResponse.getWriter().write(form);// 直接将完整的表单html输出到页面
         httpResponse.getWriter().flush();
         httpResponse.getWriter().close();
+    }
+    @ResponseBody
+    public Map carbill(String type,String carNum) throws ParseException {
+        String username=chackphotoService.finduser(carNum);
+        System.out.println("入场用户-----------"+username);
+        //查询入场时间
+        String entertime=chackphotoService.findentertime(carNum);
+        //出厂时间
+        SimpleDateFormat sdf =   new SimpleDateFormat( " yyyy-MM-dd HH:mm:ss " );
+        String exittime = sdf.format(new Date());//查车找人
+//商户订单号，商户网站订单系统中唯一订单号，必填
+        //生成随机Id
+        String out_trade_no = App.getoutTradeNo();
+        TbBill bill = new TbBill();
+        //付款金额，必填
+        Map<String ,String> map = App.getBill(entertime,exittime,adminService.queryPrice());
+        String total_amount = map.get("bill");
+        //订单名称，必填
+        String subject ="菜鸟停车场"+map.get("stopTime");
+        String timeout_express="5m";
+        bill.setBillNum(out_trade_no);
+        bill.setBillMoney(total_amount);
+        bill.setCarNum(carNum);
+        bill.setUserName(username);
+        bill.setBillType(type);
+        billService.insertBill(bill);
+        //商品描述，可空
+        String body = "菜鸟停车场自助缴费"+map.get("stopTime");
+        Map<String ,String> billmap = new HashMap<>();
+        billmap.put("out_trade_no",out_trade_no);
+        billmap.put("total_amount",total_amount);
+        billmap.put("subject",subject);
+        billmap.put("timeout_express",timeout_express);
+        billmap.put("body",body);
+        return billmap;
+    }
+    @ResponseBody
+    public Map cardbill(String type,String carNum,String comboid){
+        String username=chackphotoService.finduser(carNum);
+        //设置支付页参数
+        String out_trade_no = App.getoutTradeNo();
+        String subject ="菜鸟停车场月卡办理";
+        String total_amount = adminService.queryComboValue(comboid);
+        System.out.println("月卡费用"+total_amount);
+        String body = "菜鸟停车场自助缴费";
+        //生成订单
+        TbBill bill = new TbBill();
+        bill.setBillNum(out_trade_no);
+        bill.setBillMoney(total_amount);
+        bill.setComboId(Integer.valueOf(comboid));
+        bill.setCarNum(carNum);
+        bill.setUserName(username);
+        bill.setBillType(type);
+        billService.insertBill(bill);
+        System.out.println("入场用户-----------"+username);
+
+        Map<String ,String> billmap = new HashMap<>();
+        billmap.put("out_trade_no",out_trade_no);
+        billmap.put("total_amount",total_amount);
+        billmap.put("subject",subject);
+        billmap.put("timeout_express","5m");
+        billmap.put("body",body);
+        return billmap;
+    }
+    //测试在手机跳出app支付
+    @ResponseBody
+    @RequestMapping("appalipay")
+    public void appalipay(HttpServletResponse response,HttpServletRequest request) throws IOException, ParseException {
+        String out_trade_no = UUID.randomUUID().toString();
+        // 订单名称，必填
+        String subject ="菜鸟停车场";
+        String timeout_express="5m";
+        // 付款金额，必填
+        String total_amount="11";        // 商品描述，可空
+        String body = "菜鸟停车场";        // 超时时间 可空
+        // 销售产品码 必填
+        String product_code="QUICK_WAP_WAY";
+        /**********************/
+        // SDK 公共请求类，包含公共请求参数，以及封装了签名与验签，开发者无需关注签名与验签
+        //调用RSA签名方式
+        AlipayClient client = new DefaultAlipayClient(GATEWAY_URL, APP_ID, AlipayConfig.APP_PRIVATE_KEY, FORMAT,CHARSET, ALIPAY_PUBLIC_KEY,SIGN_TYPE);
+        AlipayTradeWapPayRequest alipay_request=new AlipayTradeWapPayRequest();
+
+        // 封装请求支付信息
+        AlipayTradeWapPayModel model=new AlipayTradeWapPayModel();
+        model.setOutTradeNo(out_trade_no);
+        model.setSubject(subject);
+        model.setTotalAmount(total_amount);
+        model.setBody(body);
+        model.setTimeoutExpress(timeout_express);
+        model.setProductCode(product_code);
+        alipay_request.setBizModel(model);
+        // 设置异步通知地址
+        alipay_request.setNotifyUrl(NOTIFY_URL);
+        // 设置同步地址
+        alipay_request.setReturnUrl(RETURN_URL);
+
+        // form表单生产
+        String form = "";
+        try {
+            // 调用SDK生成表单
+            form = client.pageExecute(alipay_request).getBody();
+            System.out.println(form);
+            response.setContentType("text/html;charset=" + AlipayConfig.CHARSET);
+            response.getWriter().write(form);//直接将完整的表单html输出到页面
+            response.getWriter().flush();
+            response.getWriter().close();
+        } catch (AlipayApiException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
     }
 
     @ResponseBody
@@ -159,15 +266,25 @@ public class PayController {
                     TbBill bill = new TbBill();
                     bill.setBillNum(out_trade_no);
 
-                    int billState = billService.isSucceed(bill);
-                    if (billState==0){
-                        //付款完成
-                        billService.updateBill(bill);
-                        bill=billService.getCarNum(bill);
-                        //车位清空
-                        parkService.carExit(bill);
-                        //车出库
-                        userService.carexit(bill.getCarNum());
+                    TbBill billState = billService.isSucceed(bill);
+                    if (billState.getBillState()==0){
+                        switch (billState.getBillType()){
+                            case "car":
+                                //付款完成
+                                billService.updateBill(bill);
+                                bill=billService.getCarNum(bill);
+                                //车位清空
+                                parkService.carExit(bill);
+                                //车出库
+                                userService.carexit(bill.getCarNum());
+                                break;
+                            case "card":
+                                billService.updateBill(bill);
+                                bill=billService.getCarNum(bill);
+
+                                break;
+                        }
+
                     }
 
                 }else if("combo".equals(out_trade_no.split(":")[0])){
@@ -237,15 +354,21 @@ public class PayController {
                 TbBill bill = new TbBill();
                 bill.setBillNum(out_trade_no);
 
-                int billState = billService.isSucceed(bill);
-                if (billState==0){
-                    //付款完成
-                    billService.updateBill(bill);
-                    bill=billService.getCarNum(bill);
-                    //车位清空
-                    parkService.carExit(bill);
-                    //车出库
-                    userService.carexit(bill.getCarNum());
+
+                TbBill billState = billService.isSucceed(bill);
+                if (billState.getBillState()==0){
+                    switch (billState.getBillType()){
+                        case "car":
+                            //付款完成
+                            billService.updateBill(bill);
+                            bill=billService.getCarNum(bill);
+                            //车位清空
+                            parkService.carExit(bill);
+                            //车出库
+                            userService.carexit(bill.getCarNum());
+                            break;
+                    }
+
                 }
                 if(WebSocket.electricSocketMap.get("ip")!=null){
                     for (Session session:WebSocket.electricSocketMap.get("ip"))

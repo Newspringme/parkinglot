@@ -1,7 +1,9 @@
 package com.cnzk.service;
 
+import com.cnzk.mapper.FeedbackMapper;
 import com.cnzk.mapper.SlideshowMapper;
 import com.cnzk.mapper.UserMapper;
+import com.cnzk.pojo.TbFeedback;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -14,6 +16,8 @@ import java.util.UUID;
 public class WeiXinServiceImpl implements WeiXinService{
     @Resource
     private SlideshowMapper slideshowMapper;
+    @Resource
+    private FeedbackMapper feedbackMapper;
 
 
     @Override
@@ -23,5 +27,10 @@ public class WeiXinServiceImpl implements WeiXinService{
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
         String time = simpleDateFormat.format(date);
         return slideshowMapper.queryImgUrl(time);
+    }
+
+    @Override
+    public Integer feedback(TbFeedback feedback) {
+        return feedbackMapper.feedback(feedback);
     }
 }

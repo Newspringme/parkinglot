@@ -8,7 +8,7 @@
        select u.user_name from tb_user u left join tb_user_car uc on uc.user_id=u.user_id left join tb_car c on c.car_id=uc.car_id where c.car_num= #{carnum}
     </select>
     <select id="carfindentertime" resultType="java.lang.String">
-       select enter_time from tb_enter where car_num = #{carnum}order by  enter_time DESC limit 0,1
+       select enter_time from tb_enter where car_num = #{carnum} order by  enter_time DESC limit 0,1
     </select>
     <insert id="caraddenter">
        insert into tb_enter (enter_time,car_num) values (#{starttime},#{carnum})

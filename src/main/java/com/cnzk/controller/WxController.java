@@ -19,4 +19,13 @@ public class WxController
 		return bool;
 
 	}
+	@RequestMapping("feedback")
+	@ResponseBody
+	public Object feedback(String carNum,String comboId){
+		boolean bool=true;
+		System.out.println("carNum ========= " + carNum);
+		System.out.println("comboId = " + comboId);
+		return bool;
+
+	}
 }

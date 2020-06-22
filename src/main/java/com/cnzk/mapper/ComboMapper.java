@@ -5,6 +5,7 @@ import com.cnzk.pojo.Admin;
 import com.cnzk.pojo.Charge;
 import com.cnzk.pojo.TbCombo;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.HashMap;
 import java.util.List;
@@ -31,4 +32,5 @@ public interface ComboMapper {
 
 //    查每种套餐的购买量
     List<PieStatisticsData> queryComboMoney();
+    String queryComboValue(@Param("comboId")String comboId);
 }

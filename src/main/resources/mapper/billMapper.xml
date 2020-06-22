@@ -110,7 +110,7 @@
 	</select>
 
 	<insert id="insertBill" parameterType="com.cnzk.pojo.TbBill">
-		 insert into tb_bill (bill_num,bill_money,car_num,user_name) values (#{billNum},#{billMoney},#{carNum},#{userName});
+		 insert into tb_bill (bill_num,bill_money,car_num,user_name,bill_type,combo_id ) values (#{billNum},#{billMoney},#{carNum},#{userName},#{billType},#{comboId});
 	</insert>
 
 	<update id="updateBill" parameterType="com.cnzk.pojo.TbBill">
@@ -126,8 +126,8 @@
 	</insert>
 
 	<!--//查订单是否完成-->
-	<select id="isSucceed" resultType="java.lang.Integer" parameterType="TbBill">
-		select bill_state from tb_bill where bill_num = #{billNum};
+	<select id="isSucceed" resultType="com.cnzk.pojo.TbBill" parameterType="TbBill">
+		select * from tb_bill where bill_num = #{billNum};
 	</select>
 
 
