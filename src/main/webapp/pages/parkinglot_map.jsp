@@ -117,9 +117,100 @@
         word-break: keep-all;
         text-overflow: ellipsis;
     }
-
     .test-tip span {
         color: #0f0;
+    }
+    .search {
+        position: absolute;
+        padding-left: 10px;
+        top: 60px;
+        left: 150px;
+        font-size: 13px;
+        height: auto;
+        border: 1px solid #e6e6e6;
+        background: #fff;
+        /* box-shadow: 3px 3px 5px #bdbdbd; */
+        box-sizing: border-box;
+        -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        z-index: 999;
+        border-radius: 4px;
+    }
+    .searchText {
+        width: 300px;
+        height: 20px;
+        outline: none;
+        border: none;
+        margin: 0 0 0 14px;
+        font-size: 13px;
+        -webkit-appearance: none;
+    #router {
+        position: absolute;
+        padding: 20px;
+        width: 457px;
+        top: 120px;
+        left: 150px;
+        height: 130px;
+        padding: 22px 18px;
+        /*margin-left: px;*/
+        border: 1px solid #e6e6e6;
+        background: #fff;
+        box-shadow: 3px 3px 5px #bdbdbd;
+        box-sizing: border-box;
+        -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        z-index: 999;
+        display: none;
+    }
+
+    .router .routerInput {
+        height: 40px;
+        padding: 6px 0;
+        box-sizing: border-box;
+    }
+
+    .router .routerInput .routerText {
+        width: 250px;
+        border: none;
+        outline: 0;
+        height: 20px;
+        font-size: 16px;
+        border-bottom: 1px solid #dedede;
+        margin-left: 6px;
+    }
+
+    #shopSearch>ul {
+        display: block;
+        list-style-type: none;
+        /* height: 0; */
+        padding: 10px;
+    }
+
+    .list ul>li {
+        list-style: none;
+        padding: 10px 12px;
+        font-size: 13px;
+        color: #5d5d5d;
+        cursor: pointer;
+        box-sizing: border-box;
+        -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+    }
+
+    .list ul>li>span {
+        padding-right: 18px;
+    }
+
+    .list ul>li:hover {
+        background: #bbb;
+        color:#fff;
+    }
+
+    #navTo {
+        position: absolute;
+        top: 46px;
+        left: 338px;
+
     }
 </style>
 <body ms-controller = "ctrl" class="ms-controller">
@@ -134,10 +225,42 @@
         </h1>
     </div>
 </nav>
-
+<!-- 搜索 -->
+<div class="search">
+    <span id="btnSearch" class="glyphicon glyphicon-search" aria-hidden="true"></span>
+    <input id="searchText" type="text" class="searchText" placeholder="搜索关键字"> |
+    <button type="button" id="startnav" class="btn btn-default" style="border: none">
+        <span id="btnNav" class="glyphicon glyphicon-map-marker"></span>
+        导航
+    </button>
+</div>
+<!-- 查询显示列表 -->
+<div id="shopSearch" class="layer list">
+    <ul>
+    </ul>
+</div>
+<!--  导航选点 -->
+<div id="router" class="layer router">
+    <div class="routerInput">
+        <span class="glyphicon glyphicon-flag"></span>
+        <input id="startText" class="routerText" type="" name="" placeholder="点击地图可选择起点" readonly>
+    </div>
+    <div class="routerInput">
+        <span class="glyphicon glyphicon-flag"></span>
+        <input id="endText" class="routerText" type="" name="" placeholder="点击地图可选择终点" readonly>
+    </div>
+    <div id="navigation" class="navigation">
+        <button type="button" id="navTo" class="btn btn-default">
+            <span class="glyphicon glyphicon-share-alt"></span>
+            导航
+        </button>
+    </div>
+</div>
+<%--3D/2D切换--%>
 <div class="viewmode-group">
     <button id="btn3D" class="btn btn-default"></button>
 </div>
+<%--车位情况--%>
 <div class="parking fix" id="parking"><span id="park_id"></span>车位情况：<span id="park_state"></span></div>
 <div class="codition fix">
     <ul>
@@ -145,6 +268,7 @@
         <li><span class="codition-second"></span>未停车</li>
     </ul>
 </div>
+<%--停车场车位余量--%>
 <div class="i-test-tip fix" id="i-test-tip">
     <div class="test-tip">
         停车场车位总数：<span id="total"></span>个，当前剩余车位数 <span id="free"></span>。
@@ -196,7 +320,6 @@
 
     var parkData;
     var color = ["#ff0000", "#00ff00"];
-    var statusname=["已停车","未停车"];
     //地图加载完成回调
     map.on("loadComplete", function () {
         floorControl = new esmap.ESScrollFloorsControl(map, ctlOpt);
@@ -206,7 +329,7 @@
         // //先执行显示一次
         setTimeout(function () {getParkData();},10);
         //开启定时器从后台获取数据
-        setInterval(function () {getParkData();}, 10000);});
+        setInterval(function () {getParkData();}, 15000);});
 
     function getParkData() {
         $.getJSON("${pageContext.request.contextPath}/parkController/getParkData",function (data) {
@@ -261,6 +384,7 @@
         for (var i = 0; i < parkData.length; ++i) {
             if (event.ID == parkData[i].eventId) {
                 $("#park_state").html(parkData[i].parkState);
+
             }
         }
     });

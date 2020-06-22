@@ -161,8 +161,7 @@
         <div class="layui-form-item">
             <label class="layui-form-label" style="margin-left: 100px;">账号名称：</label>
             <div class="layui-input-block" style="float: left; margin-left: 20px;width: 200px;">
-                <input  type="text" name="adminName"
-                        autocomplete="off" class="layui-input" disabled="disabled">
+                <input type="text" name="adminName" autocomplete="off" class="layui-input" disabled="disabled">
             </div>
         </div>
         <div class="layui-form-item">
@@ -475,18 +474,25 @@
             }
             else if (layEvent==='showHead') {
                     var pathUrl = "${pageContext.request.contextPath}";
-                    //页面层-图片
-                    layer.open({
-                        type: 1,
-                        title: false,
-                        closeBtn: 0,
-                        area: ['500px','500px'],
-                        skin: 'layui-layer-nobg', //没有背景色
-                        shadeClose: true,
-                        content: '<img src="'+ pathUrl + data.headImg +'">',
-                    });
+                    var imgUrl = data.headImg;
+                    if (imgUrl!=null){
+                        //页面层-图片
+                        layer.open({
+                            type: 1,
+                            title: false,
+                            closeBtn: 0,
+                            area: ['500px','500px'],
+                            skin: 'layui-layer-nobg', //没有背景色
+                            shadeClose: true,
+                            content: '<img src="'+ pathUrl + imgUrl +'" style="height: 500px;width: 500px">',
+                        });
+                    }else{
+                        layer.alert("请先上传一张头像");
+                    }
+
             }
             else if (layEvent==='showDetailForm'){
+                console.log(obj);
                 openDetail(obj);
             }
         });

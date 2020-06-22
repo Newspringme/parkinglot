@@ -9,4 +9,7 @@ public interface BillService {
     int updateBill (TbBill bill);
 
     TbBill getCarNum(TbBill bill);
+
+    //	查订单是否完成
+    Integer isSucceed(TbBill bill);
 }

@@ -12,6 +12,7 @@ import com.cnzk.pojo.App;
 import com.cnzk.pojo.LayuiData;
 import com.cnzk.pojo.TbBill;
 import com.cnzk.service.*;
+import com.cnzk.websocket.WebSocket;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.websocket.Session;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.text.ParseException;
@@ -39,9 +41,9 @@ public class PayController {
     //支付宝异步通知路径,付款完毕后会异步调用本项目的方法,必须为公网地址
     private final String NOTIFY_URL = "http://39.102.35.36:8080/parkinglot/exitcar";
 //    //支付宝同步通知路径,也就是当付款完毕后跳转本项目的页面,可以不是公网地址
-    private final String RETURN_URL = "http://localhost:8080/parkinglot/url/close";
-
-    @Autowired
+    private final String RETURN_URL = "http://39.102.35.36:8080/parkinglot/returnurl";
+//    private final String RETURN_URL = "http://localhost:8080/parkinglot/returnurl";
+//    @Autowired
     private AdminService adminService;
     @Resource
     private BillService billService;
@@ -52,7 +54,7 @@ public class PayController {
     private UserService userService;
 
     @RequestMapping("alipay")
-    public void alipay(HttpServletResponse httpResponse,String enter,String exit,String carNum,String username) throws IOException, ParseException {
+    public void alipay(HttpServletResponse httpResponse,String type,String enter,String exit,String carNum,String username) throws IOException, ParseException {
         System.out.println(enter);
         System.out.println(exit);
         Random r=new Random();
@@ -67,7 +69,7 @@ public class PayController {
 
         //商户订单号，商户网站订单系统中唯一订单号，必填
         //生成随机Id
-        String out_trade_no = UUID.randomUUID().toString();
+        String out_trade_no = type + UUID.randomUUID().toString();
         //付款金额，必填
         Map<String ,String> map = App.getBill(enter,exit,adminService.queryPrice());
         String total_amount = map.get("bill");
@@ -153,19 +155,31 @@ public class PayController {
                 //如果没有做过处理，根据订单号（out_trade_no）在商户网站的订单系统中查到该笔订单的详细，并执行商户的业务程序
                 //请务必判断请求时的total_fee、seller_id与通知时获取的total_fee、seller_id为一致的
                 //如果有做过处理，不执行商户的业务程序
-                TbBill bill = new TbBill();
-                bill.setBillNum(out_trade_no);
-                //付款完成
-                billService.updateBill(bill);
-                bill=billService.getCarNum(bill);
-                //车位清空
-                parkService.carExit(bill);
-                //车出库
-                userService.carexit(bill.getCarNum());
-                //注意：
-                //如果签约的是可退款协议，那么付款完成后，支付宝系统发送该交易状态通知。
-            }
+                if("car".equals(out_trade_no.split(":")[0])){
+                    TbBill bill = new TbBill();
+                    bill.setBillNum(out_trade_no);
 
+                    int billState = billService.isSucceed(bill);
+                    if (billState==0){
+                        //付款完成
+                        billService.updateBill(bill);
+                        bill=billService.getCarNum(bill);
+                        //车位清空
+                        parkService.carExit(bill);
+                        //车出库
+                        userService.carexit(bill.getCarNum());
+                    }
+
+                }else if("combo".equals(out_trade_no.split(":")[0])){
+
+
+                }
+
+
+
+            }
+            //注意：
+            //如果签约的是可退款协议，那么付款完成后，支付宝系统发送该交易状态通知。
             //——请根据您的业务逻辑来编写程序（以上代码仅作参考）——
 //            out.clear();
 //            out.println("success");	//请不要修改或删除
@@ -204,6 +218,8 @@ public class PayController {
 
         String out_trade_no = new String(request.getParameter("out_trade_no").getBytes("ISO-8859-1"), "UTF-8");
 
+
+
         //支付宝交易号
 
         String trade_no = new String(request.getParameter("trade_no").getBytes("ISO-8859-1"), "UTF-8");
@@ -217,19 +233,34 @@ public class PayController {
             //////////////////////////////////////////////////////////////////////////////////////////
             //请在这里加上商户的业务逻辑程序代码
             //该页面可做页面美工编辑
-            TbBill bill = new TbBill();
-            bill.setBillNum(out_trade_no);
-            //付款完成
-            billService.updateBill(bill);
-            bill=billService.getCarNum(bill);
-            //车位清空
-            parkService.carExit(bill);
-            //车出库
-            userService.carexit(bill.getCarNum());
+            if("car".equals(out_trade_no.split(":")[0])){
+                TbBill bill = new TbBill();
+                bill.setBillNum(out_trade_no);
+
+                int billState = billService.isSucceed(bill);
+                if (billState==0){
+                    //付款完成
+                    billService.updateBill(bill);
+                    bill=billService.getCarNum(bill);
+                    //车位清空
+                    parkService.carExit(bill);
+                    //车出库
+                    userService.carexit(bill.getCarNum());
+                }
+                if(WebSocket.electricSocketMap.get("ip")!=null){
+                    for (Session session:WebSocket.electricSocketMap.get("ip"))
+                    {
+                        session.getBasicRemote().sendText("carexit,"+bill.getCarNum());
+                    }
+                }
+            }else if("combo".equals(out_trade_no.split(":")[0])){
+
+
+            }
 //            out.clear();
 //            out.println("验证成功<br />");
             //——请根据您的业务逻辑来编写程序（以上代码仅作参考）——
-
+            Response.sendRedirect("http://localhost:8080/parkinglot/url/close");
             //////////////////////////////////////////////////////////////////////////////////////////
         } else {
             //该页面可做页面美工编辑

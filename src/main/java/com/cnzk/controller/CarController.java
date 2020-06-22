@@ -2,16 +2,17 @@ package com.cnzk.controller;
 
 import com.alibaba.fastjson.JSON;
 import com.cnzk.mapper.CarMapper;
-import com.cnzk.pojo.LayuiData;
-import com.cnzk.pojo.TbCar;
-import com.cnzk.pojo.TbUser;
+import com.cnzk.pojo.*;
 import com.cnzk.service.CarService;
 import com.cnzk.service.UserService;
+import com.cnzk.service.VipService;
+import com.cnzk.websocket.WebSocket;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
+import javax.websocket.Session;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -32,6 +33,8 @@ public class CarController
 	private CarMapper carMapper;
 	@Resource
 	private UserService userService;
+	@Resource
+	private VipService vipService;
 
 	//	获取车辆白名单列表
 	@RequestMapping("queryWhiteList")
@@ -219,5 +222,32 @@ public class CarController
 		return bool;
 	}
 
+	//车辆出场记录
+	@ResponseBody
+    @RequestMapping("queryExit")
+    public Object queryExit(int start,int end) throws Exception{
+	    List<TbExit> list = carService.queryExit(start, end);
+        if(WebSocket.electricSocketMap.get("ip")!=null){
+            for (Session session:WebSocket.electricSocketMap.get("ip"))
+            {
+                session.getBasicRemote().sendText("new,new");
+            }
 
+        }
+	    return JSON.toJSONString(list);
+    }
+
+    //查询车辆信息
+	@ResponseBody
+	@RequestMapping("queryCarInfo")
+	public Object queryCarInfo(String carNum) throws Exception{
+		TbCar tbCar = carService.queryCarInfo(carNum);
+		if (tbCar!=null){
+			TbVip tbVip = vipService.queryVipInfo(tbCar.getVipId());
+			tbCar.setTbVip(tbVip);
+			return JSON.toJSONString(tbCar);
+		}else{
+			return "false";
+		}
+	}
 }

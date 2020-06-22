@@ -38,4 +38,7 @@ public interface ChargeService {
     Integer updateCharge(Charge charge);
 //    实时出场现金支付
     Integer cashPay(HashMap<String,Object> hashMap);
+
+    //    实时出场免费支付
+    Integer freePay(HashMap<String,Object> hashMap);
 }

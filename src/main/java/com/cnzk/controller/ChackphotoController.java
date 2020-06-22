@@ -110,15 +110,7 @@ public class ChackphotoController
 		String change64=chackphotoService.change64(file2);
 		String img_str = change64;
 		System.out.println("img_str"+img_str);
-
 		file2.transferTo(new File(url));
-
-//		String change64= ChangeBase64.multipartFileToBASE64(file2);
-
-//		HashMap<String,Object> condition = chackphotoService.file2(file2);
-
-//		String img_str = condition.get("change64").toString();
-//		String carNum = condition.get("carNum").toString();
 
 		chackphotoService.addimgurl(carNum,url);
 		SimpleDateFormat sdf =   new SimpleDateFormat( " yyyy-MM-dd HH:mm:ss " );
@@ -126,16 +118,6 @@ public class ChackphotoController
 
 		String username=chackphotoService.finduser(carNum);
 		System.out.println("入场用户-----------"+username);
-		//出场插入数据
-		chackphotoService.caraddexit(carNum,exittime);
-		//车辆情况查询 是临时还是有身份
-		String state;
-		if ("临时用户".equals(username)){
-			state = "临时车";
-		} else {
-			state=chackphotoService.findcarvip(carNum);
-		}
-		System.out.println("车辆情况---------"+state);
 		//查询入场时间
 		String entertime=chackphotoService.findentertime(carNum);
 		System.out.println("查询入场时间"+entertime);
@@ -150,16 +132,23 @@ public class ChackphotoController
 		{
 			e.printStackTrace();
 		}
-
+		//车辆情况查询 是临时还是有身份
+		String state;
+//		所需金额
+		Double money;
+		if ("临时用户".equals(username)){
+			state = "临时车";
+			money= Double.valueOf(map.get("bill")+"");
+		} else {
+			state=chackphotoService.findcarvip(carNum);
+			money = 0d;
+		}
+		System.out.println("车辆情况---------"+state);
 		//车位查询
 		String ps=chackphotoService.carfindps(carNum);
-		Double money= Double.valueOf(map.get("bill")+"");
 		String time=map.get("time").toString();;
-//		String money=null;
-//		String time=null;
 		String date= carNum+","+username+","+state+","+ps+","+entertime+","+exittime+","+time+","+money+","+img_str;
 		System.out.println("车牌："+carNum+"用户名："+username+"车状态："+state+"车位："+ps+"进场时间："+entertime+"出场时间："+exittime+"总时长："+time+"收费："+money+"图片："+img_str);
-		//		Object obj = new Gson().toJson()
 		if(WebSocket.electricSocketMap.get("ip")!=null){
 			for (Session session:WebSocket.electricSocketMap.get("ip"))
 			{
@@ -184,15 +173,6 @@ public class ChackphotoController
 
 		String username=chackphotoService.finduser(carnum);
 		System.out.println("入场用户-----------"+username);
-		//出场插入数据
-		//车辆情况查询 是临时还是有身份
-		String state;
-		if ("临时用户".equals(username)){
-			state = "临时车";
-		} else {
-			state=chackphotoService.findcarvip(carnum);
-		}
-		System.out.println("车辆情况---------"+state);
 		//查询入场时间
 		String entertime=chackphotoService.findentertime(carnum);
 		System.out.println("查询入场时间"+entertime);
@@ -210,10 +190,20 @@ public class ChackphotoController
 		{
 			e.printStackTrace();
 		}
-
+		//车辆情况查询 是临时还是有身份
+		String state;
+//		所需金额
+		Double money;
+		if ("临时用户".equals(username)){
+			state = "临时车";
+			money= Double.valueOf(map.get("bill")+"");
+		} else {
+			state=chackphotoService.findcarvip(carnum);
+			money = 0d;
+		}
+		System.out.println("车辆情况---------"+state);
 		//车位查询
 		String ps=chackphotoService.carfindps(carnum);
-		Double money= Double.valueOf(map.get("bill")+"");
 		String time=map.get("time").toString();;
 		String date= carnum+","+username+","+state+","+ps+","+entertime+","+exittime+","+time+","+money;
 		System.out.println("车牌："+carnum+"用户名："+username+"车状态："+state+"车位："+ps+"进场时间："+entertime+"出场时间："+exittime+"总时长："+time+"收费："+money);
@@ -222,7 +212,6 @@ public class ChackphotoController
 			{
 				session.getBasicRemote().sendText("success,"+date);
 			}
-
 		}
 		return date;
 

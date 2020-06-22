@@ -89,7 +89,7 @@
                     maxmin:true,
                     shadeClose: true,
                     area: ['50%', '50%'],
-                    content: '/parkinglot/alipay',
+                    content: '/parkinglot/pages/table/role-add.jsp',
                 });
                 $(window).on("resize", function () {
                     layer.full(index);

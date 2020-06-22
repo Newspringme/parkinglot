@@ -61,10 +61,10 @@ public class AdminController
 		System.out.println("===============================管理员登陆=============================");
 		String vcode = session.getAttribute("vcode").toString();//获取session上的验证码
 		System.out.println("验证码：" + vcode);
-//		if(vcode.equalsIgnoreCase(param.get("adminvcode").toString())){
+		if(vcode.equalsIgnoreCase(param.get("adminvcode").toString())){
 		return adminService.adminlogin(param, session);//获取service层返回的信息
-//		}
-//		return "验证码错误";
+		}
+		return "验证码错误";
 	}
 	//验证码
 
@@ -358,20 +358,18 @@ public class AdminController
 
 	//  修改权限
 	@RequestMapping("/updateMenuTree")
-	@Transactional
 	@ResponseBody
 	@Log(operationThing = "修改权限", operationType = "修改")
-	public void updateMenuTree(HttpServletRequest request, HttpServletResponse response)
-	{
+	public void updateMenuTree(HttpServletRequest request, HttpServletResponse response) {
 		Integer rolesid = Integer.valueOf(request.getParameter("roleId"));
 		String treeStr = request.getParameter("checkData");
+		System.out.println("updateMenuTree_rolesid:"+rolesid);
+		System.out.println("updateMenuTree_treeStr:"+treeStr);
 		Integer row = roleServeice.updateMenuTree(treeStr, rolesid);
-		if (row != 0)
-		{
+		if (row != 0) {
 			ResponseUtils.outHtml(response, "success");
 		}
-		else
-		{
+		else {
 			ResponseUtils.outHtml(response, "error");
 		}
 	}
@@ -612,6 +610,106 @@ public class AdminController
 		request.getSession().invalidate();
 //		Boolean out = true;
 		return "success";
+	}
+
+	@RequestMapping("/querySlideShow")
+	@ResponseBody
+	public Object querySlideShow(String page,String limit){
+		System.out.println("--------querySlideShow-------");
+		//获取页码
+		int startPage = Integer.parseInt(page);
+		//每页数量
+		int pageSize = Integer.valueOf(limit);;
+		//计算出起始查询位置
+		int start = (startPage - 1) * pageSize;
+		//存带有值得条件
+		LayuiData layuiData=adminService.querySlideShow(start,pageSize);
+		System.out.println("layuiData = " + JSON.toJSONString(layuiData));
+		return layuiData;
+	}
+
+	@RequestMapping(value = "/slideshowupload")
+	@ResponseBody
+	public Object upload(HttpServletRequest request, HttpServletResponse response, MultipartFile file, String fileName) {
+
+		System.out.println("fileName=" + fileName);
+		try {
+			//获取文件名
+			String originalName = file.getOriginalFilename();
+			//扩展名
+			String prefix = originalName.substring(originalName.lastIndexOf(".") + 1);
+			Date date = new Date();
+			//使用UUID+后缀名保存文件名，防止中文乱码问题
+			String uuid = UUID.randomUUID() + "";
+			SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+			String dateStr = simpleDateFormat.format(date);
+			String savePath = request.getSession().getServletContext().getRealPath("/upload/");
+			//要保存的问题件路径和名称
+			String projectPath = savePath + dateStr + File.separator + uuid + "." + prefix;
+			System.out.println("savePath==" + savePath);
+			System.out.println("dateStr==" + dateStr);
+			System.out.println("projectPath==" + projectPath);
+			File files = new File(projectPath);
+			//打印查看上传路径
+			if (!files.getParentFile().exists()) {//判断目录是否存在
+				System.out.println("files11111=" + files.getPath());
+				files.getParentFile().mkdirs();
+			}
+			file.transferTo(files); // 将接收的文件保存到指定文件中
+			System.out.println(projectPath);
+			LayuiData layuiData = new LayuiData();
+			layuiData.setCode(0);
+			layuiData.setMsg("上传成功");
+//            projectPath="http://localhost:8080/parkinglot/upload/"+ dateStr + "/"+ uuid + "." + prefix;
+			projectPath="http://39.102.35.36:8080/parkinglot/upload/"+ dateStr + "/"+ uuid + "." + prefix;
+//			TabAdmin admin = (TabAdmin) request.getSession().getAttribute("admin");
+			layuiData.setFiles(projectPath);
+
+			return JSON.toJSONString(layuiData);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	@ResponseBody
+	@RequestMapping("/addSlideShow")
+	@Log(operationThing = "添加轮播图",operationType = "添加")
+	public Object addSlideShow(TbSlideshow tbSlideshow){
+		if (adminService.addSlideShow(tbSlideshow)!=0){
+			System.out.println("添加成功");
+			return "true";
+		}else {
+			System.out.println("添加失败");
+			return "false";
+		}
+
+	}
+	@ResponseBody
+	@RequestMapping("/deleteSlideShow")
+	@Log(operationThing = "删除轮播图",operationType = "删除")
+	public Object deleteSlideShow(TbSlideshow tbSlideshow){
+		if (adminService.deleteSlideShow(tbSlideshow)!=0){
+			System.out.println("删除成功");
+			return "true";
+		}else {
+			System.out.println("删除失败");
+			return "false";
+		}
+
+	}
+
+	@ResponseBody
+	@RequestMapping("/editSlideShow")
+	@Log(operationThing = "删除轮播图",operationType = "删除")
+	public Object editSlideShow(TbSlideshow tbSlideshow){
+		if (adminService.editSlideShow(tbSlideshow)!=0){
+			System.out.println("删除成功");
+			return "true";
+		}else {
+			System.out.println("删除失败");
+			return "false";
+		}
+
 	}
 
 }

@@ -45,11 +45,12 @@
 
     <!--	//重新添加所选角色的角色菜单-->
     <insert id="addRolesMenu" parameterType="java.util.List">
-        insert into tb_role_menu(role_id,menu_id) values
+        insert into tb_role_menu(role_id,menu_id,isthree_menu) values
         <foreach collection="list" item="menu" index="index" separator=",">
             (
             #{menu.roleId}
             ,#{menu.menuId}
+            ,#{menu.isthreeMenu}
             )
         </foreach>
     </insert>

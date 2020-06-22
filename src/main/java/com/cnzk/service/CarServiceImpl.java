@@ -3,6 +3,7 @@ package com.cnzk.service;
 import com.cnzk.mapper.CarMapper;
 import com.cnzk.mapper.UserMapper;
 import com.cnzk.pojo.TbCar;
+import com.cnzk.pojo.TbExit;
 import com.cnzk.pojo.TbUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -75,4 +76,13 @@ public class CarServiceImpl implements CarService
 		return carMapper.handleRenew(tbCar);
 	}
 
+	//  查询历史出场记录
+	@Override
+	public List<TbExit> queryExit(int start, int end) {return carMapper.queryExit(start,end);}
+
+	//
+	@Override
+	public TbCar queryCarInfo(String carNum) {
+		return carMapper.queryCarInfo(carNum);
+	}
 }

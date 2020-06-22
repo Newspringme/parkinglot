@@ -32,6 +32,8 @@ public class AdminServiceImpl implements AdminService
 	private BillMapper billMapper;
 	@Resource
 	private ParamMapper paramMapper;
+	@Resource
+	private SlideshowMapper slideshowMapper;
     //登陆
 	//登陆
 
@@ -325,6 +327,32 @@ public class AdminServiceImpl implements AdminService
 	@Override
 	public Integer editParam(TbParam tbParam) {
 		return paramMapper.editParam(tbParam);
+	}
+
+	@Override
+	public LayuiData querySlideShow(int start, int pageSize) {
+		LayuiData layuiData = new LayuiData();
+		layuiData.setCode(0);
+		List<TbSlideshow> list = slideshowMapper.querySlideShow(start,pageSize);
+		int count = slideshowMapper.querySlideShowCount();
+		layuiData.setCount(count);
+		layuiData.setData(list);
+		return layuiData;
+	}
+
+	@Override
+	public Integer addSlideShow(TbSlideshow tbSlideshow) {
+		return slideshowMapper.addSlideShow(tbSlideshow);
+	}
+
+	@Override
+	public Integer deleteSlideShow(TbSlideshow tbSlideshow) {
+		return slideshowMapper.deleteSlideShow(tbSlideshow);
+	}
+
+	@Override
+	public Integer editSlideShow(TbSlideshow tbSlideshow) {
+		return slideshowMapper.editSlideShow(tbSlideshow);
 	}
 
 
