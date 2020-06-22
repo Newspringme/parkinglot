@@ -12,6 +12,15 @@ public class LayuiData
 	private String msg = "";
 	private int count;
 	private List<?> data;
+	private String files;
+
+	public String getFiles() {
+		return files;
+	}
+
+	public void setFiles(String files) {
+		this.files = files;
+	}
 
 	public int getCode() {
 		return code;

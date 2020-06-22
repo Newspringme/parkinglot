@@ -40,7 +40,7 @@
 
     <!--	//删除所选角色的角色菜单关联表里的所有菜单-->
     <delete id="deleRolesMenu" parameterType="java.lang.Integer">
-		delete from tb_role_menu where role_id = #{roleId} and isthree_menu = 0
+		delete from tb_role_menu where role_id = #{roleId}
 	</delete>
 
     <!--	//重新添加所选角色的角色菜单-->
