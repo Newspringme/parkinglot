@@ -47,4 +47,7 @@ public interface CarMapper
 
     //查询历史出场记录
     List<TbExit> queryExit(@Param("start") int start,@Param("end") int end);
+
+    //根据车牌查询车辆信息
+    TbCar queryCarInfo(@Param("carNum") String carNum);
 }

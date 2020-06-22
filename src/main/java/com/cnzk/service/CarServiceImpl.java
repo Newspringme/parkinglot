@@ -76,6 +76,13 @@ public class CarServiceImpl implements CarService
 		return carMapper.handleRenew(tbCar);
 	}
 
+	//  查询历史出场记录
 	@Override
 	public List<TbExit> queryExit(int start, int end) {return carMapper.queryExit(start,end);}
+
+	//
+	@Override
+	public TbCar queryCarInfo(String carNum) {
+		return carMapper.queryCarInfo(carNum);
+	}
 }

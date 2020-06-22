@@ -55,4 +55,9 @@
     <select id="queryExit" resultType="com.cnzk.pojo.TbExit">
         select * from tb_exit limit #{start} , #{end}
     </select>
+
+    <!--根据车牌查询车辆信息-->
+    <select id="queryCarInfo" parameterType="java.lang.String" resultType="com.cnzk.pojo.TbCar">
+        select * from tb_car where car_num = #{carNum}
+    </select>
 </mapper>
