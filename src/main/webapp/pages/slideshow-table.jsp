@@ -119,6 +119,8 @@
 
         table.on('tool(currentTableFilter)', function (obj) {
             var data = obj.data;
+            var starttime = format(data.starttime,'yyyy-MM-dd');
+            var endtime = format(data.endtime,'yyyy-MM-dd');
             if (obj.event === 'edit') {
 
                 var index = layer.open({
@@ -128,7 +130,7 @@
                     maxmin:true,
                     shadeClose: true,
                     area: ['100%', '100%'],
-                    content: '/parkinglot/pages/table/slideshow-edit.jsp?sid='+data.sid+'&title='+data.title+'&url='+data.url+'&weight='+data.weight+'&starttime='+data.starttime+'&endtime='+data.endtime,
+                    content: '/parkinglot/pages/table/slideshow-edit.jsp?sid='+data.sid+'&title='+data.title+'&url='+data.url+'&weight='+data.weight+'&starttime='+starttime+'&endtime='+endtime,
                 });
                 $(window).on("resize", function () {
                     layer.full(index);
@@ -176,6 +178,37 @@
         });
     }
 
+
+
+    //封装时间格式
+    function format(time, format) {
+        var t = new Date(time);
+        var tf = function (i) {
+            return (i < 10 ? '0' : '') + i
+        };
+        return format.replace(/yyyy|MM|dd|HH|mm|ss/g, function (a) {
+            switch (a) {
+                case 'yyyy':
+                    return tf(t.getFullYear());
+                    break;
+                case 'MM':
+                    return tf(t.getMonth() + 1);
+                    break;
+                case 'mm':
+                    return tf(t.getMinutes());
+                    break;
+                case 'dd':
+                    return tf(t.getDate());
+                    break;
+                case 'HH':
+                    return tf(t.getHours());
+                    break;
+                case 'ss':
+                    return tf(t.getSeconds());
+                    break;
+            }
+        })
+    }
 </script>
 
 </body>
