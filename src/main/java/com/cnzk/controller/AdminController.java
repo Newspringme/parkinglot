@@ -142,6 +142,7 @@ public class AdminController
 		return new Color(r, g, b);
 	}
 
+	//获取管理员列表
 	@ResponseBody
 	@RequestMapping("queryAdmin")
 	public Object queryAdmin(String msg, String page, String limit)
@@ -166,7 +167,7 @@ public class AdminController
 	//	添加管理员
 	@RequestMapping("/addAdmin")
 	@ResponseBody
-	@Log(operationThing = "添加管理员",operationType = "添加")
+	@Log(operationThing = "添加管理员", operationType = "添加")
 	public Object addAdmin(String msg)
 	{
 		Admin admin = JSON.parseObject(msg, Admin.class);
@@ -184,7 +185,7 @@ public class AdminController
 	//	删除管理员
 	@RequestMapping("/deleteAdmin")
 	@ResponseBody
-	@Log(operationThing = "删除管理员信息",operationType = "删除")
+	@Log(operationThing = "删除管理员信息", operationType = "删除")
 	public Object deleteAdmin(String delList, String adminId)
 	{
 		int num = 0;
@@ -217,8 +218,9 @@ public class AdminController
 
 	//	更新管理员信息
 	@RequestMapping("/updateAdmin")
-	@Log(operationThing = "更新管理员信息",operationType = "修改")
-	public @ResponseBody String updateAdmin(String msg)
+	@Log(operationThing = "更新管理员信息", operationType = "修改")
+	public @ResponseBody
+	String updateAdmin(String msg)
 	{
 		Admin admin = null;
 		boolean bool = false;
@@ -239,17 +241,17 @@ public class AdminController
 	//	上传头像
 	@RequestMapping("/upload")
 	@ResponseBody
-	@Log(operationThing = "上传管理员头像",operationType = "添加")
+	@Log(operationThing = "上传管理员头像", operationType = "添加")
 	public Object fileUpload(String msg, MultipartFile file, HttpServletRequest request) throws IOException
 	{
 		//获取上传文件名 : file.getOriginalFilename();
 		String uploadFileName = file.getOriginalFilename();
 		System.out.println("msg = " + msg);
 		String savePath = request.getServletContext().getRealPath("/upload/");
-		SimpleDateFormat sdf=new SimpleDateFormat("yyyyMMddHHmmss");
-		String str=sdf.format(new Date());
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
+		String str = sdf.format(new Date());
 //		要保存的文件路径和名称
-		String fileName =str+uploadFileName;
+		String fileName = str + uploadFileName;
 		String projectPath = savePath + fileName;
 		File files = new File(projectPath);
 		if (!files.getParentFile().exists())
@@ -260,7 +262,7 @@ public class AdminController
 		System.out.println("文件保存路径================" + projectPath);
 
 		LayuiData layuiData = new LayuiData();
-		int num=adminService.uploadAdminImg(projectPath,msg);
+		int num = adminService.uploadAdminImg(projectPath, msg);
 		if (num > 0)
 		{
 			layuiData.setCode(0);
@@ -269,10 +271,12 @@ public class AdminController
 		}
 		return layuiData;
 	}
+
 	//更改管理员状态
 	@ResponseBody
-    @RequestMapping("updateState")
-	public void updateState(HttpServletRequest request, HttpServletResponse response) throws Exception{
+	@RequestMapping("updateState")
+	public void updateState(HttpServletRequest request, HttpServletResponse response) throws Exception
+	{
 		response.setCharacterEncoding("UTF-8");
 		response.setContentType("text/html;charset=UTF-8");
 		System.out.println("doPost");
@@ -283,9 +287,12 @@ public class AdminController
 		admin.setAdminState(request.getParameter("adminState"));
 
 		int i = adminService.updateState(admin);
-		if (i>0){
+		if (i > 0)
+		{
 			response.getWriter().write("true");
-		}else{
+		}
+		else
+		{
 			response.getWriter().write("false");
 		}
 	}
@@ -306,18 +313,24 @@ public class AdminController
 		int pageSize;
 		//计算出起始查询位置
 		int start;
-		if (null != limit && !"".equals(limit.trim()) && !"0".equals(limit)) {
+		if (null != limit && !"".equals(limit.trim()) && !"0".equals(limit))
+		{
 			pageSize = Integer.valueOf(limit);
 			condition.put("pageSize", pageSize);
-		} else {
+		}
+		else
+		{
 			pageSize = 10;
 			condition.put("pageSize", pageSize);
 		}
-		if (null != page && !"".equals(page.trim()) && !"0".equals(page)) {
+		if (null != page && !"".equals(page.trim()) && !"0".equals(page))
+		{
 			startPage = Integer.parseInt(page);
 			start = (startPage - 1) * pageSize;
 			condition.put("start", start);
-		} else {
+		}
+		else
+		{
 			start = 0;
 			condition.put("start", start);
 		}
@@ -366,20 +379,22 @@ public class AdminController
 	//查计费规则列表
 	@ResponseBody
 	@RequestMapping("/queryRatesList")
-	public Object queryRatesList(String page,String limit){
+	public Object queryRatesList(String page, String limit)
+	{
 		System.out.println("--------queryRatesList-------");
 		//获取页码
 		int startPage = Integer.parseInt(page);
 		//每页数量
-		int pageSize = Integer.valueOf(limit);;
+		int pageSize = Integer.valueOf(limit);
+		;
 		//计算出起始查询位置
 		int start = (startPage - 1) * pageSize;
 		//存带有值得条件
 		HashMap<String, Object> condition = new HashMap<>();
-		condition.put("pageSize",pageSize);
-		condition.put("start",start);
+		condition.put("pageSize", pageSize);
+		condition.put("start", start);
 
-		LayuiData layuiData=adminService.queryRatesList(condition);
+		LayuiData layuiData = adminService.queryRatesList(condition);
 		System.out.println("layuiData = " + JSON.toJSONString(layuiData));
 		return layuiData;
 	}
@@ -387,20 +402,22 @@ public class AdminController
 	//查月缴产品列表
 	@ResponseBody
 	@RequestMapping("/queryComboList")
-	public Object queryComboList(String page,String limit){
+	public Object queryComboList(String page, String limit)
+	{
 		System.out.println("--------queryComboList-------");
 		//获取页码
 		int startPage = Integer.parseInt(page);
 		//每页数量
-		int pageSize = Integer.valueOf(limit);;
+		int pageSize = Integer.valueOf(limit);
+		;
 		//计算出起始查询位置
 		int start = (startPage - 1) * pageSize;
 		//存带有值得条件
 		HashMap<String, Object> condition = new HashMap<>();
-		condition.put("pageSize",pageSize);
-		condition.put("start",start);
+		condition.put("pageSize", pageSize);
+		condition.put("start", start);
 
-		LayuiData layuiData=adminService.queryComboList(condition);
+		LayuiData layuiData = adminService.queryComboList(condition);
 		System.out.println("layuiData = " + JSON.toJSONString(layuiData));
 		return layuiData;
 	}
@@ -410,59 +427,75 @@ public class AdminController
 	@Transactional
 	@ResponseBody
 	@Log(operationThing = "修改收费金额", operationType = "修改")
-	public void editRates(HttpServletRequest request, HttpServletResponse response,TbRates tbRates)
+	public void editRates(HttpServletRequest request, HttpServletResponse response, TbRates tbRates)
 	{
-        System.out.println("--------editRates-------");
-        System.out.println(tbRates);
+		System.out.println("--------editRates-------");
+		System.out.println(tbRates);
 		Integer row = adminService.editRates(tbRates);
-		if (row != 0) {
+		if (row != 0)
+		{
 			ResponseUtils.outHtml(response, "success");
-		} else {
+		}
+		else
+		{
 			ResponseUtils.outHtml(response, "error");
 		}
 	}
-//	查询计费规则
-    @ResponseBody
-    @RequestMapping("/queryPrice")
-    public Object queryPrice(){
-        System.out.println("--------queryRatesList-------");
-        TbRates tbRates = adminService.queryPrice();
-        System.out.println("tbRates = " + JSON.toJSONString(tbRates));
-        return tbRates;
-    }
 
-//    新增月缴状态
-@ResponseBody
-@RequestMapping("/addCombo")
-@Log(operationThing = "添加月缴产品",operationType = "添加")
-public Object addCombo(TbCombo tbCombo){
-		tbCombo.setComboState("启用");
-	if (adminService.addCombo(tbCombo)!=0){
-		System.out.println("添加成功");
-		return "true";
-	}else {
-		System.out.println("删除失败");
-		return "false";
+	//	查询计费规则
+	@ResponseBody
+	@RequestMapping("/queryPrice")
+	public Object queryPrice()
+	{
+		System.out.println("--------queryRatesList-------");
+		TbRates tbRates = adminService.queryPrice();
+		System.out.println("tbRates = " + JSON.toJSONString(tbRates));
+		return tbRates;
 	}
 
-}
+	//    新增月缴状态
+	@ResponseBody
+	@RequestMapping("/addCombo")
+	@Log(operationThing = "添加月缴产品", operationType = "添加")
+	public Object addCombo(TbCombo tbCombo)
+	{
+		tbCombo.setComboState("启用");
+		if (adminService.addCombo(tbCombo) != 0)
+		{
+			System.out.println("添加成功");
+			return "true";
+		}
+		else
+		{
+			System.out.println("删除失败");
+			return "false";
+		}
+
+	}
 
 	//    修改月缴状态
 	@ResponseBody
 	@RequestMapping("/updataCombo")
-	@Log(operationThing = "修改月缴产品状态",operationType = "修改")
-	public Object updataCombo(TbCombo tbCombo){
+	@Log(operationThing = "修改月缴产品状态", operationType = "修改")
+	public Object updataCombo(TbCombo tbCombo)
+	{
 		System.out.println("+++++++++++++++");
 		System.out.println(tbCombo.toString());
-		if(tbCombo.getComboState().equals("启用")){
+		if (tbCombo.getComboState().equals("启用"))
+		{
 			tbCombo.setComboState("禁用");
-		}else{
+		}
+		else
+		{
 			tbCombo.setComboState("启用");
 		}
-		if (adminService.updataCombo(tbCombo)!=0){
+		if (adminService.updataCombo(tbCombo) != 0)
+		{
 			System.out.println("修改成功");
 			return "true";
-		}else {
+		}
+		else
+		{
 			System.out.println("修改失败");
 			return "false";
 		}
@@ -472,44 +505,54 @@ public Object addCombo(TbCombo tbCombo){
 	//    修改月缴产品
 	@ResponseBody
 	@RequestMapping("/editCombo")
-	@Log(operationThing = "修改月缴产品",operationType = "修改")
-	public Object editCombo(TbCombo tbCombo){
-		if (adminService.editCombo(tbCombo)!=0){
+	@Log(operationThing = "修改月缴产品", operationType = "修改")
+	public Object editCombo(TbCombo tbCombo)
+	{
+		if (adminService.editCombo(tbCombo) != 0)
+		{
 			System.out.println("修改成功");
 			return "true";
-		}else {
+		}
+		else
+		{
 			System.out.println("修改失败");
 			return "false";
 		}
 	}
 
-//	查收支明细
+	//	查收支明细
 	@ResponseBody
 	@RequestMapping("queryBill")
-	public Object queryBill(String page,String limit,String billNum ,String billTime){
-		LayuiData layuiData=adminService.queryBill(page,limit,billNum,billTime);
+	public Object queryBill(String page, String limit, String billNum, String billTime)
+	{
+		LayuiData layuiData = adminService.queryBill(page, limit, billNum, billTime);
 		System.out.println("layuiData = " + JSON.toJSONString(layuiData));
 		return layuiData;
 	}
 
 	@ResponseBody
 	@RequestMapping("queryParam")
-	public Object queryParam(String page,String limit){
-		int startPage=Integer.parseInt(page);//获取页码;
-		int pageSize=Integer.parseInt(limit);//每页数量
-		int start = (startPage-1)*pageSize;//计算出起始查询位置
-		LayuiData layuiData=adminService.queryParam(start,pageSize);
+	public Object queryParam(String page, String limit)
+	{
+		int startPage = Integer.parseInt(page);//获取页码;
+		int pageSize = Integer.parseInt(limit);//每页数量
+		int start = (startPage - 1) * pageSize;//计算出起始查询位置
+		LayuiData layuiData = adminService.queryParam(start, pageSize);
 		System.out.println("layuiData = " + JSON.toJSONString(layuiData));
 		return layuiData;
 	}
 
 	@ResponseBody
 	@RequestMapping("editParam")
-	public Object editParam(TbParam tbParam){
-		if (adminService.editParam(tbParam)!=0){
+	public Object editParam(TbParam tbParam)
+	{
+		if (adminService.editParam(tbParam) != 0)
+		{
 			System.out.println("修改成功");
 			return "true";
-		}else {
+		}
+		else
+		{
 			System.out.println("修改失败");
 			return "false";
 		}
@@ -519,20 +562,25 @@ public Object addCombo(TbCombo tbCombo){
 	//用户统计
 	@RequestMapping("/showBillStatistics")
 	@ResponseBody
-	public void showBillStatistics(HttpServletRequest request, HttpServletResponse response) throws IOException, ParseException {
+	public void showBillStatistics(HttpServletRequest request, HttpServletResponse response) throws IOException, ParseException
+	{
 		System.out.println("showBillStatistics");
 		String mystatic = request.getParameter("mystatic");
 		System.out.println(mystatic);
 		//存带有值得条件
-		HashMap<String,Object> condition = new HashMap<>();
-		if(null!=mystatic&&!"".equals(mystatic.trim())) {
-			condition.put("mystatic",mystatic);
+		HashMap<String, Object> condition = new HashMap<>();
+		if (null != mystatic && !"".equals(mystatic.trim()))
+		{
+			condition.put("mystatic", mystatic);
 		}
-		HashMap<String,Object> statisticsMap =  adminService.showBillStatistics(condition);
+		HashMap<String, Object> statisticsMap = adminService.showBillStatistics(condition);
 		StatisticsData statisticsData = new StatisticsData(statisticsMap);
-		if (null!=statisticsMap){
+		if (null != statisticsMap)
+		{
 			ResponseUtils.outJson(response, statisticsData);
-		}else{
+		}
+		else
+		{
 			response.getWriter().print("error");
 		}
 	}
@@ -540,20 +588,25 @@ public Object addCombo(TbCombo tbCombo){
 	//	月缴统计
 	@RequestMapping("/showPieComboStatistics")
 	@ResponseBody
-	public void showPieComboStatistics(HttpServletRequest request, HttpServletResponse response) throws IOException {
+	public void showPieComboStatistics(HttpServletRequest request, HttpServletResponse response) throws IOException
+	{
 		System.out.println("showPieComboStatistics");
-		HashMap<String,Object> statisticsMap =  adminService.showPieComboStatistics();
+		HashMap<String, Object> statisticsMap = adminService.showPieComboStatistics();
 		StatisticsData statisticsData = new StatisticsData(statisticsMap);
-		if (null!=statisticsMap){
+		if (null != statisticsMap)
+		{
 			ResponseUtils.outJson(response, statisticsData);
-		}else{
+		}
+		else
+		{
 			response.getWriter().print("error");
 		}
 	}
-//		退出登录
+
+	//		退出登录
 	@RequestMapping("/outLogin")
 	@ResponseBody
-	@Log(operationThing = "退出登录",operationType = "退出")
+	@Log(operationThing = "退出登录", operationType = "退出")
 	public String outLogin(HttpServletRequest request)
 	{
 		request.getSession().invalidate();

@@ -1,5 +1,7 @@
 package com.cnzk.service;
 
+import com.cnzk.pojo.Admin;
+import com.cnzk.pojo.LayuiData;
 import com.cnzk.pojo.TbUser;
 
 import javax.websocket.server.PathParam;
@@ -10,6 +12,8 @@ import javax.websocket.server.PathParam;
  */
 public interface UserService
 {
+	void carexit(String carnum);
+
 	//	添加用户
 	int addUser(TbUser tbUser);
 
@@ -19,5 +23,11 @@ public interface UserService
 	//	根据用户名查询用户
 	TbUser queryUserByUserName(String userName);
 
-	void carexit(String carnum);
+	//	查询用户，包括带条件,分页,记录数
+	LayuiData queryTbUser(TbUser tbUser, int start, int pageSize);
+
+	//	删除用户
+	int deleteTbUser(int[] array);
+
+
 }
