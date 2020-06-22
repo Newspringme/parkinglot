@@ -2,6 +2,7 @@ package com.cnzk.controller;
 
 import com.alibaba.fastjson.JSON;
 import com.cnzk.pojo.LayuiData;
+import com.cnzk.pojo.TbBill;
 import com.cnzk.service.RoleServeice;
 import com.cnzk.service.WeiXinService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,5 +43,23 @@ public class WeixinController {
         List list = new ArrayList();
         list.add("222");
         return list;
+    }
+
+    //	小程序订单查询
+    @ResponseBody
+    @RequestMapping("weiXinQueryBill")
+    public Object weiXinQueryBill(String carNum){
+        LayuiData layuiData=weiXinService.weiXinQueryBill(carNum);
+        System.out.println("layuiData = " + JSON.toJSONString(layuiData));
+        return layuiData;
+    }
+
+    // 根据订单编号查账单信息
+    @ResponseBody
+    @RequestMapping("queryBilldetails")
+    public Object queryBilldetails(String carNum,String billNum){
+        TbBill tbBill =weiXinService.queryBilldetails(carNum,billNum);
+        System.out.println(tbBill.toString());
+        return tbBill;
     }
 }
