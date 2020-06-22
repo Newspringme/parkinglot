@@ -54,12 +54,36 @@
 </form>
 <!--搜索条件结束-->
 <!--弹出层开始-->
-<div id="showCar" class="layui-anim layui-anim-scale">
-    <form id="formCar" class="layui-form">
+<div id="showCar" class="layui-anim layui-anim-scale" style="display: none">
+    <form id="formCar" class="layui-form" style="padding-top: 20px">
         <div class="layui-form-item">
-            <label class="layui-form-label" style="margin-left: 120px;">车牌号：</label>
+            <label class="layui-form-label" style="margin-left: 20px;">车牌号：</label>
             <div class="layui-input-block" style="float: left; margin-left: 20px;width: 200px;">
-
+                <input type="text" id="carNum" autocomplete="off" class="layui-input" disabled="disabled">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label" style="margin-left: 20px;">用户类型：</label>
+            <div class="layui-input-block" style="float: left; margin-left: 20px;width: 200px;">
+                <input type="text" id="vipName" autocomplete="off" class="layui-input" disabled="disabled">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label" style="margin-left: 20px;">车辆类型：</label>
+            <div class="layui-input-block" style="float: left; margin-left: 20px;width: 200px;">
+                <input type="text" id="carType" autocomplete="off" class="layui-input" disabled="disabled">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label" style="margin-left: 20px;">车辆品牌：</label>
+            <div class="layui-input-block" style="float: left; margin-left: 20px;width: 200px;">
+                <input type="text" id="carBrand" autocomplete="off" class="layui-input" disabled="disabled">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label" style="margin-left: 20px;">车辆颜色：</label>
+            <div class="layui-input-block" style="float: left; margin-left: 20px;width: 200px;">
+                <input type="text" id="carColor" autocomplete="off" class="layui-input" disabled="disabled">
             </div>
         </div>
     </form>
@@ -98,7 +122,7 @@
                 ,{field:'parkState', title:'车位状态',align:'center', width:150}
                 ,{field:'carNum', title:'车牌号',align:'center', width:150}
                 ,{field:'eventId', title:'车位编号',align:'center', width:150}
-                ,{fixed: 'right', title:'操作',align:'center',width:600, toolbar: '#toolBar'}
+                ,{fixed: 'right', title:'操作',align:'center',width:200, toolbar: '#toolBar'}
             ]]
         });
         //提交条件查询表单
@@ -121,20 +145,46 @@
             var data = obj.data;
             var layEvent = obj.event;
             if (layEvent === 'showCar'){
-                //页面层-自定义
-                layer.open({
-                    type: 1,
-                    title: false,
-                    closeBtn: 0,
-                    shadeClose: true,
-                    skin: 'layui-layer-molv',
-                    content: '#showCar',
-                    success:function () {
-                        form.val("formCar",data);
-                    }
-                });
+                showCar(data);
             }
         });
+
+        function showCar(data) {
+            //清空
+            $("#carNum").val();
+            $("#vipName").val();
+            $("#carType").val();
+            $("#carBrand").val();
+            $("#carColor").val();
+            //页面层-自定义
+            layer.open({
+                type: 1,
+                title: '车辆信息',
+                closeBtn: 0,
+                shadeClose: true,
+                skin: 'layui-layer-molv',//墨绿皮肤
+                shade: [0.5,'#fff'], //0.5透明度的白色背景
+                offset: '50px',//上边距
+                shift: 1, //动画类型
+                area: ['430px','360px'],
+                content: $('#showCar'),
+                success:function () {
+                    $.post("${pageContext.request.contextPath}/CarController/queryCarInfo?carNum="+data.carNum,function (msg) {
+                        var jsonObj = JSON.parse(msg);
+                        if (msg==="false"){
+                            $("#carNum").val(data.carNum);
+                            $("#vipName").val("临时车");
+                        } else {
+                            $("#carNum").val(jsonObj.carNum);
+                            $("#vipName").val(jsonObj.tbVip.vipName);
+                            $("#carType").val(jsonObj.carType);
+                            $("#carBrand").val(jsonObj.carBrand);
+                            $("#carColor").val(jsonObj.carColor);
+                        }
+                    });
+                }
+            });
+        }
     });
 </script>
 </body>

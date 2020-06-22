@@ -161,8 +161,7 @@
         <div class="layui-form-item">
             <label class="layui-form-label" style="margin-left: 100px;">账号名称：</label>
             <div class="layui-input-block" style="float: left; margin-left: 20px;width: 200px;">
-                <input  type="text" name="adminName"
-                        autocomplete="off" class="layui-input" disabled="disabled">
+                <input type="text" name="adminName" autocomplete="off" class="layui-input" disabled="disabled">
             </div>
         </div>
         <div class="layui-form-item">

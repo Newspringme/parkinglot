@@ -20,6 +20,8 @@ public class TbCar
 	private String endTime;
 	private int months;
 
+    private TbVip tbVip;
+
 	public TbCar()
 	{
 	}
@@ -177,4 +179,12 @@ public class TbCar
 	{
 		return "TbCar{" + "carId=" + carId + ", carNum='" + carNum + '\'' + ", carColor='" + carColor + '\'' + ", carType='" + carType + '\'' + ", carBrand='" + carBrand + '\'' + ", userId=" + userId + ", userName='" + userName + '\'' + ", userTel='" + userTel + '\'' + ", vipId=" + vipId + '}';
 	}
+
+    public TbVip getTbVip() {
+        return tbVip;
+    }
+
+    public void setTbVip(TbVip tbVip) {
+        this.tbVip = tbVip;
+    }
 }

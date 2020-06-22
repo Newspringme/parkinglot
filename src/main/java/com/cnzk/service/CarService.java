@@ -40,4 +40,7 @@ public interface CarService
 	//查询车辆出场记录
 	List<TbExit> queryExit(@Param("start") int start, @Param("end") int end);
 
+	//
+    TbCar queryCarInfo(@Param("tbCar") String carNum);
+
 }
