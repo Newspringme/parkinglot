@@ -11,13 +11,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
 
 @RestController
 public class WeixinController {
 
-    @Autowired
+    @Resource
     private WeiXinService weiXinService;
     @ResponseBody
     @RequestMapping("queryImgUrl")
@@ -65,5 +66,14 @@ public class WeixinController {
         TbBill tbBill =weiXinService.queryBilldetails(carNum,billNum);
         System.out.println(tbBill.toString());
         return tbBill;
+    }
+
+    // 查看空车位
+    @ResponseBody
+    @RequestMapping("queryNullPark")
+    public Object queryNullPark(){
+        Integer num =weiXinService.queryNullPark();
+        System.out.println(num);
+        return num;
     }
 }
