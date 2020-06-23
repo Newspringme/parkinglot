@@ -1,9 +1,6 @@
 package com.cnzk.mapper;
 
-import com.cnzk.pojo.Admin;
-import com.cnzk.pojo.TbEnter;
-import com.cnzk.pojo.TbPark;
-import com.cnzk.pojo.TbUser;
+import com.cnzk.pojo.*;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -56,4 +53,11 @@ public interface UserMapper
 	//	删除用户
 	int deleteTbUser(int[] array);
 
+	String userLogin(String phone);
+
+	String findPhone(String phone);
+
+	void userReg(String phone,String password);
+	//  获取月缴要到期的车辆
+	TbCar queryEndTime();
 }

@@ -16,4 +16,8 @@ public interface WeiXinService {
 
     //    根据订单编号查账单信息
     TbBill queryBilldetails(String carNum, String billNum);
+
+    //    查看空车位
+    Integer queryNullPark();
+
 }
