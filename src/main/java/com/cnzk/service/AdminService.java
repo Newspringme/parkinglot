@@ -77,7 +77,11 @@ public interface AdminService
 	Integer addSlideShow(TbSlideshow tbSlideshow);
 	//删除轮播图
 	Integer deleteSlideShow(TbSlideshow tbSlideshow);
-
+//编辑轮播图
 	Integer editSlideShow(TbSlideshow tbSlideshow);
+//查询套餐价格
+	String queryComboValue(String comboId);
+	//查询反馈表
+	LayuiData queryfeedback(int start, int pageSize);
 
 }

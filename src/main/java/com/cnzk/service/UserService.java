@@ -1,10 +1,11 @@
 package com.cnzk.service;
 
-import com.cnzk.pojo.Admin;
 import com.cnzk.pojo.LayuiData;
 import com.cnzk.pojo.TbUser;
 
+import javax.servlet.http.HttpSession;
 import javax.websocket.server.PathParam;
+import java.util.Map;
 
 /**
  * @author su
@@ -26,4 +27,10 @@ public interface UserService
 	//	查询用户，包括带条件,分页,记录数
 	LayuiData queryTbUser(TbUser tbUser, int start, int pageSize);
 
+	//	登录
+	String userlogin(String phone);
+
+	String findPhone(String phone);
+
+	String userReg(String phone,String password);
 }

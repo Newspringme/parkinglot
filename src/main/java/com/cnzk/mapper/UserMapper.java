@@ -50,6 +50,14 @@ public interface UserMapper
 	//	查询用户，包括带条件及分页
 	List<TbUser> queryTbUser(@Param("tbUser") TbUser tbUser, @Param("start") int start, @Param("pageSize") int pageSize);
 
+	//	删除用户
+	int deleteTbUser(int[] array);
+
+	String userLogin(String phone);
+
+	String findPhone(String phone);
+
+	void userReg(String phone,String password);
 	//  获取月缴要到期的车辆
 	TbCar queryEndTime();
 }

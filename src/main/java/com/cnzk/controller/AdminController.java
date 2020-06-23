@@ -713,4 +713,20 @@ public class AdminController
 
 	}
 
+	@RequestMapping("/queryFeedback")
+	@ResponseBody
+	public Object queryFeedback(String page,String limit){
+		System.out.println("--------queryFeedback-------");
+		//获取页码
+		int startPage = Integer.parseInt(page);
+		//每页数量
+		int pageSize = Integer.valueOf(limit);;
+		//计算出起始查询位置
+		int start = (startPage - 1) * pageSize;
+		//存带有值得条件
+		LayuiData layuiData=adminService.queryfeedback(start,pageSize);
+		System.out.println("layuiData = " + JSON.toJSONString(layuiData));
+		return layuiData;
+	}
+
 }

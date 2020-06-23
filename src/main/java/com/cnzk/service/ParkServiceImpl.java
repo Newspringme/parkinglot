@@ -33,4 +33,9 @@ public class ParkServiceImpl implements ParkService {
         layuiData.setCode(0);
         return layuiData;
     }
+
+    @Override
+    public TbPark queryParkByCarNum(String carNum) {
+        return parkMapper.queryParkByCarNum(carNum);
+    }
 }

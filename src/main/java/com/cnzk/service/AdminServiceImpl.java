@@ -34,6 +34,8 @@ public class AdminServiceImpl implements AdminService
 	private ParamMapper paramMapper;
 	@Resource
 	private SlideshowMapper slideshowMapper;
+	@Resource
+	private FeedbackMapper feedbackMapper;
     //登陆
 	//登陆
 
@@ -353,6 +355,22 @@ public class AdminServiceImpl implements AdminService
 	@Override
 	public Integer editSlideShow(TbSlideshow tbSlideshow) {
 		return slideshowMapper.editSlideShow(tbSlideshow);
+	}
+
+	@Override
+	public String queryComboValue(String comboId) {
+		return comboMapper.queryComboValue(comboId);
+	}
+
+	@Override
+	public LayuiData queryfeedback(int start, int pageSize) {
+		LayuiData layuiData = new LayuiData();
+		layuiData.setCode(0);
+		List<TbFeedback> list = feedbackMapper.queryfeedback(start,pageSize);
+		int count = feedbackMapper.queryfeedbackCount();
+		layuiData.setCount(count);
+		layuiData.setData(list);
+		return layuiData;
 	}
 
 

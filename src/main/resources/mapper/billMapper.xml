@@ -110,7 +110,7 @@
 	</select>
 
 	<insert id="insertBill" parameterType="com.cnzk.pojo.TbBill">
-		 insert into tb_bill (bill_num,bill_money,car_num,user_name) values (#{billNum},#{billMoney},#{carNum},#{userName});
+		 insert into tb_bill (bill_num,bill_money,car_num,user_name,bill_type,combo_id ) values (#{billNum},#{billMoney},#{carNum},#{userName},#{billType},#{comboId});
 	</insert>
 
 	<update id="updateBill" parameterType="com.cnzk.pojo.TbBill">
@@ -126,9 +126,27 @@
 	</insert>
 
 	<!--//查订单是否完成-->
-	<select id="isSucceed" resultType="java.lang.Integer" parameterType="TbBill">
-		select bill_state from tb_bill where bill_num = #{billNum};
+	<select id="isSucceed" resultType="com.cnzk.pojo.TbBill" parameterType="TbBill">
+		select * from tb_bill where bill_num = #{billNum};
 	</select>
 
+<!--小程序订单查询-->
+	<select id="weiXinQueryBill" resultType="TbBill">
+		select  a.bill_id, a.bill_time, a.bill_num, a.bill_money, e.combo_name,d.user_name from tb_bill a
+		left join tb_car b on a.car_num = b.car_num
+		left join tb_user_car c on b.car_id = c.car_id
+		left join tb_user d on c.user_id = d.user_id
+		left join tb_combo e on a.combo_id = e.combo_id
+		where a.car_num = #{carNum};
+	</select>
 
+    <!--根据订单编号查账单信息-->
+    <select id="queryBilldetails" resultType="TbBill">
+		select  a.bill_id, a.bill_time, a.bill_num, a.bill_money, e.combo_name,d.user_name from tb_bill a
+		left join tb_car b on a.car_num = b.car_num
+		left join tb_user_car c on b.car_id = c.car_id
+		left join tb_user d on c.user_id = d.user_id
+		left join tb_combo e on a.combo_id = e.combo_id
+		where a.car_num = #{carNum} and a.bill_num = #{billNum};
+	</select>
 </mapper>

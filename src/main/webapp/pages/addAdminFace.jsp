@@ -161,7 +161,8 @@
         //把流媒体数据画到convas画布上去
         context.drawImage(video, 0, 0, 400, 300);
         var adminFace = getBase64();
-        // console.log('adminFace='+adminFace);
+
+        console.log('adminFace='+adminFace);
         $.ajax({
             type: "post",
             url: "${pageContext.request.contextPath}/adminFace/addAdminFace",
