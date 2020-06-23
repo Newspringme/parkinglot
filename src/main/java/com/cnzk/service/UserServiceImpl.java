@@ -1,13 +1,13 @@
 package com.cnzk.service;
 
 import com.cnzk.mapper.UserMapper;
-import com.cnzk.pojo.Admin;
 import com.cnzk.pojo.LayuiData;
 import com.cnzk.pojo.TbUser;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.util.List;
+import javax.servlet.http.HttpSession;
+import java.util.Map;
 
 /**
  * @author su
@@ -32,7 +32,6 @@ public class UserServiceImpl implements UserService
 	{
 		return userMapper.queryUserByCarNum(carNum);
 	}
-
 	//根据用户名查询用户
 	@Override
 	public TbUser queryUserByUserName(String userName)
@@ -41,28 +40,54 @@ public class UserServiceImpl implements UserService
 	}
 
 	@Override
-	public void carexit(String carnum)
+	public LayuiData queryTbUser(TbUser tbUser, int start, int pageSize)
 	{
+		return null;
 	}
 
-	//删除用户
 	@Override
 	public int deleteTbUser(int[] array)
 	{
-		int num = userMapper.deleteTbUser(array);
-		return num;
+		return 0;
 	}
 
-	//	查询用户，包括带条件,分页,记录数
 	@Override
-	public LayuiData queryTbUser(TbUser tbUser, int start, int pageSize)
-	{
-		List<TbUser> list = userMapper.queryTbUser(tbUser, start, pageSize);
-		int count = userMapper.queryTbUserCount(tbUser);
-		LayuiData layuiData = new LayuiData();
-		layuiData.setCode(0);
-		layuiData.setCount(count);
-		layuiData.setData(list);
-		return layuiData;
+	public void carexit(String carnum) {
+		userMapper.carexit(carnum);
 	}
+
+	@Override
+	public String userlogin(String phone)
+	{
+		String password1=userMapper.userLogin(phone);
+
+		System.out.println("password1--------"+password1);
+		if (password1==null){
+			System.out.println("未找到当前用户");
+			return "未找到";
+		}
+		return password1;
+	}
+
+	@Override
+	public String findPhone(String phone)
+	{
+		String phone1=userMapper.findPhone(phone);
+		System.out.println("phone1 userserviceimp"+phone1);
+		if (phone1==null){
+			return "用户未找到";
+		}
+		else {
+			return "已注册";
+		}
+	}
+
+	@Override
+	public String userReg(String phone, String password)
+	{
+		userMapper.userReg(phone,password);
+
+		return null;
+	}
+
 }

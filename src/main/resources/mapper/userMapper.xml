@@ -88,4 +88,15 @@
         </where>
         limit #{start},#{pageSize};
     </select>
+    <select id="userLogin" resultType="java.lang.String">
+        select user_pass from tb_user where user_tel=#{phone};
+    </select>
+
+    <select id="findPhone" resultType="java.lang.String">
+        select * from tb_user where user_tel=#{phone};
+    </select>
+    <insert id="userReg">
+        insert into tb_user (user_tel,user_pass)values(#{phone},#{password});
+    </insert>
+
 </mapper>

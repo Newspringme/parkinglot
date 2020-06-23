@@ -8,6 +8,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+import javax.websocket.server.PathParam;
+import java.util.Map;
 
 /**
  * @author su
@@ -19,6 +26,46 @@ public class UserController
 {
 	@Autowired
 	private UserService userService;
+	//登陆l
+	@RequestMapping(value = "/userLogin", produces = {"application/json;charset=UTF-8"})
+	@ResponseBody
+	public String adminLogin( @PathParam("phone") String phone, @PathParam("password") String password)
+	{
+		System.out.println("===============================用户登陆=============================");
+		System.out.println("password=="+phone+"==="+password);
+		String phone1=phone;
+		String pw1=userService.userlogin(phone1);
+		if (pw1.equals("未找到")){
+			System.out.println("请先注册");
+			return "请先注册";
+		}
+		String pw2=password;
+		System.out.println("pw1-------"+pw1+"pw2-----"+pw2);
+		if (pw1.equals(pw2)){
+			return "登陆成功";
+		}
+		return "用户名或密码错误";
+
+	}
+	@RequestMapping(value = "/userAdd", produces = {"application/json;charset=UTF-8"})
+	@ResponseBody
+	public String addLogin( @PathParam("phone") String phone, @PathParam("password") String password)
+	{
+		System.out.println("===============================用户注册=============================");
+		System.out.println("password=="+phone+"==="+password);
+		String findPhone = userService.findPhone(phone);
+		if (findPhone.equals("用户未找到")){
+            userService.userReg(phone,password);
+			System.out.println("插入用户数据 手机号:"+phone+"密码:"+password);
+			return "注册成功";
+		}
+		else{
+			return "手机号已注册";
+		}
+
+	}
+
+
 
 //	添加用户
 	@RequestMapping("addUser")

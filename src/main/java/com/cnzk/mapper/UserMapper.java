@@ -56,4 +56,9 @@ public interface UserMapper
 	//	删除用户
 	int deleteTbUser(int[] array);
 
+	String userLogin(String phone);
+
+	String findPhone(String phone);
+
+	void userReg(String phone,String password);
 }
