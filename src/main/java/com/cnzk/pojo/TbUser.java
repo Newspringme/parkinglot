@@ -14,8 +14,45 @@ public class TbUser {
   private String userTel;
   private String headImg;
   private long carId;
-  private java.sql.Timestamp regTime;
+  private String regTime;
+  private String startTime;
+  private String endTime;
 
+  public TbUser(long userId, String userName, String userPass, String userCard, String userSex, long userAge, String userTel, String headImg, long carId, String regTime, String startTime, String endTime)
+  {
+    this.userId = userId;
+    this.userName = userName;
+    this.userPass = userPass;
+    this.userCard = userCard;
+    this.userSex = userSex;
+    this.userAge = userAge;
+    this.userTel = userTel;
+    this.headImg = headImg;
+    this.carId = carId;
+    this.regTime = regTime;
+    this.startTime = startTime;
+    this.endTime = endTime;
+  }
+
+  public String getStartTime()
+  {
+    return startTime;
+  }
+
+  public void setStartTime(String startTime)
+  {
+    this.startTime = startTime;
+  }
+
+  public String getEndTime()
+  {
+    return endTime;
+  }
+
+  public void setEndTime(String endTime)
+  {
+    this.endTime = endTime;
+  }
 
   public long getUserId() {
     return userId;
@@ -98,11 +135,11 @@ public class TbUser {
   }
 
 
-  public java.sql.Timestamp getRegTime() {
+  public String getRegTime() {
     return regTime;
   }
 
-  public void setRegTime(java.sql.Timestamp regTime) {
+  public void setRegTime(String regTime) {
     this.regTime = regTime;
   }
 
@@ -110,7 +147,7 @@ public class TbUser {
   {
   }
 
-  public TbUser(long userId, String userName, String userPass, String userCard, String userSex, long userAge, String userTel, String headImg, long carId, Timestamp regTime)
+  public TbUser(long userId, String userName, String userPass, String userCard, String userSex, long userAge, String userTel, String headImg, long carId, String regTime)
   {
     this.userId = userId;
     this.userName = userName;

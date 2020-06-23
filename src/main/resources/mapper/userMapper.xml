@@ -45,7 +45,7 @@
     <!--        insert into tb_user (user_name,user_tel)values(#{userName},#{userTel});-->
     <!--    </insert>-->
     <insert id="addUser" keyProperty="userId" useGeneratedKeys="true">
-        insert into tb_user (user_name,user_pass,user_sex,user_age,user_card,user_tel)values(#{userName},#{userTel},#{userPass},#{userSex},#{userAge},#{userCard});
+        insert into tb_user (user_name,user_pass,user_tel,user_sex,user_age,user_card)values(#{userName},#{userPass},#{userTel},#{userSex},#{userAge},#{userCard});
     </insert>
 
     <insert id="addimgurl">
@@ -59,13 +59,7 @@
     <select id="queryUserByUserName" resultType="com.cnzk.pojo.TbUser">
         select * from tb_user where user_name=#{userName};
     </select>
-    <!-- 删除用户-->
-    <delete id="deleteTbUser" parameterType="java.lang.Integer">
-        delete from tb_user where user_id in
-        <foreach collection="array" item="item" open="(" separator="," close=")">
-            #{item}
-        </foreach>
-    </delete>
+
     <!--查询用户记录数-->
     <select id="queryTbUserCount" resultType="int">
         select count(*)as count from tb_user
@@ -82,11 +76,15 @@
             <if test="tbUser.userName!=null and tbUser.userName!=''">and user_name like
                 concat('%',#{tbUser.userName},'%')
             </if>
-            <if test="tbUser.startTime!=null and tbUser.startTime!=''">and reg_time &gt;=#{admin.startTime}
+            <if test="tbUser.startTime!=null and tbUser.startTime!=''">and reg_time &gt;=#{tbUser.startTime}
             </if>
-            <if test="tbUser.endTime!=null and tbUser.endTime!=''">and reg_time &lt;= #{admin.endTime}</if>
+            <if test="tbUser.endTime!=null and tbUser.endTime!=''">and reg_time &lt;= #{tbUser.endTime}</if>
         </where>
         limit #{start},#{pageSize};
+    </select>
+<!--获取月缴要到期的车辆-->
+    <select id="queryEndTime" resultType="com.cnzk.pojo.TbCar">
+        select * from tb_car where date_add(end_time,interval 5 day) &lt;=now();
     </select>
     <select id="userLogin" resultType="java.lang.String">
         select user_pass from tb_user where user_tel=#{phone};

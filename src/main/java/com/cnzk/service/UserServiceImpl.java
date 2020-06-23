@@ -46,12 +46,6 @@ public class UserServiceImpl implements UserService
 	}
 
 	@Override
-	public int deleteTbUser(int[] array)
-	{
-		return 0;
-	}
-
-	@Override
 	public void carexit(String carnum) {
 		userMapper.carexit(carnum);
 	}

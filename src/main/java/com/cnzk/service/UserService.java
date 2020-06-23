@@ -27,9 +27,6 @@ public interface UserService
 	//	查询用户，包括带条件,分页,记录数
 	LayuiData queryTbUser(TbUser tbUser, int start, int pageSize);
 
-	//	删除用户
-	int deleteTbUser(int[] array);
-
 	//	登录
 	String userlogin(String phone);
 
