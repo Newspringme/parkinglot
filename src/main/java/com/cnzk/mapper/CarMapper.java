@@ -50,4 +50,6 @@ public interface CarMapper
 
     //根据车牌查询车辆信息
     TbCar queryCarInfo(@Param("carNum") String carNum);
+
+    String queryCarNum (@Param("userTel") String userTel);
 }

@@ -76,4 +76,13 @@ public class WeixinController {
         System.out.println(num);
         return num;
     }
+
+    // 根据手机号查车牌
+    @ResponseBody
+    @RequestMapping("queryCarNum")
+    public Object queryCarNum(String userTel){
+        String carNum =weiXinService.queryCarNum(userTel);
+        System.out.println(carNum);
+        return carNum;
+    }
 }

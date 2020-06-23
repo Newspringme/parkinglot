@@ -20,4 +20,7 @@ public interface WeiXinService {
     //    查看空车位
     Integer queryNullPark();
 
+//    根据手机号查车牌
+    String  queryCarNum(String userTel);
+
 }

@@ -22,6 +22,8 @@ public class WeiXinServiceImpl implements WeiXinService{
     private BillMapper billMapper;
     @Resource
     private ParkMapper parkMapper;
+    @Resource
+    private CarMapper carMapper;
 
 
     @Override
@@ -69,5 +71,10 @@ public class WeiXinServiceImpl implements WeiXinService{
     @Override
     public Integer queryNullPark() {
         return parkMapper.queryNullPark();
+    }
+
+    @Override
+    public String queryCarNum(String userTel) {
+        return carMapper.queryCarNum(userTel);
     }
 }

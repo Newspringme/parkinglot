@@ -61,5 +61,13 @@
         select * from tb_car where car_num = #{carNum}
     </select>
 
+    <!--根据手机号查车牌-->
+    <select id="queryCarNum" resultType="java.lang.String">
+        select c.car_num from tb_user a
+            left join tb_user_car b on a.user_id = b.user_id
+            left join tb_car c on b.car_id = c.car_id
+        where a.user_tel = #{userTel}
+    </select>
+
 
 </mapper>
