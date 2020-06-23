@@ -54,4 +54,8 @@
     <select id="queryCoordinate" resultType="com.cnzk.pojo.TbCoordinate">
         select * from tb_coordinate where coordinate_id = #{coordinateId}
     </select>
+<!--查看空车位-->
+    <select id="queryNullPark" resultType="int">
+        select count(*) from tb_park where park_state = '未停车'
+    </select>
 </mapper>

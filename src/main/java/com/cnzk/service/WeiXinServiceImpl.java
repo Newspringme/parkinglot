@@ -1,9 +1,6 @@
 package com.cnzk.service;
 
-import com.cnzk.mapper.FeedbackMapper;
-import com.cnzk.mapper.BillMapper;
-import com.cnzk.mapper.SlideshowMapper;
-import com.cnzk.mapper.UserMapper;
+import com.cnzk.mapper.*;
 import com.cnzk.pojo.TbFeedback;
 import com.cnzk.pojo.LayuiData;
 import com.cnzk.pojo.TbBill;
@@ -23,6 +20,8 @@ public class WeiXinServiceImpl implements WeiXinService{
     private FeedbackMapper feedbackMapper;
     @Resource
     private BillMapper billMapper;
+    @Resource
+    private ParkMapper parkMapper;
 
 
     @Override
@@ -65,5 +64,10 @@ public class WeiXinServiceImpl implements WeiXinService{
             tbBill.setComboName("购买"+tbBill.getComboName());
         }
         return tbBill;
+    }
+
+    @Override
+    public Integer queryNullPark() {
+        return parkMapper.queryNullPark();
     }
 }

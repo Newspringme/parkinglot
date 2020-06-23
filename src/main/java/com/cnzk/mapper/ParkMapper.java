@@ -24,4 +24,7 @@ public interface ParkMapper {
 
     //通过车牌获取车位
     TbPark queryParkByCarNum(@Param("carNum") String carNum);
+
+//    查看空车位
+    Integer queryNullPark();
 }
