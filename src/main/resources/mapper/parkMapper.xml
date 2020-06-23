@@ -54,4 +54,6 @@
     <select id="queryCoordinate" resultType="com.cnzk.pojo.TbCoordinate">
         select * from tb_coordinate where coordinate_id = #{coordinateId}
     </select>
+
+
 </mapper>
