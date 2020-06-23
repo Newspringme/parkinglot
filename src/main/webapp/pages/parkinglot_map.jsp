@@ -1,4 +1,4 @@
-<%--
+<%@ page import="com.cnzk.pojo.TbCoordinate" %><%--
   Created by IntelliJ IDEA.
   User: 86189
   Date: 2020/6/10
@@ -6,6 +6,11 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%
+    TbCoordinate machine =(TbCoordinate) request.getSession().getAttribute("machine");
+    String x = machine.getCoordinateX();
+    String y = machine.getCoordinateY();
+%>
 <html>
 <head>
     <meta charset="utf-8">
@@ -14,8 +19,6 @@
     <link href="${pageContext.request.contextPath}/static/Case/lib/bootstrap.min.css" rel="stylesheet" />
     <link href="${pageContext.request.contextPath}/static/Case/css/common.css" rel="stylesheet" />
     <link href="${pageContext.request.contextPath}/static/Case/css/iconfont/iconfont.css" rel="stylesheet" />
-
-
 </head>
 <style type="text/css">
     .viewmode-group {
@@ -90,10 +93,6 @@
         background-color: #0f0;
     }
 
-    .codition-third {
-        background-color: rgb(126, 172, 202);
-    }
-
     .i-test-tip {
         width: 360px;
         height: 46px;
@@ -117,9 +116,11 @@
         word-break: keep-all;
         text-overflow: ellipsis;
     }
+
     .test-tip span {
         color: #0f0;
     }
+
     .search {
         position: absolute;
         padding-left: 10px;
@@ -136,6 +137,7 @@
         z-index: 999;
         border-radius: 4px;
     }
+
     .searchText {
         width: 300px;
         height: 20px;
@@ -144,6 +146,8 @@
         margin: 0 0 0 14px;
         font-size: 13px;
         -webkit-appearance: none;
+    }
+
     #router {
         position: absolute;
         padding: 20px;
@@ -212,8 +216,21 @@
         left: 338px;
 
     }
+
+    #description {
+        position: absolute;
+        left: 50%;
+        top: 86px;
+        padding: 10px 25px;
+        background: rgba(255, 255, 255, 255);
+        border-radius: 4px;
+        margin-left: -140px;
+        opacity: 0.7;
+    }
 </style>
 <body ms-controller = "ctrl" class="ms-controller">
+<input type="hidden" id="coorX" value="<%=x%>">
+<input type="hidden" id="coorY" value="<%=y%>">
 <div id="map-container"></div>
 <div class="loading">
     <div class="lodingImg"></div>
@@ -228,33 +245,19 @@
 <!-- 搜索 -->
 <div class="search">
     <span id="btnSearch" class="glyphicon glyphicon-search" aria-hidden="true"></span>
-    <input id="searchText" type="text" class="searchText" placeholder="搜索关键字"> |
+    <input id="searchText" type="text" class="searchText" placeholder="输入车牌号"> |
     <button type="button" id="startnav" class="btn btn-default" style="border: none">
         <span id="btnNav" class="glyphicon glyphicon-map-marker"></span>
         导航
     </button>
+    <button type="button" id="searchCar" class="btn btn-default" style="border: none">
+        <span id="btnSearchCar" class="glyphicon glyphicon-search"></span>
+        搜索车辆
+    </button>
 </div>
-<!-- 查询显示列表 -->
-<div id="shopSearch" class="layer list">
-    <ul>
-    </ul>
-</div>
-<!--  导航选点 -->
-<div id="router" class="layer router">
-    <div class="routerInput">
-        <span class="glyphicon glyphicon-flag"></span>
-        <input id="startText" class="routerText" type="" name="" placeholder="点击地图可选择起点" readonly>
-    </div>
-    <div class="routerInput">
-        <span class="glyphicon glyphicon-flag"></span>
-        <input id="endText" class="routerText" type="" name="" placeholder="点击地图可选择终点" readonly>
-    </div>
-    <div id="navigation" class="navigation">
-        <button type="button" id="navTo" class="btn btn-default">
-            <span class="glyphicon glyphicon-share-alt"></span>
-            导航
-        </button>
-    </div>
+<%--导航信息--%>
+<div id="description">
+    暂无导航提示信息
 </div>
 <%--3D/2D切换--%>
 <div class="viewmode-group">
@@ -283,6 +286,8 @@
 <script type="text/javascript">
     //定义全局map变量
     var map;
+    var lm,im,floorLayer;
+    var navi; //导航对象
     var esmapID = 'cai_niao_parkinglot';
     var styleid = 1005;
     var floorControl; // 楼层控制控件配置参数（几楼）
@@ -290,13 +295,17 @@
         position: esmap.ESControlPositon.RIGHT_TOP,
         imgURL: "${pageContext.request.contextPath}/static/Case/image/wedgets/"
     });
+    if (navi) {
+        navi.stop();
+        navi = null;
+    }
     // 放大、缩小控件配置
     var ctlOpt1 = new esmap.ESControlOptions({
         position: esmap.ESControlPositon.LEFT_TOP, // 位置 左上角
         // 位置x,y的偏移量
         offset: {
-            x: 20,
-            y: 80
+            x: 10,
+            y: 100
         },
         imgURL: "${pageContext.request.contextPath}/static/Case/image/wedgets/"
     });
@@ -312,24 +321,28 @@
         focusFloor: 1,
         mapAudioSrc: '${pageContext.request.contextPath}/static/Case/lib',
         token:'20200611',
-        // visibleFloors: "all",
-        themeID: styleid //自定义样式主题ID
+        themeID: styleid, //自定义样式主题ID
+        mapAudioSrc: '${pageContext.request.contextPath}/static/Case/lib',
     });
     map.openMapById(esmapID); //打开地图
     map.showCompass = true; //显示指南针
 
     var parkData;
-    var color = ["#ff0000", "#00ff00"];
+    //rgb颜色：红，绿，黄（高亮）
+    var color = ["#ff0000", "#00ff00", "#ffff00"];
     //地图加载完成回调
     map.on("loadComplete", function () {
         floorControl = new esmap.ESScrollFloorsControl(map, ctlOpt);
+        floorLayer = map.getFloor(1);
         var zoomControl = new esmap.ESZoomControl(map, ctlOpt1);
+        createNavi();
         bingEvents();
         marquee();
         // //先执行显示一次
         setTimeout(function () {getParkData();},10);
         //开启定时器从后台获取数据
-        setInterval(function () {getParkData();}, 15000);});
+        setInterval(function () {getParkData();}, 15000);}
+    );
 
     function getParkData() {
         $.getJSON("${pageContext.request.contextPath}/parkController/getParkData",function (data) {
@@ -380,11 +393,10 @@
             return;
         }
         $("#parking").css("fontSize", "18px").html();
-        $("#park_id").css("color", "rgb(255, 255, 0)").html(event.name); //停车位ID(parkName)
+        $("#park_id").css("color", "#4169E1").html(event.name); //停车位ID(parkName)
         for (var i = 0; i < parkData.length; ++i) {
             if (event.ID == parkData[i].eventId) {
                 $("#park_state").html(parkData[i].parkState);
-
             }
         }
     });
@@ -405,7 +417,7 @@
         }, 8);
     }
 
-    //绑定事件
+    //绑定事件2D-3D
     function bingEvents() {
         document.getElementById("btn3D").onclick = function () {
             if (map.viewMode == esmap.ESViewMode.MODE_2D) {
@@ -418,6 +430,153 @@
                     "url('${pageContext.request.contextPath}/static/Case/image/wedgets/2D.png')";
             }
         };
+    }
+
+    //搜索车辆
+    $("#searchCar").on("click",function () {
+        removeAll();
+        var searchText = $("#searchText").val();
+        $.post("${pageContext.request.contextPath}/parkController/queryParkByCarNum?searchText="+searchText,function (data) {
+            if (data==="false") {
+                alert("停车场内没有车牌号为：【"+searchText+"】的车");
+            }else{
+                var park = JSON.parse(data);
+                map.changeModelColor({
+                    id: park.eventId,
+                    color: color[2]
+                });
+                var layer = new esmap.ESLayer('imageMarker');
+                im = new esmap.ESImageMarker({
+                    x: park.tbCoordinate.coordinateX - 0,
+                    y: park.tbCoordinate.coordinateY - 0,
+                    url: '${pageContext.request.contextPath}/static/Case/image/user.png',
+                    size: 64,
+                    showLevel: 20,
+                    height: 0.5,
+                    id: 1,
+                    name: 'myMarker'
+                });
+                layer.addMarker(im);
+                floorLayer.addLayer(layer);
+            }
+        });
+    });
+
+
+    //清除功能
+    var removeAll = function () {
+        var re = floorLayer.removeLayersByTypes([esmap.ESLayerType.TEXT_MARKER, esmap.ESLayerType.IMAGE_MARKER]);
+        lm && map.removeLocationMarker(lm);
+    };
+
+    $("#startnav").on("click",function () {
+
+        var searchText = $("#searchText").val();
+        $.post("${pageContext.request.contextPath}/parkController/queryParkByCarNum?searchText="+searchText,function (data) {
+            if (data==="false") {
+                alert("停车场内没有车牌号为：【"+searchText+"】的车");
+            }else{
+                var park = JSON.parse(data);
+                var machineX = $("#coorX").val();
+                var machineY = $("#coorY").val();
+                alert("machineX:"+machineX+"/machineY:"+machineY+"/x:"+park.tbCoordinate.coordinateX+"/y:"+park.tbCoordinate.coordinateY);
+                navi.setStartPoint({
+                    x: machineX - 0,
+                    y: machineY - 0,
+                    height: 1,
+                    url: '${pageContext.request.contextPath}/static/Case/image/start.png',
+                    size: 64
+                });
+                navi.setEndPoint({
+                    x: park.tbCoordinate.coordinateX,
+                    y: park.tbCoordinate.coordinateY,
+                    height: 1,
+                    url: '${pageContext.request.contextPath}/static/Case/image/end.png',
+                    size: 64
+                });
+                // 画导航线
+                navi.drawNaviLine();
+                //开始导航
+                navi.followAngle = true;
+                navi.followPosition = true;
+                navi.scaleAnimate = true;
+                if(navi.isSimulating){
+                    navi.stop();
+                    navi.reset();
+                }
+                //下句解决IOS苹果手机不能播放问题，不能删除
+                map.ESAudioTool.playSoundByName('startNaving');
+                navi.simulate();
+            }
+        });
+    });
+
+    function createNavi() {
+        // if (map.naviData.length == 0) {
+        //     console.warn("地图导航数据信息不存在！");
+        //     return;
+        // }
+        if (!navi) {
+            //初始化导航对象
+            navi = new esmap.ESNavigation({
+                map: map,
+                locationMarkerUrl: '${pageContext.request.contextPath}/static/Case/image/pointer.png',
+                locationMarkerSize: 150,
+                speed: 1,
+                followAngle: true,
+                followPosition: true,
+                followGap: 3,
+                tiltAngle: 30,
+                audioPlay: true,
+                // scaleLevel:0,
+                mode: 1,
+                offsetHeight: 1,
+                // 设置导航线的样式
+                lineStyle: {
+                    color: '#58a2e4',
+                    //设置线为导航线样式
+                    lineType: esmap.ESLineType.ESARROW,
+                    lineWidth: 6,
+                    offsetHeight: 0.5,
+                    smooth: true,
+                    seeThrough: false,
+                    noAnimate: true
+                },
+                scaleAnimate: true,
+                isMultiFloors: false
+            });
+        }
+
+        navi.on("walking", function (data) {
+            //显示导航展示信息
+            showDis(data);
+        });
+
+        navi.on("complete", function () {
+            console.log("停止");
+            document.getElementById('description').innerText = "到达终点";
+        });
+    }
+    //
+    // function clearNavi() {
+    //     if (navi)
+    //         navi.clearAll();
+    //     document.getElementById("description").innerText = "暂无导航提示信息";
+    // }
+
+    //显示路径数据
+    function showDis(data) {
+        //距终点的距离
+        var distance = data.remain;
+        //路线提示信息
+        var info = navi.naviDescriptions[data.index];
+        var f = info[0] + parseInt(data.distanceToNext) + info[2];
+        //普通人每分钟走80米。
+        var time = distance / 80;
+        var m = parseInt(time);
+        var s = Math.floor((time % 1) * 60);
+        document.getElementById('description').innerHTML = '<p>距终点：' + distance.toFixed(1) + ' 米</p><p>大约需要：  ' + m + '  分钟   ' + s +
+            '   秒</p><p>路线提示：' + f + ' </p>';
     }
 </script>
 </body>

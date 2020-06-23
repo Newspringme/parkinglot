@@ -17,4 +17,7 @@ public interface ParkService {
 
     //获取场内车位信息
     LayuiData getParkList(TbPark tbPark, int start,  int pageSize);
+
+    //通过车牌获取车位
+    TbPark queryParkByCarNum(@Param("carNum") String carNum);
 }

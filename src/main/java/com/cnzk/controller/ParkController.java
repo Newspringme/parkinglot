@@ -45,4 +45,15 @@ public class ParkController {
         return layuiData;
     }
 
+    //车牌———>车位
+    @ResponseBody
+    @RequestMapping("/queryParkByCarNum")
+    public Object queryParkByCarNum(String searchText){
+        TbPark tbPark = parkService.queryParkByCarNum(searchText);
+        if (tbPark==null){
+            return "false";
+        }else{
+            return JSON.toJSONString(tbPark);
+        }
+    }
 }

@@ -48,34 +48,34 @@ public class ChackphotoController
 
 
 
-		String carNum = chackphotoService.file(file);
-		System.out.println("车牌-----------:"+carNum);
-        String ParkSpace=chackphotoService.parkspacemsg(carNum);//查重
-		if(carNum=="NO")
-		{
-			return "NOCAR";//无法识别车牌
-		}else if(ParkSpace!=null){
-			return  "HAVEING";//车牌重复
-		}
+			String carNum = chackphotoService.file(file);
+			System.out.println("车牌-----------:"+carNum);
+			String ParkSpace=chackphotoService.parkspacemsg(carNum);//查重
+			if(carNum=="NO")
+			{
+				return "NOCAR";//无法识别车牌
+			}else if(ParkSpace!=null){
+				return  "HAVEING";//车牌重复
+			}
 
-		SimpleDateFormat sdf =   new SimpleDateFormat( " yyyy-MM-dd HH:mm:ss " );
-		String starttime = sdf.format(new Date());
-		//查车找人
-		String username=chackphotoService.finduser(carNum);
-		System.out.println("入场用户-----------"+username);
-        //入场插入数据
-		chackphotoService.caraddenter(carNum,starttime);
-		String state;
-		//车辆情况查询 是临时还是有身份
-		if ("临时用户".equals(username)){
-			state = "临时车";
-		} else {
-			state=chackphotoService.findcarvip(carNum);
-		}
-		System.out.println("车辆情况---------"+state);
-		//车位查询
-		String ps=chackphotoService.findParkSpacenum("未停车");
-		//插入车库数据
+			SimpleDateFormat sdf =   new SimpleDateFormat( " yyyy-MM-dd HH:mm:ss " );
+			String starttime = sdf.format(new Date());
+			//查车找人
+			String username=chackphotoService.finduser(carNum);
+			System.out.println("入场用户-----------"+username);
+			//入场插入数据
+			chackphotoService.caraddenter(carNum,starttime);
+			String state;
+			//车辆情况查询 是临时还是有身份
+			if ("临时用户".equals(username)){
+				state = "临时车";
+			} else {
+				state=chackphotoService.findcarvip(carNum);
+			}
+			System.out.println("车辆情况---------"+state);
+			//车位查询
+			String ps=chackphotoService.findParkSpacenum("未停车");
+			//插入车库数据
 			Random r = new Random();
 			int num = r.nextInt(PS.size());
 			System.out.println("num==============="+num);
@@ -87,8 +87,8 @@ public class ChackphotoController
 			chackphotoService.updatetoPark(tbPark);
 
 
-		//		Object obj = new Gson().toJson()
-		return carNum+","+username+","+state+","+starttime+","+ps;
+			//		Object obj = new Gson().toJson()
+			return carNum+","+username+","+state+","+starttime+","+ps;
 		}
 
 	}
@@ -122,7 +122,7 @@ public class ChackphotoController
 		String entertime=chackphotoService.findentertime(carNum);
 		System.out.println("查询入场时间"+entertime);
 
-//		查询计费规则
+		//		查询计费规则
 		TbRates tbRates = adminService.queryPrice();
 		Map map = new HashMap();
 		try
@@ -134,7 +134,7 @@ public class ChackphotoController
 		}
 		//车辆情况查询 是临时还是有身份
 		String state;
-//		所需金额
+		//		所需金额
 		Double money;
 		if ("临时用户".equals(username)){
 			state = "临时车";
@@ -180,7 +180,7 @@ public class ChackphotoController
 		if (entertime==null){
 			return  "HAVEING";
 		}
-//		查询计费规则
+		//		查询计费规则
 		TbRates tbRates = adminService.queryPrice();
 		Map map = new HashMap();
 		try
@@ -192,7 +192,7 @@ public class ChackphotoController
 		}
 		//车辆情况查询 是临时还是有身份
 		String state;
-//		所需金额
+		//		所需金额
 		Double money;
 		if ("临时用户".equals(username)){
 			state = "临时车";

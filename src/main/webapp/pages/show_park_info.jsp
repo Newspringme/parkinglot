@@ -171,12 +171,13 @@
                 success:function () {
                     $.post("${pageContext.request.contextPath}/CarController/queryCarInfo?carNum="+data.carNum,function (msg) {
                         var jsonObj = JSON.parse(msg);
+                        var vip = jsonObj.tbVip;
                         if (msg==="false"){
-                            $("#carNum").val(data.carNum);
-                            $("#vipName").val("临时车");
+                            $("#carNum").val(jsonObj.carNum);
+                            $("#vipName").val(vip.vipName);
                         } else {
                             $("#carNum").val(jsonObj.carNum);
-                            $("#vipName").val(jsonObj.tbVip.vipName);
+                            $("#vipName").val(vip.vipName);
                             $("#carType").val(jsonObj.carType);
                             $("#carBrand").val(jsonObj.carBrand);
                             $("#carColor").val(jsonObj.carColor);
