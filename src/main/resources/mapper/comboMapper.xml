@@ -8,6 +8,10 @@
     <select id="queryComboList" parameterType="java.util.Map" resultType="TbCombo">
         select * from tb_combo where combo_name!='白名单' limit #{start},#{pageSize};
     </select>
+<!--    套餐金额-->
+    <select id="queryComboValue"  resultType="String">
+        select combo_value from tb_combo where combo_id = #{comboId};
+    </select>
 
     <!--规则集合数量-->
     <select id="queryCount" parameterType="java.util.Map" resultType="java.lang.Integer">

@@ -16,7 +16,7 @@
     </select>
     <!--车辆白名单的录入-->
     <update id="addWhiteList">
-        update tb_car set vip_id=1 where car_num=#{carNum};
+        update tb_car set vip_id=1,combo_id=6 where car_num=#{carNum};
     </update>
     <!--车辆白名单删除-->
     <update id="deleteWhiteList">
@@ -43,7 +43,7 @@
     <!--办理续费-->
     <insert id="handleRenew">
         update tb_car set combo_id=#{comboId},end_time=#{endTime} where
-        car_num=#{carNum};
+        car_num=#{carNum} and vip_id=2;
     </insert>
 
 <!--    //车辆出场（添加出库表数据）-->

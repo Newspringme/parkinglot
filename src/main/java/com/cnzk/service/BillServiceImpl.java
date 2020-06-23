@@ -27,7 +27,7 @@ public class BillServiceImpl  implements  BillService{
     }
 
     @Override
-    public Integer isSucceed(TbBill bill) {
+    public TbBill isSucceed(TbBill bill) {
         return billMapper.isSucceed(bill);
     }
 }

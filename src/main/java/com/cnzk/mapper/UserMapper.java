@@ -1,9 +1,11 @@
 package com.cnzk.mapper;
 
+import com.cnzk.pojo.Admin;
 import com.cnzk.pojo.TbEnter;
 import com.cnzk.pojo.TbPark;
 import com.cnzk.pojo.TbUser;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.web.bind.annotation.PathVariable;
 
 import javax.websocket.server.PathParam;
@@ -44,5 +46,14 @@ public interface UserMapper
 
 	//	根据用户名查询用户
 	TbUser queryUserByUserName(String userName);
+
+	//	查询用户记录数
+	int queryTbUserCount(TbUser tbUser);
+
+	//	查询用户，包括带条件及分页
+	List<TbUser> queryTbUser(@Param("tbUser") TbUser tbUser, @Param("start") int start, @Param("pageSize") int pageSize);
+
+	//	删除用户
+	int deleteTbUser(int[] array);
 
 }

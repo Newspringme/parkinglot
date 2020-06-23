@@ -2,6 +2,8 @@ package com.cnzk.controller;
 
 import com.alibaba.fastjson.JSON;
 import com.cnzk.pojo.LayuiData;
+import com.cnzk.pojo.TbFeedback;
+import com.cnzk.pojo.TbBill;
 import com.cnzk.service.RoleServeice;
 import com.cnzk.service.WeiXinService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,11 +29,14 @@ public class WeixinController {
 
     @ResponseBody
     @RequestMapping("sumbitFeedback")
-    public Object sumbitFeedback(String content,String phoneNo,String feedbackType){
-        System.out.println(content);
-        System.out.println(phoneNo);
-        System.out.println(feedbackType);
-        return "提交成功";
+    public Object sumbitFeedback(TbFeedback tbFeedback){
+       int i= weiXinService.feedback(tbFeedback);
+       if (i!=0){
+           System.out.println(tbFeedback.toString());
+           return "提交成功";
+       }
+       return "提交成功";
+
     }
 
     @ResponseBody
@@ -42,5 +47,23 @@ public class WeixinController {
         List list = new ArrayList();
         list.add("222");
         return list;
+    }
+
+    //	小程序订单查询
+    @ResponseBody
+    @RequestMapping("weiXinQueryBill")
+    public Object weiXinQueryBill(String carNum){
+        LayuiData layuiData=weiXinService.weiXinQueryBill(carNum);
+        System.out.println("layuiData = " + JSON.toJSONString(layuiData));
+        return layuiData;
+    }
+
+    // 根据订单编号查账单信息
+    @ResponseBody
+    @RequestMapping("queryBilldetails")
+    public Object queryBilldetails(String carNum,String billNum){
+        TbBill tbBill =weiXinService.queryBilldetails(carNum,billNum);
+        System.out.println(tbBill.toString());
+        return tbBill;
     }
 }

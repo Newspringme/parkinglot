@@ -11,5 +11,5 @@ public interface BillService {
     TbBill getCarNum(TbBill bill);
 
     //	查订单是否完成
-    Integer isSucceed(TbBill bill);
+    TbBill isSucceed(TbBill bill);
 }

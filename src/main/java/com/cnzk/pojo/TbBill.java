@@ -4,31 +4,24 @@ package com.cnzk.pojo;
 public class TbBill {
 
   private long billId;
-  private String billTime;
+  private java.sql.Timestamp billTime;
   private String billNum;
   private String billMoney;
   private long comboId;
-  private long billState;
-  private long carId;
-
-  private String carNum;
-
-//  操作事项
   private String comboName;
-
-//  操作人
   private String userName;
+  private long billState;
+  private String carNum;
+  private String billType;
 
-  public TbBill() {
+  public String getComboName() {
+    return comboName;
   }
 
-  public String getCarNum() {
-    return carNum;
+  public void setComboName(String comboName) {
+    this.comboName = comboName;
   }
 
-  public void setCarNum(String carNum) {
-    this.carNum = carNum;
-  }
   public long getBillId() {
     return billId;
   }
@@ -38,11 +31,11 @@ public class TbBill {
   }
 
 
-  public String getBillTime() {
+  public java.sql.Timestamp getBillTime() {
     return billTime;
   }
 
-  public void setBillTime(String billTime) {
+  public void setBillTime(java.sql.Timestamp billTime) {
     this.billTime = billTime;
   }
 
@@ -73,13 +66,6 @@ public class TbBill {
     this.comboId = comboId;
   }
 
-  public String getComboName() {
-    return comboName;
-  }
-
-  public void setComboName(String comboName) {
-    this.comboName = comboName;
-  }
 
   public String getUserName() {
     return userName;
@@ -89,6 +75,7 @@ public class TbBill {
     this.userName = userName;
   }
 
+
   public long getBillState() {
     return billState;
   }
@@ -97,27 +84,22 @@ public class TbBill {
     this.billState = billState;
   }
 
-  public long getCarId() {
-    return carId;
+
+  public String getCarNum() {
+    return carNum;
   }
 
-  public void setCarId(long carId) {
-    this.carId = carId;
+  public void setCarNum(String carNum) {
+    this.carNum = carNum;
   }
 
-  @Override
-  public String toString() {
-    return "TbBill{" +
-            "billId=" + billId +
-            ", billTime='" + billTime + '\'' +
-            ", billNum='" + billNum + '\'' +
-            ", billMoney='" + billMoney + '\'' +
-            ", comboId=" + comboId +
-            ", billState=" + billState +
-            ", carId=" + carId +
-            ", carNum='" + carNum + '\'' +
-            ", comboName='" + comboName + '\'' +
-            ", userName='" + userName + '\'' +
-            '}';
+
+  public String getBillType() {
+    return billType;
   }
+
+  public void setBillType(String billType) {
+    this.billType = billType;
+  }
+
 }

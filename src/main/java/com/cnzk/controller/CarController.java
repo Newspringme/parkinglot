@@ -200,6 +200,27 @@ public class CarController
 			return bool;
 		}
 	}
+	//  用户绑定车辆
+	@RequestMapping("addCar")
+	@ResponseBody
+	public Object addCar(String msg){
+		boolean bool=false;
+		System.out.println(" 绑定车辆msg ==== " + msg);
+		if(msg!=null&&!"".equals(msg.trim())){
+			TbCar tbCar=JSON.parseObject(msg,TbCar.class);
+			int num=carService.addCar(tbCar);
+			if (num>0){
+				TbUser tbUser=userService.queryUserByUserName(tbCar.getUserName());
+				tbCar.setUserId((int) tbUser.getUserId());
+				System.out.println("tbCar = " + tbCar);
+				int num1=carService.addUserCar(tbCar);
+				if(num1>0){
+				    bool=true;
+				}
+			}
+		}
+		return bool;
+	}
 
 	//车辆出场记录
 	@ResponseBody
