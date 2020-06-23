@@ -1,5 +1,6 @@
 package com.cnzk.service;
 
+import com.cnzk.pojo.TbCar;
 import com.cnzk.pojo.TbFeedback;
 
 import com.cnzk.pojo.LayuiData;
@@ -12,15 +13,15 @@ public interface WeiXinService {
     Integer feedback(TbFeedback feedback);
 
     //    小程序订单查询
-    LayuiData weiXinQueryBill(String carNum);
+    LayuiData weiXinQueryBill(List<TbCar> tbCarList);
 
     //    根据订单编号查账单信息
-    TbBill queryBilldetails(String carNum, String billNum);
+    TbBill queryBilldetails(String billNum);
 
     //    查看空车位
     Integer queryNullPark();
 
 //    根据手机号查车牌
-    String  queryCarNum(String userTel);
+    List<TbCar>  queryCarNum(String userTel);
 
 }

@@ -4,7 +4,7 @@ package com.cnzk.pojo;
 public class TbBill {
 
   private long billId;
-  private java.sql.Timestamp billTime;
+  private String billTime;
   private String billNum;
   private String billMoney;
   private long comboId;
@@ -31,11 +31,11 @@ public class TbBill {
   }
 
 
-  public java.sql.Timestamp getBillTime() {
+  public String getBillTime() {
     return billTime;
   }
 
-  public void setBillTime(java.sql.Timestamp billTime) {
+  public void setBillTime(String billTime) {
     this.billTime = billTime;
   }
 
