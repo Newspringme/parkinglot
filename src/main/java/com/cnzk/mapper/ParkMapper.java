@@ -21,4 +21,7 @@ public interface ParkMapper {
 
     //获取车位数量
     Integer getParkCount(TbPark tbPark);
+
+    //通过车牌获取车位
+    TbPark queryParkByCarNum(@Param("carNum") String carNum);
 }

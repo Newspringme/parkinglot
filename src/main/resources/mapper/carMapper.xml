@@ -60,4 +60,6 @@
     <select id="queryCarInfo" parameterType="java.lang.String" resultType="com.cnzk.pojo.TbCar">
         select * from tb_car where car_num = #{carNum}
     </select>
+
+
 </mapper>
