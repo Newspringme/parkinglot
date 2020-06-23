@@ -64,9 +64,6 @@
 			<button type="button" class="layui-btn layui-btn-xm layui-icon layui-icon-add-circle" lay-event="add">
 				新增用户
 			</button>
-			<button type="button" class="layui-btn layui-btn-xm layui-btn-danger layui-icon layui-icon-delete"
-			        lay-event="batchDelete">删除用户
-			</button>
 		</div>
 		<!--        表格主体-->
 		<table class="layui-hide" id="userTable" lay-filter="userTable"></table>
@@ -106,7 +103,7 @@
 				<div class="layui-form-item">
 					<label class="layui-form-label" style="margin-left: 120px;">年&emsp;&emsp;龄：</label>
 					<div class="layui-input-block" style="float: left; margin-left: 20px;width: 200px;">
-						<input type="number" name="userAge  " autocomplete="off" class="layui-input ">
+						<input type="number" name="userAge" autocomplete="off" class="layui-input ">
 					</div>
 				</div>
 				<div class="layui-form-item">
@@ -116,9 +113,9 @@
 					</div>
 				</div>
 				<div class="layui-form-item">
-					<label class="layui-form-label" style="margin-left: 120px;">身份证号码：</label>
+					<label class="layui-form-label" style="margin-left: 120px;">证件号码：</label>
 					<div class="layui-input-block" style="float: left; margin-left: 20px;width: 200px;">
-						<input type="number" name="userCard" autocomplete="off" class="layui-input ">
+						<input type="text" name="userCard" autocomplete="off" class="layui-input ">
 					</div>
 				</div>
 				<div class="layui-form-item">
@@ -131,10 +128,58 @@
 				</div>
 			</form>
 		</div>
+		<!--        车辆绑定弹出层-->
+		<div id="addCar" style="display: none">
+			<form class="layui-form"onsubmit="return false;" style="margin-top: 30px">
+				<div class="layui-form-item">
+					<label class="layui-form-label" style="margin-left: 120px;">用户昵称：</label>
+					<div class="layui-input-block" style="float: left; margin-left: 20px;width: 200px;">
+						<input type="text" readonly name="userName"
+						       autocomplete="off" class="layui-input userName">
+					</div>
+				</div>
+				<div class="layui-form-item">
+					<label class="layui-form-label" style="margin-left: 120px;">车牌号码：</label>
+					<div class="layui-input-block" style="float: left; margin-left: 20px;width: 200px;">
+						<input type="text" name="carNum"
+						       autocomplete="off" class="layui-input">
+					</div>
+				</div>
+				<div class="layui-form-item">
+					<label class="layui-form-label" style="margin-left: 120px;">颜&emsp;&emsp;色：</label>
+					<div class="layui-input-block" style="float: left; margin-left: 20px;width: 200px;">
+						<input type="text" name="carColor"
+						       autocomplete="off" class="layui-input">
+					</div>
+				</div>
+				<div class="layui-form-item">
+					<label class="layui-form-label" style="margin-left: 120px;">车&emsp;&emsp;型：</label>
+					<div class="layui-input-block" style="float: left; margin-left: 20px;width: 200px;">
+						<input type="text" name="carType" autocomplete="off" class="layui-input">
+					</div>
+				</div>
+				<div class="layui-form-item">
+					<label class="layui-form-label" style="margin-left: 120px;">品&emsp;&emsp;牌：</label>
+					<div class="layui-input-block" style="float: left; margin-left: 20px;width: 200px;">
+						<input type="text" name="carBrand" autocomplete="off" class="layui-input">
+					</div>
+				</div>
+				<div class="layui-form-item">
+					<div class="layui-input-block" style="margin-left: 220px;">
+						<button type="submit" class="layui-btn layui-icon layui-icon-release" lay-submit
+						        lay-filter="formAddCar">提交
+						</button>
+						<button type="reset" class="layui-btn layui-btn-warm layui-icon layui-icon-refresh">重置</button>
+					</div>
+				</div>
+			</form>
+		</div>
 
 		<!--        行工具栏-->
 		<div style="display: none" id="userBar">
-
+			<button type="button" class="layui-btn layui-btn-sm layui-icon layui-icon-addition" lay-event="addCar">
+				绑定车辆
+			</button>
 		</div>
 
 		<script type="text/javascript">
@@ -175,58 +220,22 @@
 					}
 					, cols: [[
 						{type: 'numbers', align: 'center', width: 100, fixed: 'left'}
-						, {field: 'checkbox', type: 'checkbox'}
-						, {field: 'userId', hide: true, title: 'ID', align: 'center', width: 50, sort: true}
-						, {field: 'userName', title: '用户名', align: 'center', width: 120, templet: '#nameTpl'}
-						, {field: 'userSex', title: '性别', align: 'center', width: 80, templet: '#sexTpl', hide: true}
-						, {field: 'userAge', title: '年龄', align: 'center', width: 100}
-						, {field: 'userTel', title: '手机号码', align: 'center', width: 100, hide: true}
-						, {field: 'userCard', title: '身份证号码', align: 'center', width: 150, hide: true}
-						, {field: 'regTime', title: '注册时间', align: 'center', width: 200}
+						, {field: 'userId', hide: true, title: 'ID', align: 'center', sort: true}
+						, {field: 'userName', title: '用户名', align: 'center', templet: '#nameTpl'}
+						, {field: 'userSex', title: '性别', align: 'center', templet: '#sexTpl'}
+						, {field: 'userAge', title: '年龄', align: 'center'}
+						, {field: 'userTel', title: '手机号码', align: 'center'}
+						, {field: 'userCard', title: '身份证号码', align: 'center'}
+						, {field: 'regTime', title: '注册时间', align: 'center'}
+						, {fixed: 'right', title: '操作', align: 'center', toolbar: '#userBar'}
+
 					]]
 				});
-
 				//头部工具栏监听事件
 				table.on('toolbar(userTable)', function (obj) {
-					var nowId = '${tbUser.userId}';
-					var checkStatus = table.checkStatus('userTable');
-					data = checkStatus.data;
-					delList = [];
-					data.forEach(function (n, i) {
-						if (n.userId == nowId) {
-							alert("当前登录的账号不能删除的哦(*￣︶￣)");
-						} else {
-							delList.push(n.userId);
-						}
-					});
-
 					switch (obj.event) {
 						case 'add':
 							openAddUser();
-							break;
-
-
-						case 'batchDelete':
-							if (delList.length > 0) {
-								layer.confirm('确定删除所选择的用户？', {icon: 5}, function (index) {
-									layer.close(index);
-									// 向服务端发送删除指令
-									$.post("${pageContext.request.contextPath}/UserController/deleteTbUser?delList=" + delList, null, function (msg) {
-										msg = msg + '';
-										if (msg == 'true') {
-											layer.alert('删除成功', {icon: 6}, function (index) {
-												window.location.reload();
-											});
-										} else {
-											layer.alert('删除失败', {icon: 2});
-										}
-									})
-								});
-							} else {
-								layer.alert("至少选一个删除吧", {icon: 4}, function (index) {
-									layer.close(index);
-								})
-							}
 							break;
 					}
 					;
@@ -267,6 +276,7 @@
 
 					});
 				}
+
 				//提交条件查询表单
 				form.on('submit(formSearch)', function (data) {
 					var msg = JSON.stringify(data.field);
@@ -284,6 +294,41 @@
 
 					})
 				})
+				//监听行工具条事件
+				table.on('tool(userTable)', function (obj) {
+					var data = obj.data; //获得当前行数据
+					$('.userName').val(data.userName);
+					var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
+					if (layEvent == 'addCar') { //绑定车辆
+						//打开绑定车辆弹窗
+						layer.open({
+							type: 1,
+							title: '绑定车辆',
+							content: $('#addCar'),
+							area: ['600px', '420px'],
+							shade: [0.5, '#fff'], //0.5透明度的白色背景
+							skin: 'layui-layer-molv',//墨绿 皮肤
+							offset: '50px',//上边距
+							shift: 1 //动画类型
+						})
+						//提交绑定车辆表单
+						form.on('submit(formAddCar)', function (data) {
+							var msg = JSON.stringify(data.field);
+							$.post("${pageContext.request.contextPath}/CarController/addCar?msg=" + encodeURI(msg), function (msg) {
+								msg = msg + '';
+								if (msg == 'true') {
+									layer.alert('车辆绑定成功', {icon: 6}, function (index) {
+										window.location.reload();
+									});
+								} else {
+									layer.msg("车辆绑定失败", {icon: 2});
+								}
+							})
+
+							return false;//阻止页面刷新
+						});
+					}
+				})
 
 				//	自定义验证规则
 				form.verify({
@@ -298,10 +343,7 @@
 					]
 				});
 			});
-
-
 		</script>
-
 		<%--根据性别更改样式--%>
 		<script type="text/html" id="sexTpl">
 			{{#  if(d.userSex === '女'){ }}

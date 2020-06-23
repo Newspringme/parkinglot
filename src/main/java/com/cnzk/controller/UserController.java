@@ -5,9 +5,12 @@ import com.cnzk.pojo.LayuiData;
 import com.cnzk.pojo.TbUser;
 import com.cnzk.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import java.time.LocalDateTime;
 
 /**
  * @author su
@@ -54,38 +57,6 @@ public class UserController
 		LayuiData layuiData = userService.queryTbUser(tbUser, start, pageSize);
 		System.out.println("layuiData = " + JSON.toJSONString(layuiData));
 		return layuiData;
-	}
-	//	删除用户
-	@RequestMapping("/deleteTbUser")
-	@ResponseBody
-	@Log(operationThing = "删除用户", operationType = "删除")
-	public Object deleteTbUser(String delList, String userId)
-	{
-		int num = 0;
-		boolean bool = false;
-		if (userId != null && !"".equals(userId.trim()))
-		{
-			System.out.println("删除用户userId = " + userId);
-			int[] arr = {Integer.parseInt(userId)};
-			num = userService.deleteTbUser(arr);
-		}
-		else
-		{
-			System.out.println("delList = " + delList);
-			String[] strArr = delList.split(",");
-			int[] intArr = new int[strArr.length];
-			for (int i = 0; i < strArr.length; i++)
-			{
-				intArr[i] = Integer.parseInt(strArr[i]);
-			}
-			num = userService.deleteTbUser(intArr);
-		}
-		if (num > 0)
-		{
-			System.out.println("删除成功");
-			bool = true;
-		}
-		return bool;
 	}
 
 }

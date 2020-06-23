@@ -1,7 +1,6 @@
 package com.cnzk.service;
 
 import com.cnzk.mapper.UserMapper;
-import com.cnzk.pojo.Admin;
 import com.cnzk.pojo.LayuiData;
 import com.cnzk.pojo.TbUser;
 import org.springframework.stereotype.Service;
@@ -45,13 +44,6 @@ public class UserServiceImpl implements UserService
 	{
 	}
 
-	//删除用户
-	@Override
-	public int deleteTbUser(int[] array)
-	{
-		int num = userMapper.deleteTbUser(array);
-		return num;
-	}
 
 	//	查询用户，包括带条件,分页,记录数
 	@Override
