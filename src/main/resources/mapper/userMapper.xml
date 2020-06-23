@@ -88,4 +88,8 @@
         </where>
         limit #{start},#{pageSize};
     </select>
+<!--修改用户资料-->
+    <update id="updataUser" parameterType="TbUser">
+        update tb_user set user_name = #{userName},user_sex = #{userSex},user_age = #{userAge},user_tel = #{userTel}  where user_id = #{userId};
+    </update>
 </mapper>

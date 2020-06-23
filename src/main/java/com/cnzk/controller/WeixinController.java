@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.cnzk.pojo.LayuiData;
 import com.cnzk.pojo.TbFeedback;
 import com.cnzk.pojo.TbBill;
+import com.cnzk.pojo.TbUser;
 import com.cnzk.service.RoleServeice;
 import com.cnzk.service.WeiXinService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +37,18 @@ public class WeixinController {
            return "提交成功";
        }
        return "提交成功";
+
+    }
+
+    @ResponseBody
+    @RequestMapping("sumbitUserdata")
+    public Object sumbitUserdata(TbUser TbUser){
+        int i= weiXinService.UpdateUser(TbUser);
+        if (i!=0){
+            System.out.println(TbUser.toString());
+            return "提交成功";
+        }
+        return "提交成功";
 
     }
 

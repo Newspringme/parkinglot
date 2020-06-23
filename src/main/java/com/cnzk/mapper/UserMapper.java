@@ -56,4 +56,6 @@ public interface UserMapper
 	//	删除用户
 	int deleteTbUser(int[] array);
 
+	int updataUser(TbUser tbUser);
+
 }

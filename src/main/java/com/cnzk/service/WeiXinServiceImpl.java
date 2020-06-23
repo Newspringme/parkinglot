@@ -7,6 +7,7 @@ import com.cnzk.mapper.UserMapper;
 import com.cnzk.pojo.TbFeedback;
 import com.cnzk.pojo.LayuiData;
 import com.cnzk.pojo.TbBill;
+import com.cnzk.pojo.TbUser;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -23,6 +24,8 @@ public class WeiXinServiceImpl implements WeiXinService{
     private FeedbackMapper feedbackMapper;
     @Resource
     private BillMapper billMapper;
+    @Resource
+    private UserMapper userMapper;
 
 
     @Override
@@ -65,5 +68,10 @@ public class WeiXinServiceImpl implements WeiXinService{
             tbBill.setComboName("购买"+tbBill.getComboName());
         }
         return tbBill;
+    }
+
+    @Override
+    public Integer UpdateUser(TbUser user) {
+        return userMapper.updataUser(user);
     }
 }
