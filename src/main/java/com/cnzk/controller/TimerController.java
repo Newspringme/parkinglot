@@ -25,16 +25,16 @@ public class TimerController
 //	@Scheduled(cron = "0 0 10 * * *")//每天早上10点执行一次
 	public void runTimer() throws IOException
 	{
-		TbCar tbCar=userMapper.queryEndTime();
-		System.out.println("月缴到期tbCar ===== " + tbCar);
-		if(tbCar!=null){
-			if(WebSocket.electricSocketMap.get("ip")!=null){
-				for (Session session:WebSocket.electricSocketMap.get("ip"))
-				{
-					session.getBasicRemote().sendText(tbCar.getCarNum()+"的月缴产品还剩"+5+"天到期");
-				}
-
-			}
-		}
+//		TbCar tbCar=userMapper.queryEndTime();
+//		System.out.println("月缴到期tbCar ===== " + tbCar);
+//		if(tbCar!=null){
+//			if(WebSocket.electricSocketMap.get("ip")!=null){
+//				for (Session session:WebSocket.electricSocketMap.get("ip"))
+//				{
+//					session.getBasicRemote().sendText(tbCar.getCarNum()+"的月缴产品还剩"+5+"天到期");
+//				}
+//
+//			}
+//		}
 	}
 }

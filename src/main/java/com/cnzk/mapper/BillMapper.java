@@ -55,6 +55,6 @@ public interface BillMapper {
     List<TbBill> weiXinQueryBill(@PathParam("carNum")String carNum);
 
     //    根据订单编号查账单信息
-    TbBill queryBilldetails(@PathParam("carNum")String carNum,@PathParam("billNum")String billNum);
+    TbBill queryBilldetails(@PathParam("billNum")String billNum);
 
 }

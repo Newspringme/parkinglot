@@ -2,8 +2,10 @@ package com.cnzk.controller;
 
 import com.alibaba.fastjson.JSON;
 import com.cnzk.pojo.LayuiData;
+import com.cnzk.pojo.TbCar;
 import com.cnzk.pojo.TbFeedback;
 import com.cnzk.pojo.TbBill;
+import com.cnzk.pojo.TbUser;
 import com.cnzk.service.RoleServeice;
 import com.cnzk.service.WeiXinService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,6 +43,18 @@ public class WeixinController {
     }
 
     @ResponseBody
+    @RequestMapping("sumbitUserdata")
+    public Object sumbitUserdata(TbUser TbUser){
+        int i= weiXinService.UpdateUser(TbUser);
+        if (i!=0){
+            System.out.println(TbUser.toString());
+            return "提交成功";
+        }
+        return "提交成功";
+
+    }
+
+    @ResponseBody
     @RequestMapping("queryCode")
     public Object queryCode(){
 
@@ -53,8 +67,11 @@ public class WeixinController {
     //	小程序订单查询
     @ResponseBody
     @RequestMapping("weiXinQueryBill")
-    public Object weiXinQueryBill(String carNum){
-        LayuiData layuiData=weiXinService.weiXinQueryBill(carNum);
+    public Object weiXinQueryBill(String carList){
+        System.out.println(carList);
+        List<TbCar> tbCarList = JSON.parseArray(carList,TbCar.class);
+        System.out.println(tbCarList);
+        LayuiData layuiData=weiXinService.weiXinQueryBill(tbCarList);
         System.out.println("layuiData = " + JSON.toJSONString(layuiData));
         return layuiData;
     }
@@ -62,8 +79,8 @@ public class WeixinController {
     // 根据订单编号查账单信息
     @ResponseBody
     @RequestMapping("queryBilldetails")
-    public Object queryBilldetails(String carNum,String billNum){
-        TbBill tbBill =weiXinService.queryBilldetails(carNum,billNum);
+    public Object queryBilldetails(String billNum){
+        TbBill tbBill =weiXinService.queryBilldetails(billNum);
         System.out.println(tbBill.toString());
         return tbBill;
     }
@@ -75,5 +92,14 @@ public class WeixinController {
         Integer num =weiXinService.queryNullPark();
         System.out.println(num);
         return num;
+    }
+
+    // 根据手机号查车牌
+    @ResponseBody
+    @RequestMapping("queryCarNum")
+    public Object queryCarNum(String userTel){
+        List<TbCar> tbCarList =weiXinService.queryCarNum(userTel);
+        System.out.println(tbCarList);
+        return tbCarList;
     }
 }

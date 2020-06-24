@@ -61,5 +61,14 @@
         select * from tb_car where car_num = #{carNum}
     </select>
 
+    <!--根据手机号查车牌-->
+    <select id="queryCarNum" resultType="TbCar">
+        select c.car_brand,c.car_color,c.car_id,c.car_num,c.car_type,c.combo_id,d.combo_name,c.end_time,a.user_id,a.user_name,a.user_tel from tb_user a
+            left join tb_user_car b on a.user_id = b.user_id
+            left join tb_car c on b.car_id = c.car_id
+            left join tb_combo d on c.combo_id = d.combo_id
+        where a.user_tel = #{userTel}
+    </select>
+
 
 </mapper>

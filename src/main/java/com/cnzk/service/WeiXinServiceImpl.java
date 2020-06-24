@@ -1,13 +1,16 @@
 package com.cnzk.service;
 
 import com.cnzk.mapper.*;
+import com.cnzk.pojo.TbCar;
 import com.cnzk.pojo.TbFeedback;
 import com.cnzk.pojo.LayuiData;
 import com.cnzk.pojo.TbBill;
+import com.cnzk.pojo.TbUser;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -21,7 +24,11 @@ public class WeiXinServiceImpl implements WeiXinService{
     @Resource
     private BillMapper billMapper;
     @Resource
+    private UserMapper userMapper;
+    @Resource
     private ParkMapper parkMapper;
+    @Resource
+    private CarMapper carMapper;
 
 
     @Override
@@ -40,9 +47,14 @@ public class WeiXinServiceImpl implements WeiXinService{
 
 //    小程序订单查询
     @Override
-    public LayuiData weiXinQueryBill(String carNum){
-        List<TbBill> list=billMapper.weiXinQueryBill(carNum);
-        for (TbBill tbBill : list) {
+    public LayuiData weiXinQueryBill(List<TbCar> tbCarList){
+        List<TbBill> tbBillList = new ArrayList<>();
+        for(TbCar tbCar: tbCarList){
+            List<TbBill> list = new ArrayList<>();
+            list = billMapper.weiXinQueryBill(tbCar.getCarNum());
+            tbBillList.addAll(list);
+        }
+        for (TbBill tbBill : tbBillList) {
             if (null==tbBill.getComboName()) {
                 tbBill.setComboName("临时停车");
             }else{
@@ -50,14 +62,14 @@ public class WeiXinServiceImpl implements WeiXinService{
             }
         }
         LayuiData layuiData = new LayuiData();
-        layuiData.setData(list);
+        layuiData.setData(tbBillList);
         return layuiData;
     }
 
     //    根据订单编号查账单信息
     @Override
-    public TbBill queryBilldetails(String carNum, String billNum) {
-        TbBill tbBill=billMapper.queryBilldetails(carNum,billNum);
+    public TbBill queryBilldetails(String billNum) {
+        TbBill tbBill=billMapper.queryBilldetails(billNum);
         if (null==tbBill.getComboName()) {
             tbBill.setComboName("临时停车");
         }else{
@@ -67,7 +79,17 @@ public class WeiXinServiceImpl implements WeiXinService{
     }
 
     @Override
+    public Integer UpdateUser(TbUser user) {
+        return userMapper.updataUser(user);
+    }
+    //    查看空车位
+    @Override
     public Integer queryNullPark() {
         return parkMapper.queryNullPark();
+    }
+    //    根据手机号查车牌
+    @Override
+    public List<TbCar> queryCarNum(String userTel) {
+        return carMapper.queryCarNum(userTel);
     }
 }

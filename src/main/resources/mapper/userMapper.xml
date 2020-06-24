@@ -76,9 +76,9 @@
             <if test="tbUser.userName!=null and tbUser.userName!=''">and user_name like
                 concat('%',#{tbUser.userName},'%')
             </if>
-            <if test="tbUser.startTime!=null and tbUser.startTime!=''">and reg_time &gt;=#{tbUser.startTime}
+            <if test="tbUser.startTime!=null and tbUser.startTime!=''">and reg_time &gt;=#{admin.startTime}
             </if>
-            <if test="tbUser.endTime!=null and tbUser.endTime!=''">and reg_time &lt;= #{tbUser.endTime}</if>
+            <if test="tbUser.endTime!=null and tbUser.endTime!=''">and reg_time &lt;= #{admin.endTime}</if>
         </where>
         limit #{start},#{pageSize};
     </select>
@@ -97,4 +97,8 @@
         insert into tb_user (user_tel,user_pass)values(#{phone},#{password});
     </insert>
 
+<!--修改用户资料-->
+    <update id="updataUser" parameterType="TbUser">
+        update tb_user set user_name = #{userName},user_sex = #{userSex},user_age = #{userAge},user_tel = #{userTel}  where user_id = #{userId};
+    </update>
 </mapper>
