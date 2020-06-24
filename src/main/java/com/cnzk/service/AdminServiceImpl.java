@@ -190,6 +190,11 @@ public class AdminServiceImpl implements AdminService
 			}else{
 				tbBill.setComboName("购买"+tbBill.getComboName());
 			}
+			if(tbBill.getBillState()==1){
+				tbBill.setBillType("支付成功");
+			}else{
+				tbBill.setBillType("支付失败");
+			}
 		}
 		int count=billMapper.queryBillCount(map);
 		LayuiData layuiData = new LayuiData();

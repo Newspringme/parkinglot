@@ -392,4 +392,24 @@ public class PayController {
         }
 
     }
+
+    @ResponseBody
+    @RequestMapping("weiXinCarPay")
+    public Object weiXinCarPay(String carNum,String type) throws ParseException {
+        String username = chackphotoService.finduser(carNum);
+        System.out.println("入场用户-----------" + username);
+        //查询入场时间
+        String entertime = chackphotoService.findentertime(carNum);
+        //出厂时间
+        SimpleDateFormat sdf = new SimpleDateFormat(" yyyy-MM-dd HH:mm:ss ");
+        String exittime = sdf.format(new Date());//查车找人
+//商户订单号，商户网站订单系统中唯一订单号，必填
+        //生成随机Id
+        String out_trade_no = App.getoutTradeNo();
+        //付款金额，必填
+        Map<String, String> map = App.getBill(entertime, exittime, adminService.queryPrice());
+        String total_amount = map.get("bill");
+        return total_amount;
+    }
+
 }
