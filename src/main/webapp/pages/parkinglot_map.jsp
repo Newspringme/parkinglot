@@ -512,10 +512,10 @@
     });
 
     function createNavi() {
-        // if (map.naviData.length == 0) {
-        //     console.warn("地图导航数据信息不存在！");
-        //     return;
-        // }
+        if (map.naviData.length === 0) {
+            console.warn("地图导航数据信息不存在！");
+            return;
+        }
         if (!navi) {
             //初始化导航对象
             navi = new esmap.ESNavigation({
