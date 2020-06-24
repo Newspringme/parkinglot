@@ -5,6 +5,7 @@ import com.cnzk.pojo.TbFeedback;
 
 import com.cnzk.pojo.LayuiData;
 import com.cnzk.pojo.TbBill;
+import com.cnzk.pojo.TbUser;
 
 import java.util.List;
 
@@ -16,6 +17,8 @@ public interface WeiXinService {
     LayuiData weiXinQueryBill(List<TbCar> tbCarList);
 
     //    根据订单编号查账单信息
+    TbBill queryBilldetails(String carNum, String billNum);
+    Integer UpdateUser(TbUser user);
     TbBill queryBilldetails(String billNum);
 
     //    查看空车位

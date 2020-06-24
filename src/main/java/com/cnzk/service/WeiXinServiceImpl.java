@@ -5,6 +5,7 @@ import com.cnzk.pojo.TbCar;
 import com.cnzk.pojo.TbFeedback;
 import com.cnzk.pojo.LayuiData;
 import com.cnzk.pojo.TbBill;
+import com.cnzk.pojo.TbUser;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -22,6 +23,8 @@ public class WeiXinServiceImpl implements WeiXinService{
     private FeedbackMapper feedbackMapper;
     @Resource
     private BillMapper billMapper;
+    @Resource
+    private UserMapper userMapper;
     @Resource
     private ParkMapper parkMapper;
     @Resource
@@ -73,6 +76,11 @@ public class WeiXinServiceImpl implements WeiXinService{
             tbBill.setComboName("购买"+tbBill.getComboName());
         }
         return tbBill;
+    }
+
+    @Override
+    public Integer UpdateUser(TbUser user) {
+        return userMapper.updataUser(user);
     }
     //    查看空车位
     @Override
