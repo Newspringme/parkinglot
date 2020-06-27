@@ -220,8 +220,8 @@
     }
 </style>
 <body ms-controller = "ctrl" class="ms-controller">
-<input type="hidden" id="coorX" value="<%=x%>">
-<input type="hidden" id="coorY" value="<%=y%>">
+<%--<input type="hidden" id="coorX" value="<%=x%>">--%>
+<%--<input type="hidden" id="coorY" value="<%=y%>">--%>
 <div id="map-container"></div>
 <div class="loading">
     <div class="lodingImg"></div>
