@@ -101,4 +101,10 @@
     <update id="updataUser" parameterType="TbUser">
         update tb_user set user_name = #{userName},user_sex = #{userSex},user_age = #{userAge},user_tel = #{userTel}  where user_id = #{userId};
     </update>
+
+
+    <!--根据手机号查询用户-->
+    <select id="queryUser" resultType="com.cnzk.pojo.TbUser">
+        select * from tb_user where user_tel=#{userTel};
+    </select>
 </mapper>

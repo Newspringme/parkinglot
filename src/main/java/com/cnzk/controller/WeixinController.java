@@ -102,4 +102,14 @@ public class WeixinController {
         System.out.println(tbCarList);
         return tbCarList;
     }
+
+    // 根据手机号查用户
+    @ResponseBody
+    @RequestMapping("queryUserbyUserTel")
+    public Object queryUser(String userTel){
+        TbUser tbUser =weiXinService.queryUser(userTel);
+        System.out.println(tbUser);
+        return tbUser;
+    }
+
 }
