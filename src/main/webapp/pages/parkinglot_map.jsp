@@ -6,11 +6,11 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%
-    TbCoordinate machine =(TbCoordinate) request.getSession().getAttribute("machine");
-    String x = machine.getCoordinateX();
-    String y = machine.getCoordinateY();
-%>
+<%--<%--%>
+    <%--TbCoordinate machine =(TbCoordinate) request.getSession().getAttribute("machine");--%>
+    <%--String x = machine.getCoordinateX();--%>
+    <%--String y = machine.getCoordinateY();--%>
+<%--%>--%>
 <html>
 <head>
     <meta charset="utf-8">
@@ -494,28 +494,28 @@
     }
 
     //添加当前位置标注
-    function addCurrPoint(){
-        var machineX = $("#coorX").val();
-        var machineY = $("#coorY").val();
-        var layer = new esmap.ESLayer('textMaker');
-        layer.name = 'mylayer';
-        //添加文本标注，默认样式
-        var tm = new esmap.ESTextMarker({
-            x: machineX - 0,
-            y: machineY - 0,
-            name: "当前位置",
-            image: "${pageContext.request.contextPath}/static/Case/image/start.png",
-            imageAlign: "bottom",
-            imageSize: 60,
-            height: 3,
-            showLevel: 20,
-            fillcolor: "255,0,0", //填充色
-            fontsize: "12.0", //字体大小
-            strokecolor: "255,255,0" //边框色
-        });
-        layer.addMarker(tm);
-        floorLayer.addLayer(layer);
-    }
+    <%--function addCurrPoint(){--%>
+        <%--var machineX = $("#coorX").val();--%>
+        <%--var machineY = $("#coorY").val();--%>
+        <%--var layer = new esmap.ESLayer('textMaker');--%>
+        <%--layer.name = 'mylayer';--%>
+        <%--//添加文本标注，默认样式--%>
+        <%--var tm = new esmap.ESTextMarker({--%>
+            <%--x: machineX - 0,--%>
+            <%--y: machineY - 0,--%>
+            <%--name: "当前位置",--%>
+            <%--image: "${pageContext.request.contextPath}/static/Case/image/start.png",--%>
+            <%--imageAlign: "bottom",--%>
+            <%--imageSize: 60,--%>
+            <%--height: 3,--%>
+            <%--showLevel: 20,--%>
+            <%--fillcolor: "255,0,0", //填充色--%>
+            <%--fontsize: "12.0", //字体大小--%>
+            <%--strokecolor: "255,255,0" //边框色--%>
+        <%--});--%>
+        <%--layer.addMarker(tm);--%>
+        <%--floorLayer.addLayer(layer);--%>
+    <%--}--%>
 
     var searchText;
     //搜索车辆
