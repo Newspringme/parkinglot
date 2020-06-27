@@ -73,7 +73,6 @@
                     <br><br><br>
                     <div class="layui-timeline-content layui-text" style="text-align: center">
                         <div class="layui-timeline-title">
-                            <button type="button" class="layui-btn" onclick="abnormalOut()">异常出库</button>
                             <button type="button" class="layui-btn" onclick="onlinePay()">在线收费</button>
                             <button type="button" class="layui-btn" onclick="cashPay()">现金收费</button>
                         </div>

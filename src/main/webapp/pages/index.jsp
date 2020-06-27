@@ -58,7 +58,9 @@
             </ul>
 
             <ul class="layui-nav layui-layout-right">
-
+                <li class="layui-nav-item" lay-unselect>
+                    <span style="color: gray;"> 菜鸟智科欢迎${tbAdmin.adminName}的登陆</span>
+                </li>
                 <li class="layui-nav-item" lay-unselect>
                     <a href="javascript:;" data-refresh="刷新"><i class="fa fa-refresh"></i></a>
                 </li>
