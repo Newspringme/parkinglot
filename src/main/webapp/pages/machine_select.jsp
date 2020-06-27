@@ -62,7 +62,6 @@
 
     function entryMap(machineNum){
         $.post("${pageContext.request.contextPath}/CoorController/getSelfServiceCoor?machineNum="+machineNum,function (data) {
-            alert(data);
             window.location.href = "${pageContext.request.contextPath}/pages/parkinglot_map.jsp";
         });
     }
