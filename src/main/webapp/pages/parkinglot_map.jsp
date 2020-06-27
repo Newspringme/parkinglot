@@ -333,7 +333,6 @@
             floorLayer = map.getFloor(1);
             var zoomControl = new esmap.ESZoomControl(map, ctlOpt1);
             createNavi();
-            // addCurrPoint();
             bingEvents();
             marquee();
             // //先执行显示一次
