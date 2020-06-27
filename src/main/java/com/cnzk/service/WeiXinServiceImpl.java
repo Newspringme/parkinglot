@@ -91,4 +91,9 @@ public class WeiXinServiceImpl implements WeiXinService{
     public List<TbCar> queryCarNum(String userTel) {
         return carMapper.queryCarNum(userTel);
     }
+
+    @Override
+    public TbUser queryUser(String userTel) {
+        return userMapper.queryUser(userTel);
+    }
 }

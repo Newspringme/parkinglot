@@ -26,4 +26,6 @@ public interface WeiXinService {
 //    根据手机号查车牌
     List<TbCar>  queryCarNum(String userTel);
 
+    TbUser queryUser(String userTel);
+
 }
