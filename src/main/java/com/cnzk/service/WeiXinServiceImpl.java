@@ -92,4 +92,5 @@ public class WeiXinServiceImpl implements WeiXinService{
     public List<TbCar> queryCarNum(String userTel) {
         return carMapper.queryCarNum(userTel);
     }
+
 }
