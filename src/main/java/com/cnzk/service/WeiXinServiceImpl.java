@@ -96,4 +96,5 @@ public class WeiXinServiceImpl implements WeiXinService{
     public TbUser queryUser(String userTel) {
         return userMapper.queryUser(userTel);
     }
+
 }
