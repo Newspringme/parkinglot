@@ -5,7 +5,7 @@
 <mapper namespace="com.cnzk.mapper.BillMapper">
 <!--    //	查收支明细-->
     <select id="queryBill" resultType="TbBill" >
-        select a.bill_id, a.bill_time, a.bill_num, a.bill_money, b.combo_name,a.user_name
+        select a.bill_id, a.bill_time, a.bill_num, a.bill_money, a.bill_state, b.combo_name,a.user_name
         from tb_bill a left join tb_combo b on a.combo_id=b.combo_id
         <where>
             <if test="billNum">

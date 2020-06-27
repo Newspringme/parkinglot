@@ -84,7 +84,8 @@
                 {field: 'billTime', maxwidth: 200,minWidth: 100, title: '账单时间'},
                 {field: 'billMoney', minWidth: 80, title: '金额'},
                 {field: 'comboName', minWidth: 100, title: '消费事项'},
-                {field: 'userName', minWidth: 100, title: '用户名'}
+                {field: 'userName', minWidth: 100, title: '用户名'},
+                {field: 'billType', minWidth: 100, title: '支付状态'}
             ]],
             limits: [10, 15, 20, 25, 50, 100],
             limit: 10,
