@@ -62,5 +62,7 @@ public interface UserMapper
 	void userReg(String phone,String password);
 	//  获取月缴要到期的车辆
 	TbCar queryEndTime();
+
+	//通过手机号获取用户
 	TbUser queryUser(@Param("userTel")String userTel);
 }

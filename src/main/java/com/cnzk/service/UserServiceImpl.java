@@ -84,4 +84,11 @@ public class UserServiceImpl implements UserService
 		return null;
 	}
 
+	//通过手机号获取用户
+	@Override
+	public TbUser queryUser(String userTel) {
+		return userMapper.queryUser(userTel);
+	}
+
+
 }
