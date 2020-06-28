@@ -107,7 +107,7 @@
 				<div class="layui-form-item">
 					<label class="layui-form-label" style="margin-left: 120px;">手机号码：</label>
 					<div class="layui-input-block" style="float: left; margin-left: 20px;width: 200px;">
-						<input type="tel" name="adminTel" autocomplete="off" class="layui-input ">
+						<input type="tel" lay-verify="adminTel" name="adminTel" autocomplete="off" class="layui-input ">
 					</div>
 				</div>
 
@@ -567,12 +567,14 @@
 						/^[\S]{6,12}$/
 						, '密码必须6到12位，且不能出现空格'
 					]
+					, adminTel:[
+						/^1([38][0-9]|4[579]|5[0-3,5-9]|6[6]|7[0135678]|9[89])\d{8}$/
+						,'请输入正确格式的手机号'
+					]
 				});
 			});
 
-
 		</script>
-
 		<%--根据性别更改样式--%>
 		<script type="text/html" id="sexTpl">
 			{{#  if(d.adminSex === '女'){ }}

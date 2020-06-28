@@ -143,7 +143,11 @@
 						//月缴用户不能重复办理月缴产品，只能续费来变更套餐
 						$('#comboCarNum').val(tbCar.carNum);
 					}
-					openCarInfo();
+					if (msg == ''||msg==null) {
+						layer.msg('该车辆未绑定用户',{icon:2})
+					}else {
+						openCarInfo();
+					}
 				});
 			})
 
