@@ -19,7 +19,7 @@
     <legend>历史出场信息</legend>
 
 </fieldset>
-<ul class="layui-timeline">
+<ul class="layui-timeline" style="padding-left: 20px">
     <%--<li class="layui-timeline-item">--%>
         <%--<i class="layui-icon layui-timeline-axis">&#xe63f;</i>--%>
         <%--<div class="layui-timeline-content layui-text">--%>
@@ -37,12 +37,44 @@
         $.post("${pageContext.request.contextPath}/CarController/queryExit",{start:0,end:6},function (data) {
             var history = JSON.parse(data);
             for (var i = 0; i < history.length; i++) {
-                $(".layui-timeline").prepend(
+                var car = history[i].tbCar;
+                var combo = car.comboId;
+                var cardType;
+                if (car != null || car != "") {
+                    switch (combo) {
+                        case 0:
+                            cardType = "临时车";
+                            break;
+                        case 1:
+                            cardType = "月卡";
+                            break;
+                        case 2:
+                            cardType = "季卡";
+                            break;
+                        case 3:
+                            cardType = "半年卡";
+                            break;
+                        case 4:
+                            cardType = "年卡";
+                            break;
+                        case 5:
+                            cardType = "至尊卡";
+                            break;
+                        case 6:
+                            cardType = "白名单";
+                            break;
+                    }
+                } else {
+                    cardType = "临时车";
+                }
+
+
+                $(".layui-timeline").append(
                     "<li class='layui-timeline-item'>" +
                     "<i class='layui-icon layui-timeline-axis'>&#xe63f;</i>" +
                     "<div class='layui-timeline-content layui-text'>" +
                     "<h3 class='layui-timeline-title'>"+history[i].exitTime+"</h3>" +
-                    "<p>车牌号：" + history[i].carNum +
+                    "<p>车牌号：" + history[i].carNum + "<br>用户类型："+cardType+
                     "</p></div></li>"
                 );
             }
