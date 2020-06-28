@@ -301,11 +301,12 @@ public class ChackphotoServiceImpl implements ChackphotoService
 	{     //查VIP ，如果为空返回临时车，如果有。返回数据
 		String carvip = userMapper.findcarvip(carnum);
 		if ("1".equals(carvip)){
-
-			return "特殊车辆"; }
-		else {
-
-			return "月卡车辆" ;}
+			return "特殊车辆";
+		} else if("2".equals(carvip)) {
+			return "月卡车辆" ;
+		}else {
+			return "临时车" ;
+		}
 	}
 
 	@Override

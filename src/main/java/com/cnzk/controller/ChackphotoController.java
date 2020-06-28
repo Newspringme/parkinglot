@@ -141,7 +141,12 @@ public class ChackphotoController
 			money= Double.valueOf(map.get("bill")+"");
 		} else {
 			state=chackphotoService.findcarvip(carNum);
-			money = 0d;
+			if ("月卡车辆".equals(state)) {
+				money = 0d;
+			}else{
+				money= Double.valueOf(map.get("bill")+"");
+			}
+
 		}
 		System.out.println("车辆情况---------"+state);
 		//车位查询
