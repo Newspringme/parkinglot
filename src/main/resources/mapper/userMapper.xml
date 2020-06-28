@@ -84,7 +84,7 @@
     </select>
 <!--获取月缴要到期的车辆-->
     <select id="queryEndTime" resultType="com.cnzk.pojo.TbCar">
-        select * from tb_car where date_add(end_time,interval 5 day) &lt;=now();
+        select * from tb_car where date_add(now(),interval 5 day) &gt;=end_time and end_time!='';
     </select>
     <select id="userLogin" resultType="java.lang.String">
         select user_pass from tb_user where user_tel=#{phone};

@@ -59,55 +59,29 @@ public class CarController
 	//	车辆白名单的录入
 	@RequestMapping("/addWhiteList")
 	@ResponseBody
-	public Object addWhiteList(String msg)
+	public Object addWhiteList(String carNum)
 	{
-		TbCar tbCar = new TbCar();
-		if (msg != null && !"".equals(msg.trim()))
-		{
-			tbCar = JSON.parseObject(msg, TbCar.class);
-		}
-		System.out.println("白名单tbCar ========= " + tbCar);
 
-		TbUser tbUser = userService.queryUserByUserName(tbCar.getUserName());
-		TbUser tbUser1 = null;
-		if (tbUser == null)
+		System.out.println("白名单carNumtbCar ========= " + carNum);
+
+		TbCar tbCar = carService.queryCarByCarNum(carNum);
+		if (tbCar != null)
 		{
-			tbUser1 = new TbUser();
-			tbUser1.setUserName(tbCar.getUserName());
-			tbUser1.setUserTel(tbCar.getUserTel());
-			int num = userService.addUser(tbUser1);
-			if(num>0){
-				System.out.println("用户添加成功") ;
-			}
-		}
-		System.out.println("白名单用户tbUser1 ====== " + tbUser1);
-		TbCar tbCar1 = carService.queryCarByCarNum(tbCar.getCarNum());
-		System.out.println("tbCar1 ========== " + tbCar1);
-		boolean bool = false;
-		if (tbCar1 != null)
-		{
-			int num = carService.addWhiteList(tbCar.getCarNum());
+			int num = carService.addWhiteList(carNum);
 			if (num > 0)
 			{
-				System.out.println("添加成功");
-				bool = true;
+				System.out.println("白名单添加成功");
+				return "true";
+			}else {
+				return "false";
 			}
 		}
 		else
 		{
-			//车表数据不存在就要添加车数据和用户与车关系表
-			int num = carService.addCar(tbCar);
-			tbCar.setUserId((int) tbUser1.getUserId());
-			int num1 = carService.addUserCar(tbCar);
-			if (num1 > 0)
-			{
-				System.out.println("用户与车关系添加成功");
-				bool = true;
-			}
+//			车辆不存在则要提示先绑定车辆
+			return "noCar";
 		}
-		return bool;
 	}
-
 	//	车辆白名单的删除
 	@RequestMapping("/deleteWhiteList")
 	@ResponseBody
@@ -136,43 +110,43 @@ public class CarController
 	@ResponseBody
 	@RequestMapping("handlePackage")
 	public Object handlePackage(String carNum, String comboId)
+{
+	TbCar tbCar = new TbCar();
+	tbCar.setCarNum(carNum);
+	tbCar.setComboId(Integer.parseInt(comboId));
+	Date date = new Date();
+	Calendar calendar = Calendar.getInstance();
+	calendar.setTime(date);
+	switch (tbCar.getComboId())
 	{
-		TbCar tbCar = new TbCar();
-		tbCar.setCarNum(carNum);
-		tbCar.setComboId(Integer.parseInt(comboId));
-		Date date = new Date();
-		Calendar calendar = Calendar.getInstance();
-		calendar.setTime(date);
-		switch (tbCar.getComboId())
-		{
-			case 1:
-				calendar.add(Calendar.MONTH, 1);
-				break;
-			case 2:
-				calendar.add(Calendar.MONTH, 3);
-				break;
-			case 3:
-				calendar.add(Calendar.MONTH, 6);
-				break;
-			case 4:
-				calendar.add(Calendar.MONTH, 12);
-				break;
-			case 5:
-				calendar.add(Calendar.MONTH, 36);
-				break;
-			default:
-				break;
-		}
-		SimpleDateFormat sd = new SimpleDateFormat("yyyy-MM-dd");
-		tbCar.setEndTime(sd.format(calendar.getTime()));
-		int num = carService.handlePackage(tbCar);
-		boolean bool = false;
-		if (num > 0)
-		{
-			bool = true;
-		}
-		return bool;
+		case 1:
+			calendar.add(Calendar.MONTH, 1);
+			break;
+		case 2:
+			calendar.add(Calendar.MONTH, 3);
+			break;
+		case 3:
+			calendar.add(Calendar.MONTH, 6);
+			break;
+		case 4:
+			calendar.add(Calendar.MONTH, 12);
+			break;
+		case 5:
+			calendar.add(Calendar.MONTH, 36);
+			break;
+		default:
+			break;
 	}
+	SimpleDateFormat sd = new SimpleDateFormat("yyyy-MM-dd");
+	tbCar.setEndTime(sd.format(calendar.getTime()));
+	int num = carService.handlePackage(tbCar);
+	boolean bool = false;
+	if (num > 0)
+	{
+		bool = true;
+	}
+	return bool;
+}
 
 	//  办理续费
 	@ResponseBody
@@ -200,26 +174,37 @@ public class CarController
 			return bool;
 		}
 	}
-	//  用户绑定车辆
+	//  用户绑定车辆（要先查询车辆是否已经被绑定）
 	@RequestMapping("addCar")
 	@ResponseBody
 	public Object addCar(String msg){
-		boolean bool=false;
 		System.out.println(" 绑定车辆msg ==== " + msg);
 		if(msg!=null&&!"".equals(msg.trim())){
 			TbCar tbCar=JSON.parseObject(msg,TbCar.class);
-			int num=carService.addCar(tbCar);
-			if (num>0){
-				TbUser tbUser=userService.queryUserByUserName(tbCar.getUserName());
-				tbCar.setUserId((int) tbUser.getUserId());
-				System.out.println("tbCar = " + tbCar);
-				int num1=carService.addUserCar(tbCar);
-				if(num1>0){
-				    bool=true;
+			TbCar tbCar1=carService.queryCarByCarNum(tbCar.getCarNum());
+			if(tbCar1!=null){
+//			    提示车辆已经被绑定
+				return "haveCar";
+			}else {
+				int num=carService.addCar(tbCar);
+				if (num>0){
+					TbUser tbUser=userService.queryUserByUserName(tbCar.getUserName());
+					tbCar.setUserId((int) tbUser.getUserId());
+					System.out.println("tbCar = " + tbCar);
+					int num1=carService.addUserCar(tbCar);
+					if(num1>0){
+						return "true";
+					}else {
+						return "false";
+					}
+				}else {
+					return "false";
 				}
 			}
 		}
-		return bool;
+		else {
+			return "false";
+		}
 	}
 
 	//车辆出场记录

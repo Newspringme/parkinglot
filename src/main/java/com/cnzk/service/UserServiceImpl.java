@@ -1,12 +1,14 @@
 package com.cnzk.service;
 
 import com.cnzk.mapper.UserMapper;
+import com.cnzk.pojo.Admin;
 import com.cnzk.pojo.LayuiData;
 import com.cnzk.pojo.TbUser;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpSession;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -42,7 +44,13 @@ public class UserServiceImpl implements UserService
 	@Override
 	public LayuiData queryTbUser(TbUser tbUser, int start, int pageSize)
 	{
-		return null;
+		List<TbUser> list = userMapper.queryTbUser(tbUser, start, pageSize);
+		int count = userMapper.queryTbUserCount(tbUser);
+		LayuiData layuiData = new LayuiData();
+		layuiData.setCode(0);
+		layuiData.setCount(count);
+		layuiData.setData(list);
+		return layuiData;
 	}
 
 	@Override

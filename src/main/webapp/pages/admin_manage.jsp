@@ -316,7 +316,7 @@
 						, {field: 'roleName', title: '角色', align: 'center', width: 100, hide: true}
 						, {field: 'roleId', title: '角色id', hide: true, width: 100}
 						, {field: 'regTime', title: '添加时间', align: 'center', width: 200}
-						, {fixed: 'right', title: '操作', align: 'center', width: 550, toolbar: '#adminBar'}
+						, {fixed: 'right', title: '操作', align: 'center', width: 600, toolbar: '#adminBar'}
 					]]
 				});
 
@@ -519,7 +519,7 @@
 								msg = msg + '';
 								if (msg == 'true') {
 									layer.alert('更新成功', {icon: 6}, function () {
-										location.reload(true);
+										window.location.reload(true);
 									});
 								} else {
 									layer.alert('更新失败', {icon: 2});

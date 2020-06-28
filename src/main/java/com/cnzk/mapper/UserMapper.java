@@ -3,6 +3,7 @@ package com.cnzk.mapper;
 import com.cnzk.pojo.*;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+import org.bouncycastle.crypto.paddings.TBCPadding;
 import org.springframework.web.bind.annotation.PathVariable;
 
 import javax.websocket.server.PathParam;
@@ -59,5 +60,5 @@ public interface UserMapper
 
 	void userReg(String phone,String password);
 	//  获取月缴要到期的车辆
-	TbCar queryEndTime();
+	List<TbCar> queryEndTime();
 }

@@ -255,7 +255,7 @@
         if ($(".money").val()==0){
 
         }else {
-            window.open("${pageContext.request.contextPath}/alipay?enter="+$(".enter").val()+"&exit="+$(".exit").val()+"&carNum="+$(".carnum").val()+"&username="+$(".username").val());
+            window.open("${pageContext.request.contextPath}/alipay?type=car&carNum="+$(".carnum").val());
         }
 
     }
