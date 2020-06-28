@@ -16,11 +16,11 @@
     </select>
     <!--车辆白名单的录入-->
     <update id="addWhiteList">
-        update tb_car set vip_id=1,combo_id=6 where car_num=#{carNum};
+        update tb_car set vip_id=1,combo_id=6,end_time='' where car_num=#{carNum};
     </update>
     <!--车辆白名单删除-->
     <update id="deleteWhiteList">
-        update tb_car set vip_id=0 where car_num=#{carNum};
+        update tb_car set vip_id=0,combo_id=0 where car_num=#{carNum};
     </update>
     <!-- 根据车牌查询车表记录-->
     <select id="queryCarByCarNum" resultType="com.cnzk.pojo.TbCar">
@@ -35,25 +35,32 @@
     <insert id="addUserCar">
         insert into tb_user_car ( user_id,car_id) values (#{userId},#{carId});
     </insert>
-    <!-- 开通新月缴-->
-    <insert id="handlePackage" keyProperty="carId" useGeneratedKeys="true">
-        insert into tb_car (car_num,car_type,car_brand,car_color,vip_id,combo_id,end_time)
-        values (#{carNum},#{carType},#{carBrand},#{carColor},2,#{comboId},#{endTime});
-    </insert>
+    <!--开通新月缴-->
+    <update id="handlePackage">
+        update tb_car set end_time=#{endTime},combo_id=#{comboId},vip_id=2 where car_num=#{carNum};
+    </update>
     <!--办理续费-->
-    <insert id="handleRenew">
+    <update id="handleRenew">
         update tb_car set combo_id=#{comboId},end_time=#{endTime} where
         car_num=#{carNum} and vip_id=2;
-    </insert>
-
-<!--    //车辆出场（添加出库表数据）-->
-    <insert id="carexit" >
+    </update>
+    <!-- 车辆出场（添加出库表数据）-->
+    <insert id="carexit">
        insert into tb_exit (car_num) values (#{carnum})
     </insert>
 
-<!--车辆出场记录查询-->
-    <select id="queryExit" resultType="com.cnzk.pojo.TbExit">
-        select * from tb_exit limit #{start} , #{end}
+    <!--车辆出场记录查询-->
+    <select id="queryExit" resultType="com.cnzk.pojo.TbExit" resultMap="getCar">
+        select * from tb_exit order by exit_time desc limit #{start} , #{end}
+    </select>
+
+    <resultMap id="getCar" type="com.cnzk.pojo.TbExit">
+        <result property="carNum" column="car_num"/>
+        <association property="tbCar" column="car_num" javaType="com.cnzk.pojo.TbCar" select="selectCar"/>
+    </resultMap>
+
+    <select id="selectCar" parameterType="java.lang.String" resultType="com.cnzk.pojo.TbCar">
+        select * from tb_car where car_num = #{carNum}
     </select>
 
     <!--根据车牌查询车辆信息-->

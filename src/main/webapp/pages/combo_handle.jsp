@@ -22,7 +22,7 @@
 		<div class="all">
 			<div class="layui-form-item" style="padding-top: 100px">
 				<input id="carNum" type="text" style="width: 120px;height: 35px">
-				<button id="search" style="width:80px;height: 37px" class="layui-icon layui-icon-search">搜索</button>
+				<button id="search" style="width:80px;height: 37px" class="layui-icon layui-icon-search">验证</button>
 			</div>
 			<div id="handle" class="layui-form-item" style="margin-top: 100px">
 				<button style="width:210px;height: 40px">办理新月缴</button>
@@ -67,40 +67,44 @@
 				</form>
 			</div>
 			<div id="newCombo" style="display: none">
+				<%--				<form action="${pageContext.request.contextPath}/alipay">--%>
 				<div class="layui-form-item">
 					<label class="layui-form-label" style="margin-left: 120px;margin-top: 20px">车牌号：</label>
 					<div class="layui-input-block"
 					     style="float: left; margin-left: 20px;margin-top: 20px;width: 200px;">
-						<input id="comboCarNum" name="carNum" type="text" placeholder="请输入车牌号" autocomplete="off"
-						       class="layui-input ">
+						<input id="comboCarNum" name="carNum" type="text" readonly autocomplete="off"
+						       class="layui-input  ">
+						<input type="hidden" name="type" value="card">
 					</div>
 				</div>
 				<div class="layui-form-item">
 					<label class="layui-form-label" style="margin-left: 120px;">套餐：</label>
 					<div class="layui-input-block">
-						<select id="comboId" lay-verify="required"
+						<select id="comboId" name="comboid" lay-verify="required"
 						        style="float: left; margin-left: 20px;width: 200px;height: 30px">
 							<option value="" disabled selected>请选择套餐</option>
-							<option value="1">月卡（300/月）</option>
-							<option value="2">季卡（800/季）</option>
-							<option value="3"> 半年卡（1500/半年）</option>
-							<option value="4">年卡（3000/年）</option>
-							<option value="5">至尊卡（5999/3年）</option>
+							<option value="1">月卡（300元/月）</option>
+							<option value="2">季卡（800元/季）</option>
+							<option value="3"> 半年卡（1500元/半年）</option>
+							<option value="4">年卡（3000元/年）</option>
+							<option value="5">至尊卡（5999元/3年）</option>
 						</select>
 					</div>
 					<div id="sure" class="layui-form-item" style="margin-top: 60px">
 						<button style="width:200px;height: 40px">确定</button>
+						<%--						<input type="submit" style="width:200px;height: 40px">确定</input>--%>
 					</div>
-
 				</div>
+				<%--				</form>--%>
 			</div>
 			<div id="handleRenew" style="display: none">
 				<div class="layui-form-item">
 					<label class="layui-form-label" style="margin-left: 120px;margin-top: 20px">车牌号：</label>
 					<div class="layui-input-block"
 					     style="float: left; margin-left: 20px;margin-top: 20px;width: 200px;">
-						<input id="renewCarNum" name="carNum" type="text" placeholder="请输入车牌号" autocomplete="off"
+						<input id="renewCarNum" readonly name="carNum" type="text" autocomplete="off"
 						       class="layui-input ">
+						<input type="hidden" name="type" value="carRenew">
 					</div>
 				</div>
 				<div class="layui-form-item">
@@ -110,10 +114,10 @@
 						        style="float: left; margin-left: 20px;width: 200px;height: 30px">
 							<option value="" disabled selected>请选择月份</option>
 							<option value="1">1个月</option>
-							<option value="3">3个月</option>
-							<option value="6">6个月</option>
-							<option value="12">12个月</option>
-							<option value="36">36个月</option>
+							<option value="2">3个月</option>
+							<option value="3">6个月</option>
+							<option value="4">12个月</option>
+							<option value="5">36个月</option>
 						</select>
 					</div>
 					<div id="sureRenew" class="layui-form-item" style="margin-top: 60px">
@@ -133,7 +137,15 @@
 				//获取车辆信息
 				$.post("${pageContext.request.contextPath}/CarController/verifyCar?carNum=" + $("#carNum").val(), function (msg) {
 					var tbCar = msg;
-					form.val("formCar", tbCar);
+					var vipId = tbCar.vipId;
+					form.val("formCar", tbCar)
+					if (vipId == 2) {
+						//	是月缴用户才能办理月缴续费
+						$('#renewCarNum').val(tbCar.carNum);
+					} else {
+						//月缴用户不能重复办理月缴产品，只能续费来变更套餐
+						$('#comboCarNum').val(tbCar.carNum);
+					}
 					openCarInfo();
 				});
 			})
@@ -170,7 +182,7 @@
 					var comboId = $("#comboId").val();
 					var carNum = $("#comboCarNum").val();
 					if (carNum == null || carNum == "") {
-						layer.alert("请输入正确的车牌号", {icon: 7}, function (index) {
+						layer.alert("请先验证车牌号或该车牌号不能办理月缴", {icon: 7}, function (index) {
 							layer.close(index);
 						})
 					} else if (comboId == null) {
@@ -178,18 +190,20 @@
 							layer.close(index);
 						})
 					} else {
-						$.post("${pageContext.request.contextPath}/CarController/handlePackage?carNum=" + carNum + "&comboId=" + comboId, function (msg) {
-							msg = msg + "";
-							if (msg == 'true') {
-								layer.alert("办理成功", {icon: 6}, function (index) {
-									layer.close(index);
-								})
-							} else {
-								layer.alert("办理失败", {icon: 6}, function (index) {
-									layer.close(index);
-								})
-							}
-						});
+						window.open("${pageContext.request.contextPath}/alipay?type=card&carNum=" + carNum + "&comboid=" + comboId);
+						window.location.reload();
+						<%--$.post("${pageContext.request.contextPath}/alipay?type=card&carNum=" + carNum + "&comboid=" + comboId, function (msg) {--%>
+						<%--	msg = msg + "";--%>
+						<%--	if (msg == 'true') {--%>
+						<%--		layer.alert("办理成功", {icon: 6}, function (index) {--%>
+						<%--			layer.close(index);--%>
+						<%--		})--%>
+						<%--	} else {--%>
+						<%--		layer.alert("办理失败", {icon: 6}, function (index) {--%>
+						<%--			layer.close(index);--%>
+						<%--		})--%>
+						<%--	}--%>
+						<%--});--%>
 					}
 				})
 			})
@@ -207,10 +221,10 @@
 					shift: 1 //动画类型
 				})
 				$("#sureRenew").on("click", function () {
-					var addTime = $("#addTime").val();
+					var comboId = $("#addTime").val();
 					var carNum = $("#renewCarNum").val();
 					if (carNum == null || carNum == "") {
-						layer.alert("请输入正确的车牌号", {icon: 7}, function (index) {
+						layer.alert("请先验证车牌号或该车牌号不能办理续费", {icon: 7}, function (index) {
 							layer.close(index);
 						})
 					} else if (addTime == null) {
@@ -218,22 +232,24 @@
 							layer.close(index);
 						})
 					} else {
-						$.post("${pageContext.request.contextPath}/CarController/handleRenew?carNum=" + carNum + "&addTime=" + addTime, function (msg) {
-							msg = msg + "";
-							if (msg == 'isNull') {
-								layer.alert("该车牌号未办理月缴，请先办理", {icon: 7}, function (index) {
-									layer.close(index);
-								})
-							} else if (msg == 'true') {
-								layer.alert("续费成功", {icon: 6}, function (index) {
-									layer.close(index);
-								})
-							} else if (msg == 'false') {
-								layer.alert("续费失败", {icon: 6}, function (index) {
-									layer.close(index);
-								})
-							}
-						});
+						window.open("${pageContext.request.contextPath}/alipay?type=cardRenew&carNum=" + carNum + "&comboid=" + comboId);
+						window.location.reload();
+						<%--$.post("${pageContext.request.contextPath}/CarController/handleRenew?carNum=" + carNum + "&addTime=" + addTime, function (msg) {--%>
+						<%--	msg = msg + "";--%>
+						<%--	if (msg == 'isNull') {--%>
+						<%--		layer.alert("该车牌号未办理月缴，请先办理", {icon: 7}, function (index) {--%>
+						<%--			layer.close(index);--%>
+						<%--		})--%>
+						<%--	} else if (msg == 'true') {--%>
+						<%--		layer.alert("续费成功", {icon: 6}, function (index) {--%>
+						<%--			layer.close(index);--%>
+						<%--		})--%>
+						<%--	} else if (msg == 'false') {--%>
+						<%--		layer.alert("续费失败", {icon: 6}, function (index) {--%>
+						<%--			layer.close(index);--%>
+						<%--		})--%>
+						<%--	}--%>
+						<%--});--%>
 					}
 				})
 			})

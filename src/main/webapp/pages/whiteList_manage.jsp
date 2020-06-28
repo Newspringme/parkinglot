@@ -20,7 +20,7 @@
 		<!--        头部工具栏-->
 		<div style="display: none" id="carToolbar">
 			<button type="button" class="layui-btn layui-btn-xm layui-icon layui-icon-add-circle" lay-event="add">
-				添加白名单
+				新增白名单
 			</button>
 		</div>
 		<!--        行工具栏-->
@@ -38,43 +38,11 @@
 					<label class="layui-form-label" style="margin-left: 120px;">车牌号：</label>
 					<div class="layui-input-block" style="float: left; margin-left: 20px;width: 200px;">
 						<input type="text" name="carNum" lay-verify="carNum"
-						       autocomplete="off" class="layui-input">
+						       autocomplete="off" class="layui-input carNum">
 					</div>
 				</div>
-
-				<div class="layui-form-item">
-					<label class="layui-form-label" style="margin-left: 120px;">车&emsp;&emsp;型：</label>
-					<div class="layui-input-block" style="float: left; margin-left: 20px;width: 200px;">
-						<input type=text" name="carType" autocomplete="off" class="layui-input">
-					</div>
-				</div>
-
-				<div class="layui-form-item">
-					<label class="layui-form-label" style="margin-left: 120px;">颜&emsp;&emsp;色：</label>
-					<div class="layui-input-block" style="float: left; margin-left: 20px;width: 200px;">
-						<input type=text" name="carColor" autocomplete="off" class="layui-input">
-					</div>
-				</div>
-				<div class="layui-form-item">
-					<label class="layui-form-label" style="margin-left: 120px;">品&emsp;&emsp;牌：</label>
-					<div class="layui-input-block" style="float: left; margin-left: 20px;width: 200px;">
-						<input type=text" name="carBrand" autocomplete="off" class="layui-input">
-					</div>
-				</div>
-				<div class="layui-form-item">
-					<label class="layui-form-label" style="margin-left: 120px;">车&emsp;&emsp;主：</label>
-					<div class="layui-input-block" style="float: left; margin-left: 20px;width: 200px;">
-						<input type=text" name="userName" autocomplete="off" class="layui-input">
-					</div>
-				</div>
-				<div class="layui-form-item">
-					<label class="layui-form-label" style="margin-left: 120px;">手机号码：</label>
-					<div class="layui-input-block" style="float: left; margin-left: 20px;width: 200px;">
-						<input type="tel" name="userTel" autocomplete="off" class="layui-input ">
-					</div>
-				</div>
-				<div class="layui-form-item">
-					<div class="layui-input-block" style="margin-left: 220px;">
+				<div class="layui-form-item" style="margin-top: 50px">
+					<div class="layui-input-block" style="margin-left: 220px">
 						<button type="submit" class="layui-btn layui-icon layui-icon-release" lay-submit
 						        lay-filter="formAddCar">提交
 						</button>
@@ -138,7 +106,7 @@
 					type: 1,
 					title: '添加白名单',
 					content: $('#addCar'),
-					area: ['600px', '600px'],
+					area: ['600px', '240px'],
 					shade: [0.5, '#fff'], //0.5透明度的白色背景
 					skin: 'layui-layer-molv',//墨绿皮肤
 					offset: '50px',//上边距
@@ -146,15 +114,18 @@
 				})
 				//提交添加表单
 				form.on('submit(formAddCar)', function (data) {
-					var msg = JSON.stringify(data.field);
-					$.post("${pageContext.request.contextPath}/CarController/addWhiteList?msg=" + encodeURI(msg), function (msg) {
+					// var msg = JSON.stringify(data.field);
+					var carNum=$('.carNum').val();
+					$.post("${pageContext.request.contextPath}/CarController/addWhiteList?carNum=" + encodeURI(carNum), function (msg) {
 						msg = msg + '';
 						if (msg == 'true') {
 							layer.alert('白名单添加成功', {icon: 6}, function (index) {
 								window.location.reload();
 							});
-						} else {
-							layer.alert("白名单添加失败", {icon: 2});
+						} else if(msg=='false'){
+							layer.msg("白名单添加失败", {icon: 2});
+						} else if(msg=='noCar'){
+							layer.msg("该车辆未绑定，请先绑定", {icon: 3});
 						}
 					})
 				})

@@ -291,7 +291,6 @@
 						},
 						method: 'post',
 						url: '${pageContext.request.contextPath}/UserController/queryTbUser'
-
 					})
 				})
 				//监听行工具条事件
@@ -320,7 +319,9 @@
 									layer.alert('车辆绑定成功', {icon: 6}, function (index) {
 										window.location.reload();
 									});
-								} else {
+								} else if (msg=='haveCar') {
+									layer.msg("该车辆已经被绑定", {icon: 2});
+								}else {
 									layer.msg("车辆绑定失败", {icon: 2});
 								}
 							})

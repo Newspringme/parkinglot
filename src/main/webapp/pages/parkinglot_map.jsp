@@ -16,15 +16,15 @@
     <meta charset="utf-8">
     <title>地图</title>
     <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
-    <link href="${pageContext.request.contextPath}/static/Case/lib/bootstrap.min.css" rel="stylesheet" />
-    <link href="${pageContext.request.contextPath}/static/Case/css/common.css" rel="stylesheet" />
-    <link href="${pageContext.request.contextPath}/static/Case/css/iconfont/iconfont.css" rel="stylesheet" />
+    <link href="${pageContext.request.contextPath}/static/Case/lib/bootstrap.min.css" rel="stylesheet" media="all"/>
+    <link href="${pageContext.request.contextPath}/static/Case/css/common.css" rel="stylesheet" media="all"/>
+    <link href="${pageContext.request.contextPath}/static/Case/css/iconfont/iconfont.css" rel="stylesheet" media="all"/>
 </head>
 <style type="text/css">
     .viewmode-group {
         position: absolute;
-        right: 12px;
-        top: 32%;
+        right: 22px;
+        top: 55%;
         border-radius: 6px;
         border: none;
     }
@@ -153,26 +153,9 @@
         -webkit-appearance: none;
     }
 
-    .router {
-        height: 40px;
-        padding: 6px 0;
-        box-sizing: border-box;
-    }
-
-    .router .routerInput  {
-        width: 250px;
-        border: none;
-        outline: 0;
-        height: 20px;
-        font-size: 16px;
-        border-bottom: 1px solid #dedede;
-        margin-left: 6px;
-    }
-
     #shopSearch>ul {
         display: block;
         list-style-type: none;
-        /* height: 0; */
         padding: 10px;
     }
 
@@ -218,10 +201,195 @@
     .container-fluid h1 {
         text-align: center;
     }
+
+    /*手机适配：最大宽度500px*/
+    @media screen and (max-width: 500px) {
+        .viewmode-group {
+            position: absolute;
+            right: 12px;
+            top: 32%;
+            border-radius: 6px;
+            border: none;
+        }
+        #pannel {
+            position: absolute;
+            left: 2%;
+            bottom: 10%;
+            z-index: 999;
+        }
+        .viewmode-group button {
+            display: inline-block;
+            width: 38px;
+            height: 38px;
+            border-radius: 4px;
+            border: none;
+            background-image: url("${pageContext.request.contextPath}/static/Case/image/wedgets/3D.png");
+        }
+
+        .parking {
+            width: 45%;
+            height: 30px;
+            line-height: 30px;
+            left: 10px;
+            bottom: 14px;
+            border: 1px solid #083344;
+            border-radius: 4px;
+            color: rgb(255, 255, 255);
+            background-color: rgba(71, 92, 105, 0.8);
+            font-size: 14px;
+            text-align: center;
+        }
+
+        .fix {
+            position: fixed;
+        }
+
+        .codition {
+            width: 120px;
+            left: 10px;
+            bottom: 120px;
+        }
+
+        .codition ul {
+            width: 100%;
+            padding: 6px;
+            list-style-type: none;
+        }
+
+        .codition ul li {
+            display: list-item;
+            height: 36px;
+            background-color: rgb(255, 255, 255);
+            line-height: 36px;
+            text-align: center;
+        }
+
+        .codition ul li span {
+            display: inline-block;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            margin-right: 10px;
+            vertical-align: middle;
+        }
+
+        .codition-first {
+            background-color: #f00;
+        }
+
+        .codition-second {
+            background-color: #0f0;
+        }
+
+        .i-test-tip {
+            width: 45%;
+            height: 30px;
+            left: 50%;
+            bottom: 14px;
+            border-radius: 4px;
+            overflow: hidden;
+            /* position: relative; */
+            background-color: rgba(71, 92, 105, 0.8);
+            text-align: center;
+        }
+
+        .test-tip {
+            position: absolute;
+            left: 100%;
+            color: #fff;
+            font-size: 14px;
+            line-height: 30px;
+            white-space: nowrap;
+            word-break: keep-all;
+            text-overflow: ellipsis;
+        }
+
+        .test-tip span {
+            color: #0f0;
+        }
+
+        .search {
+            width: 90%;
+            position: absolute;
+            padding-left: 10px;
+            top: 60px;
+            left: 10%;
+            font-size: 13px;
+            height: auto;
+            border: 1px solid #e6e6e6;
+            background: #fff;
+            /* box-shadow: 3px 3px 5px #bdbdbd; */
+            box-sizing: border-box;
+            -webkit-box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            /*z-index: 999;*/
+            border-radius: 4px;
+        }
+
+        .search button{
+            width: 10%;
+        }
+
+        .searchText {
+            width: 60%;
+            height: 20px;
+            outline: none;
+            border: none;
+            font-size: 13px;
+            -webkit-appearance: none;
+        }
+
+        #shopSearch>ul {
+            display: block;
+            list-style-type: none;
+            padding: 10px;
+        }
+
+        .list ul>li {
+            list-style: none;
+            padding: 10px 12px;
+            font-size: 13px;
+            color: #5d5d5d;
+            cursor: pointer;
+            box-sizing: border-box;
+            -webkit-box-sizing: border-box;
+            -moz-box-sizing: border-box;
+        }
+
+        .list ul>li>span {
+            padding-right: 18px;
+        }
+
+        .list ul>li:hover {
+            background: #bbb;
+            color:#fff;
+        }
+
+        #description {
+            position: absolute;
+            left: 50%;
+            top: 150px;
+            padding: 10px 25px;
+            background: rgba(255, 255, 255, 255);
+            border-radius: 4px;
+            opacity: 0.7;
+            margin-left: -20%;
+        }
+
+        button,input[type="button"] {
+            padding: 7px 11px;
+            background-color: #fff;
+            border: none;
+            cursor: pointer;
+            border-radius: 3px;
+        }
+
+        .container-fluid h1 {
+            text-align: center;
+        }
+    }
 </style>
 <body ms-controller = "ctrl" class="ms-controller">
-<%--<input type="hidden" id="coorX" value="<%=x%>">--%>
-<%--<input type="hidden" id="coorY" value="<%=y%>">--%>
 <div id="map-container"></div>
 <div class="loading">
     <div class="lodingImg"></div>
@@ -237,10 +405,6 @@
 <div class="search">
     <span id="btnSearch" class="glyphicon glyphicon-search" aria-hidden="true"></span>
     <input id="searchText" type="text" class="searchText" placeholder="输入车牌号"> |
-    <%--<button type="button" id="startnav" class="btn btn-default" style="border: none">--%>
-        <%--<span id="btnNav" class="glyphicon glyphicon-map-marker"></span>--%>
-        <%--导航--%>
-    <%--</button>--%>
     <button type="button" id="searchCar" class="btn btn-default" style="border: none">
         <span id="btnSearchCar" class="glyphicon glyphicon-search"></span>
         搜索车辆
@@ -298,8 +462,13 @@
             navi.stop();
             navi = null;
         }
+
         var ctlOpt = new esmap.ESControlOptions({
             position: esmap.ESControlPositon.RIGHT_TOP,
+            offset: {
+                x: 10,
+                y: 100
+            },
             imgURL: "${pageContext.request.contextPath}/static/Case/image/wedgets/"
         });
         // 放大、缩小控件配置
@@ -492,30 +661,6 @@
         };
     }
 
-    //添加当前位置标注
-    <%--function addCurrPoint(){--%>
-        <%--var machineX = $("#coorX").val();--%>
-        <%--var machineY = $("#coorY").val();--%>
-        <%--var layer = new esmap.ESLayer('textMaker');--%>
-        <%--layer.name = 'mylayer';--%>
-        <%--//添加文本标注，默认样式--%>
-        <%--var tm = new esmap.ESTextMarker({--%>
-            <%--x: machineX - 0,--%>
-            <%--y: machineY - 0,--%>
-            <%--name: "当前位置",--%>
-            <%--image: "${pageContext.request.contextPath}/static/Case/image/start.png",--%>
-            <%--imageAlign: "bottom",--%>
-            <%--imageSize: 60,--%>
-            <%--height: 3,--%>
-            <%--showLevel: 20,--%>
-            <%--fillcolor: "255,0,0", //填充色--%>
-            <%--fontsize: "12.0", //字体大小--%>
-            <%--strokecolor: "255,255,0" //边框色--%>
-        <%--});--%>
-        <%--layer.addMarker(tm);--%>
-        <%--floorLayer.addLayer(layer);--%>
-    <%--}--%>
-
     var searchText;
     //搜索车辆
     $("#searchCar").on("click",function () {
@@ -575,7 +720,6 @@
                 followGap: 3,
                 tiltAngle: 30,
                 audioPlay: true,
-                // scaleLevel:0,
                 mode: 1,
                 offsetHeight: 1,
                 // 设置导航线的样式
@@ -583,16 +727,11 @@
                     color: '#58a2e4',
                     //设置线为导航线样式
                     lineType: esmap.ESLineType.ESARROW,
-                    // lineType: esmap.ESLineType.FULL,
                     lineWidth: 6,
                     offsetHeight: 0.5,
                     smooth: true,
                     seeThrough: false,
                     noAnimate: true
-                    // 设置边线的颜色
-                    // godEdgeColor: '#920000',
-                    // 设置箭头颜色
-                    // godArrowColor: "#ffffff"
                 },
                 scaleAnimate: true,
                 isMultiFloors: false
