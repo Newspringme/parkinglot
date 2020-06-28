@@ -29,7 +29,7 @@
     <!-- 添加车辆信息-->
     <insert id="addCar" keyProperty="carId" useGeneratedKeys="true">
         insert into tb_car (car_num,car_type,car_brand,car_color,vip_id)
-        values (#{carNum},#{carType},#{carBrand},#{carColor},1);
+        values (#{carNum},#{carType},#{carBrand},#{carColor},0);
     </insert>
     <!--添加用户与车关系-->
     <insert id="addUserCar">
