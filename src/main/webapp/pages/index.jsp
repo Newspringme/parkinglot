@@ -58,7 +58,12 @@
             </ul>
 
             <ul class="layui-nav layui-layout-right">
-
+                <li class="layui-nav-item" lay-unselect>
+                    <span style="color: gray;"> 菜鸟智科欢迎${tbAdmin.adminName}的登陆</span>
+                </li>
+                <li class="layui-nav-item" lay-unselect>
+                   <span style="color: gray;"> 菜鸟智科欢迎${tbAdmin.adminName}的登陆</span>
+                </li>
                 <li class="layui-nav-item" lay-unselect>
                     <a href="javascript:;" data-refresh="刷新"><i class="fa fa-refresh"></i></a>
                 </li>
@@ -71,13 +76,13 @@
                 <li class="layui-nav-item layuimini-setting">
                     <a href="javascript:;">${TbAdmin.adminName}</a>
                     <dl class="layui-nav-child">
-                        <dd>
-                            <a href="javascript:;" layuimini-content-href="page/user-setting.html" data-title="基本资料" data-icon="fa fa-gears">基本资料<span class="layui-badge-dot"></span></a>
-                        </dd>
-                        <dd>
-                            <a href="javascript:;" layuimini-content-href="page/user-password.html" data-title="修改密码" data-icon="fa fa-gears">修改密码</a>
-                        </dd>
-                        <dd>
+<%--                        <dd>--%>
+<%--                            <a href="javascript:;" layuimini-content-href="page/user-setting.html" data-title="基本资料" data-icon="fa fa-gears">基本资料<span class="layui-badge-dot"></span></a>--%>
+<%--                        </dd>--%>
+<%--                        <dd>--%>
+<%--                            <a href="javascript:;" layuimini-content-href="page/user-password.html" data-title="修改密码" data-icon="fa fa-gears">修改密码</a>--%>
+<%--                        </dd>--%>
+<%--                        <dd>--%>
                             <hr>
                         </dd>
                         <dd>

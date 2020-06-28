@@ -225,14 +225,22 @@ public class CarController
     //查询车辆信息
 	@ResponseBody
 	@RequestMapping("queryCarInfo")
-	public Object queryCarInfo(String carNum) throws Exception{
+	public Object queryCarInfo(String carNum) {
 		TbCar tbCar = carService.queryCarInfo(carNum);
 		if (tbCar!=null){
 			TbVip tbVip = vipService.queryVipInfo(tbCar.getVipId());
+			if (tbVip==null){
+                tbVip = new TbVip();
+			    tbVip.setVipName("临时车");
+            }
 			tbCar.setTbVip(tbVip);
-			return JSON.toJSONString(tbCar);
 		}else{
-			return "false";
+            TbVip error = new TbVip();
+            error.setVipName("临时车");
+            tbCar.setCarNum(carNum);
+			tbCar.setTbVip(error);
 		}
+        return JSON.toJSONString(tbCar);
+//		return "charge_manage";
 	}
 }

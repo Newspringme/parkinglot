@@ -50,6 +50,11 @@ public class UserController
 		return "用户名或密码错误";
 
 	}
+
+
+
+
+
 	@RequestMapping(value = "/userAdd", produces = {"application/json;charset=UTF-8"})
 	@ResponseBody
 	public String addLogin( @PathParam("phone") String phone, @PathParam("password") String password)
@@ -68,6 +73,14 @@ public class UserController
 
 	}
 
+//通过手机号获取用户
+	@RequestMapping("queryUserName")
+	@ResponseBody
+	public TbUser queryUserName( @PathParam("userTel") String userTel)
+	{
+		System.out.println("queryUserName:userTel="+userTel);
+		return userService.queryUser(userTel);
+	}
 
 
 //	添加用户

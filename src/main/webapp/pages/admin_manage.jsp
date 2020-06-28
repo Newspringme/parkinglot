@@ -228,7 +228,7 @@
 			</div>
 		</div>
 		<%--//详细信息弹出层--%>
-		<div id="lookAdmin" onsubmit="return false;" style="display: none">
+		<div id="lookAdmin" onsubmit="return false;" style="display: none; ">
 
 			<div class="layui-form-item">
 				<label class="layui-form-label" style="margin-left: 120px;">账号名称：</label>
@@ -542,7 +542,7 @@
 							type: 1,
 							title: '查看详细信息',
 							content: $('#lookAdmin'),
-							area: ['600px', '600px'],
+							area: ['600px', '300px'],
 							shade: [0.5, '#fff'], //0.5透明度的白色背景
 							// shadeClose: true, //开启遮罩关闭
 							skin: 'layui-layer-molv',//墨绿皮肤

@@ -33,4 +33,7 @@ public interface UserService
 	String findPhone(String phone);
 
 	String userReg(String phone,String password);
+
+	//通过手机号获取用户
+	TbUser queryUser(String userTel);
 }

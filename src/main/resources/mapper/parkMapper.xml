@@ -58,4 +58,6 @@
     <select id="queryNullPark" resultType="int">
         select count(*) from tb_park where park_state = '未停车'
     </select>
+
+
 </mapper>

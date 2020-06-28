@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cnzk.mapper.CoorMapper">
+    <!--获取自助终端坐标-->
+    <select id="getSelfServiceCoor" resultType="com.cnzk.pojo.TbCoordinate">
+      select * from tb_coordinate where coordinate_name like concat('%',#{machineNum},'%')
+    </select>
+</mapper>
