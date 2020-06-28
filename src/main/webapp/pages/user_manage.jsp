@@ -103,7 +103,7 @@
 				<div class="layui-form-item">
 					<label class="layui-form-label" style="margin-left: 120px;">年&emsp;&emsp;龄：</label>
 					<div class="layui-input-block" style="float: left; margin-left: 20px;width: 200px;">
-						<input type="number" name="userAge" autocomplete="off" class="layui-input ">
+						<input type="number" lay-verify="userAge" name="userAge" autocomplete="off" class="layui-input ">
 					</div>
 				</div>
 				<div class="layui-form-item">
@@ -115,7 +115,7 @@
 				<div class="layui-form-item">
 					<label class="layui-form-label" style="margin-left: 120px;">证件号码：</label>
 					<div class="layui-input-block" style="float: left; margin-left: 20px;width: 200px;">
-						<input type="text" name="userCard" autocomplete="off" class="layui-input ">
+						<input type="text" lay-verify="userCard" name="userCard" autocomplete="off" class="layui-input ">
 					</div>
 				</div>
 				<div class="layui-form-item">
@@ -349,6 +349,15 @@
 					, userTel: [
 						/^1([38][0-9]|4[579]|5[0-3,5-9]|6[6]|7[0135678]|9[89])\d{8}$/
 						,'请输入正确格式的手机号'
+					]
+					, userCard:[
+						/^[1-9]\d{7}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])\d{3}$|^[1-9]\d{5}[1-9]\d{3}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])\d{3}([0-9]|X)$/
+						,'请输入正确格式的身份证号'
+					]
+					, userAge: [
+						/^(?:[1-9][0-9]?|1[01][0-9]|120)$/
+						,'请输入1~120之间的数字'
+
 					]
 
 
