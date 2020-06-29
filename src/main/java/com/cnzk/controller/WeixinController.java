@@ -97,11 +97,12 @@ public class WeixinController {
     }
 
 
-    // 根据手机号查车牌
+    // 根据用户标识查车牌
     @ResponseBody
     @RequestMapping("queryCarNum")
-    public Object queryCarNum(String userTel){
-        List<TbCar> tbCarList =weiXinService.queryCarNum(userTel);
+    public Object queryCarNum(String userCard){
+        System.out.println("queryCarNum:"+userCard);
+        List<TbCar> tbCarList =weiXinService.queryCarNum(userCard);
         System.out.println(tbCarList);
         return tbCarList;
     }

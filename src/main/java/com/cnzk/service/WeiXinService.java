@@ -20,8 +20,8 @@ public interface WeiXinService {
 
     ResultData weChatLogin(String code, String userHead, String userName, String userGender);
 
-//    根据手机号查车牌
-    List<TbCar>  queryCarNum(String userTel);
+//    根据用户标识查车牌
+    List<TbCar>  queryCarNum(String userCard);
 
     TbUser queryUser(String userTel);
 

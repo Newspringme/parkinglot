@@ -142,10 +142,10 @@ public class WeiXinServiceImpl implements WeiXinService{
 		return resultData;
 	}
 
-    //    根据手机号查车牌
+    //    根据用户标识查车牌
     @Override
-    public List<TbCar> queryCarNum(String userTel) {
-        return carMapper.queryCarNum(userTel);
+    public List<TbCar> queryCarNum(String userCard) {
+        return carMapper.queryCarNum(userCard);
     }
 
     @Override
