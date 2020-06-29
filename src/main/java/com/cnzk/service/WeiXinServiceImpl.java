@@ -157,6 +157,7 @@ public class WeiXinServiceImpl implements WeiXinService{
 
     @Override
     public ResultData addVehicle(String carNum, String userId){
+        System.out.println(userId);
        int i= userMapper.addVehicle(carNum);
         ResultData data=new ResultData();
        if (i==1){

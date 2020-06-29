@@ -127,8 +127,8 @@ public class WeixinController {
     //增加车牌（车位直接添加
     @ResponseBody
     @RequestMapping("addVehicle")
-    public Object addVehicle(String carNum,String userCard) {
-        ResultData resultData = weiXinService.addVehicle(carNum, userCard);
+    public Object addVehicle(String carNum,String userId) {
+        ResultData resultData = weiXinService.addVehicle(carNum, userId);
         return JSON.toJSONString(resultData);
     }
 
