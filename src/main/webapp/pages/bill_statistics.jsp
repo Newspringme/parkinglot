@@ -56,7 +56,11 @@
                         var XList = statisticsData.statisticsMap.XList;
                         var comboList = statisticsData.statisticsMap.comboList;
                         var tempList = statisticsData.statisticsMap.tempList;
-                        var appccount = statisticsData.statisticsMap.appccount;
+                        if (statisticsData.statisticsMap.appccount==null){
+                            var appccount = 0;
+                        }else{
+                            var appccount = statisticsData.statisticsMap.appccount;
+                        }
                         console.log(XList);
                         console.log(comboList);
                         console.log(tempList);
@@ -180,7 +184,11 @@
                     var XList = statisticsData.statisticsMap.XList;
                     var comboList = statisticsData.statisticsMap.comboList;
                     var tempList = statisticsData.statisticsMap.tempList;
-                    var appccount = statisticsData.statisticsMap.appccount;
+                    if (statisticsData.statisticsMap.appccount==null){
+                        var appccount = 0;
+                    }else{
+                        var appccount = statisticsData.statisticsMap.appccount;
+                    }
                     console.log(XList);
                     console.log(comboList);
                     console.log(tempList);
@@ -213,7 +221,11 @@
                     var XList = statisticsData.statisticsMap.XList;
                     var comboList = statisticsData.statisticsMap.comboList;
                     var tempList = statisticsData.statisticsMap.tempList;
-                    var appccount = statisticsData.statisticsMap.appccount;
+                    if (statisticsData.statisticsMap.appccount==null){
+                        var appccount = 0;
+                    }else{
+                        var appccount = statisticsData.statisticsMap.appccount;
+                    }
                     console.log(XList);
                     console.log(comboList);
                     console.log(tempList);
@@ -246,7 +258,11 @@
                     var XList = statisticsData.statisticsMap.XList;
                     var comboList = statisticsData.statisticsMap.comboList;
                     var tempList = statisticsData.statisticsMap.tempList;
-                    var appccount = statisticsData.statisticsMap.appccount;
+                    if (statisticsData.statisticsMap.appccount==null){
+                        var appccount = 0;
+                    }else{
+                        var appccount = statisticsData.statisticsMap.appccount;
+                    }
                     console.log(XList);
                     console.log(comboList);
                     console.log(tempList);
