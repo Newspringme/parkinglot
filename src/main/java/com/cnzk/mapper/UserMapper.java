@@ -75,5 +75,11 @@ public interface UserMapper
 
 	Integer insertUserInfo(TbUser user);
 
+	Integer addVehicle(@Param("carNum")String carNum);
+
+	Long queryVehicle(@Param("carNum")String carNum);
+
+	Integer addVehicleforuser(@Param("carId")Long carId,@Param("userId")String userId);
+
 
 }

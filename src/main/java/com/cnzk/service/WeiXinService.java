@@ -25,4 +25,6 @@ public interface WeiXinService {
 
     TbUser queryUser(String userCard);
 
+    ResultData addVehicle(String carNum,String userCard);
+
 }

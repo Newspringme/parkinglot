@@ -120,4 +120,17 @@
         update  tb_user set reg_time=#{regTime} where user_card=#{userCard};
     </update>
 
+    <insert id="addVehicle">
+        insert into tb_car (car_num)values(#{carNum});
+    </insert>
+
+    <select id="queryVehicle" resultType="long">
+        select car_id from tb_car where car_num=#{carNum};
+    </select>
+    <insert id="addVehicleforuser">
+        insert into tb_user_car (user_id,car_id)values(#{userId},#{carId});
+    </insert>
+
+
+
 </mapper>
