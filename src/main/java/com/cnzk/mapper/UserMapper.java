@@ -65,7 +65,8 @@ public interface UserMapper
 	List<TbCar> queryEndTime();
 
 	//通过手机号获取用户
-	TbUser queryUser(@Param("userTel")String userTel);
+	TbUser queryUser(@Param("userCard")String userCard);
+
 
 
 	TbUser queryOpenIdUser(@Param("userCard")String open_id);
@@ -73,6 +74,12 @@ public interface UserMapper
 	Integer uploadLoginTime(TbUser user);
 
 	Integer insertUserInfo(TbUser user);
+
+	Integer addVehicle(@Param("carNum")String carNum);
+
+	Long queryVehicle(@Param("carNum")String carNum);
+
+	Integer addVehicleforuser(@Param("carId")Long carId,@Param("userId")String userId);
 
 
 }

@@ -109,9 +109,9 @@ public class WeixinController {
 
     // 根据手机号查用户
     @ResponseBody
-    @RequestMapping("queryUserbyUserTel")
-    public Object queryUser(String userTel){
-        TbUser tbUser =weiXinService.queryUser(userTel);
+    @RequestMapping("queryUserbyUserCard")
+    public Object queryUser(String userCard){
+        TbUser tbUser =weiXinService.queryUser(userCard);
         System.out.println(tbUser);
         return tbUser;
     }
@@ -120,9 +120,17 @@ public class WeixinController {
     @ResponseBody
     @RequestMapping("weChatLogin")
     public Object weChatLogin(String code,String userHead, String userName, String userGender, String userCity,String userProvince) {
-        System.out.println("????????????????");
         ResultData resultData = weiXinService.weChatLogin(code, userHead, userName, userGender);
         return JSON.toJSONString(resultData);
     }
+
+    //增加车牌（车位直接添加
+    @ResponseBody
+    @RequestMapping("addVehicle")
+    public Object addVehicle(String carNum,String userCard) {
+        ResultData resultData = weiXinService.addVehicle(carNum, userCard);
+        return JSON.toJSONString(resultData);
+    }
+
 
 }

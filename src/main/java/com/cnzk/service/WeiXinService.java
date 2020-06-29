@@ -23,6 +23,8 @@ public interface WeiXinService {
 //    根据用户标识查车牌
     List<TbCar>  queryCarNum(String userCard);
 
-    TbUser queryUser(String userTel);
+    TbUser queryUser(String userCard);
+
+    ResultData addVehicle(String carNum,String userCard);
 
 }

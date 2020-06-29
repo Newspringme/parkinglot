@@ -8,6 +8,7 @@ import com.cnzk.pojo.*;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.sql.ResultSet;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.ArrayList;
@@ -131,6 +132,7 @@ public class WeiXinServiceImpl implements WeiXinService{
 			if(addRes>=1){
 				resultData.setCode(0);
 				resultData.setMsg("添加用户成功");
+                addUser= userMapper.queryOpenIdUser(open_id);
 				resultData.setData(addUser);
 			} else {
 				resultData.setCode(0);
@@ -149,8 +151,21 @@ public class WeiXinServiceImpl implements WeiXinService{
     }
 
     @Override
-    public TbUser queryUser(String userTel) {
-        return userMapper.queryUser(userTel);
+    public TbUser queryUser(String userCard) {
+        return userMapper.queryUser(userCard);
     }
 
+    @Override
+    public ResultData addVehicle(String carNum, String userId){
+       int i= userMapper.addVehicle(carNum);
+        ResultData data=new ResultData();
+       if (i==1){
+           long carId=userMapper.queryVehicle(carNum);
+           i=userMapper.addVehicleforuser(carId,userId);
+           data.setData(carNum);
+       }
+
+        data.setCode(i);
+        return data;
+    }
 }
