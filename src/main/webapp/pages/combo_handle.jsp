@@ -21,14 +21,14 @@
 	<body style="background-image: url('${pageContext.request.contextPath}/static/img/combobg.jpg')">
 		<div class="all">
 			<div class="layui-form-item" style="padding-top: 100px">
-				<input id="carNum" type="text" style="width: 120px;height: 35px">
-				<button id="search" style="width:80px;height: 37px" class="layui-icon layui-icon-search">验证</button>
+				<input id="carNum" type="text" placeholder="请输入车牌号" style="width: 120px;height: 35px" >
+				<button id="search" style="width:80px;height: 37px" class="layui-btn layui-btn-normal layui-icon layui-icon-search">验证</button>
 			</div>
 			<div id="handle" class="layui-form-item" style="margin-top: 100px">
-				<button style="width:210px;height: 40px">办理新月缴</button>
+				<button style="width:210px;height: 40px" class="layui-btn layui-btn-normal">办理新月缴</button>
 			</div>
 			<div id="renew" class="layui-form-item" style="margin-top: 100px">
-				<button style="width:210px;height: 40px">月缴续费</button>
+				<button style="width:210px;height: 40px" class="layui-btn layui-btn-normal">月缴续费</button>
 			</div>
 			<div id="carInfo" style="display: none">
 				<form onsubmit="return false;" class="layui-form " lay-filter="formCar">
@@ -67,7 +67,6 @@
 				</form>
 			</div>
 			<div id="newCombo" style="display: none">
-				<%--				<form action="${pageContext.request.contextPath}/alipay">--%>
 				<div class="layui-form-item">
 					<label class="layui-form-label" style="margin-left: 120px;margin-top: 20px">车牌号：</label>
 					<div class="layui-input-block"
@@ -91,11 +90,9 @@
 						</select>
 					</div>
 					<div id="sure" class="layui-form-item" style="margin-top: 60px">
-						<button style="width:200px;height: 40px">确定</button>
-						<%--						<input type="submit" style="width:200px;height: 40px">确定</input>--%>
+						<button style="width:200px;height: 40px" class="layui-btn" >确定</button>
 					</div>
 				</div>
-				<%--				</form>--%>
 			</div>
 			<div id="handleRenew" style="display: none">
 				<div class="layui-form-item">
@@ -121,7 +118,7 @@
 						</select>
 					</div>
 					<div id="sureRenew" class="layui-form-item" style="margin-top: 60px">
-						<button style="width:200px;height: 40px">确定</button>
+						<button style="width:200px;height: 40px" class="layui-btn">确定</button>
 					</div>
 
 				</div>
@@ -146,7 +143,11 @@
 						//月缴用户不能重复办理月缴产品，只能续费来变更套餐
 						$('#comboCarNum').val(tbCar.carNum);
 					}
-					openCarInfo();
+					if (msg == ''||msg==null) {
+						layer.msg('该车辆未绑定用户',{icon:2})
+					}else {
+						openCarInfo();
+					}
 				});
 			})
 
@@ -158,8 +159,8 @@
 					content: $('#carInfo'),
 					area: ['600px', '400px'],
 					shade: [0.5, '#fff'], //0.5透明度的白色背景
-					// skin: 'layui-layer-molv',//墨绿皮肤
-					skin: 'layui-layer-lan',//深蓝
+					skin: 'layui-layer-molv',//墨绿皮肤
+					// skin: 'layui-layer-lan',//深蓝
 					offset: '50px',//上边距
 					shift: 1 //动画类型
 				})
@@ -173,8 +174,8 @@
 					content: $('#newCombo'),
 					area: ['600px', '300px'],
 					shade: [0.5, '#fff'], //0.5透明度的白色背景
-					// skin: 'layui-layer-molv',//墨绿皮肤
-					skin: 'layui-layer-lan',//深蓝
+					skin: 'layui-layer-molv',//墨绿皮肤
+					// skin: 'layui-layer-lan',//深蓝
 					offset: '50px',//上边距
 					shift: 1 //动画类型
 				})
@@ -192,18 +193,7 @@
 					} else {
 						window.open("${pageContext.request.contextPath}/alipay?type=card&carNum=" + carNum + "&comboid=" + comboId);
 						window.location.reload();
-						<%--$.post("${pageContext.request.contextPath}/alipay?type=card&carNum=" + carNum + "&comboid=" + comboId, function (msg) {--%>
-						<%--	msg = msg + "";--%>
-						<%--	if (msg == 'true') {--%>
-						<%--		layer.alert("办理成功", {icon: 6}, function (index) {--%>
-						<%--			layer.close(index);--%>
-						<%--		})--%>
-						<%--	} else {--%>
-						<%--		layer.alert("办理失败", {icon: 6}, function (index) {--%>
-						<%--			layer.close(index);--%>
-						<%--		})--%>
-						<%--	}--%>
-						<%--});--%>
+
 					}
 				})
 			})
@@ -234,22 +224,6 @@
 					} else {
 						window.open("${pageContext.request.contextPath}/alipay?type=cardRenew&carNum=" + carNum + "&comboid=" + comboId);
 						window.location.reload();
-						<%--$.post("${pageContext.request.contextPath}/CarController/handleRenew?carNum=" + carNum + "&addTime=" + addTime, function (msg) {--%>
-						<%--	msg = msg + "";--%>
-						<%--	if (msg == 'isNull') {--%>
-						<%--		layer.alert("该车牌号未办理月缴，请先办理", {icon: 7}, function (index) {--%>
-						<%--			layer.close(index);--%>
-						<%--		})--%>
-						<%--	} else if (msg == 'true') {--%>
-						<%--		layer.alert("续费成功", {icon: 6}, function (index) {--%>
-						<%--			layer.close(index);--%>
-						<%--		})--%>
-						<%--	} else if (msg == 'false') {--%>
-						<%--		layer.alert("续费失败", {icon: 6}, function (index) {--%>
-						<%--			layer.close(index);--%>
-						<%--		})--%>
-						<%--	}--%>
-						<%--});--%>
 					}
 				})
 			})

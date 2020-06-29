@@ -103,19 +103,19 @@
 				<div class="layui-form-item">
 					<label class="layui-form-label" style="margin-left: 120px;">年&emsp;&emsp;龄：</label>
 					<div class="layui-input-block" style="float: left; margin-left: 20px;width: 200px;">
-						<input type="number" name="userAge" autocomplete="off" class="layui-input ">
+						<input type="number" lay-verify="userAge" name="userAge" autocomplete="off" class="layui-input ">
 					</div>
 				</div>
 				<div class="layui-form-item">
 					<label class="layui-form-label" style="margin-left: 120px;">手机号码：</label>
 					<div class="layui-input-block" style="float: left; margin-left: 20px;width: 200px;">
-						<input type="tel" name="userTel" autocomplete="off" class="layui-input ">
+						<input type="tel" lay-verify="userTel" name="userTel" autocomplete="off" class="layui-input ">
 					</div>
 				</div>
 				<div class="layui-form-item">
 					<label class="layui-form-label" style="margin-left: 120px;">证件号码：</label>
 					<div class="layui-input-block" style="float: left; margin-left: 20px;width: 200px;">
-						<input type="text" name="userCard" autocomplete="off" class="layui-input ">
+						<input type="text" lay-verify="userCard" name="userCard" autocomplete="off" class="layui-input ">
 					</div>
 				</div>
 				<div class="layui-form-item">
@@ -142,7 +142,7 @@
 					<label class="layui-form-label" style="margin-left: 120px;">车牌号码：</label>
 					<div class="layui-input-block" style="float: left; margin-left: 20px;width: 200px;">
 						<input type="text" name="carNum"
-						       autocomplete="off" class="layui-input">
+						       autocomplete="off" lay-verify="carNum" class="layui-input">
 					</div>
 				</div>
 				<div class="layui-form-item">
@@ -335,13 +335,32 @@
 				form.verify({
 					userName: function (value) {
 						if (value.length < 2) {
-							return '管理员名称至少得2个字符啊';
+							return '管理员名称至少得2个字符噢';
 						}
 					}
 					, userPass: [
 						/^[\S]{6,12}$/
 						, '密码必须6到12位，且不能出现空格'
 					]
+					, carNum: [
+						/^(([京津沪渝冀豫云辽黑湘皖鲁新苏浙赣鄂桂甘晋蒙陕吉闽贵粤青藏川宁琼使领][A-Z](([0-9]{5}[DF])|([DF]([A-HJ-NP-Z0-9])[0-9]{4})))|([京津沪渝冀豫云辽黑湘皖鲁新苏浙赣鄂桂甘晋蒙陕吉闽贵粤青藏川宁琼使领][A-Z][A-HJ-NP-Z0-9]{4}[A-HJ-NP-Z0-9挂学警港澳使领]))$/
+						,'请输入正确格式的车牌号(*￣︶￣)'
+					]
+					, userTel: [
+						/^1([38][0-9]|4[579]|5[0-3,5-9]|6[6]|7[0135678]|9[89])\d{8}$/
+						,'请输入正确格式的手机号'
+					]
+					, userCard:[
+						/^[1-9]\d{7}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])\d{3}$|^[1-9]\d{5}[1-9]\d{3}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])\d{3}([0-9]|X)$/
+						,'请输入正确格式的身份证号'
+					]
+					, userAge: [
+						/^(?:[1-9][0-9]?|1[01][0-9]|120)$/
+						,'请输入1~120之间的数字'
+
+					]
+
+
 				});
 			});
 		</script>

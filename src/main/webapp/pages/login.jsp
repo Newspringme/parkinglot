@@ -93,13 +93,20 @@
                     </div>
                     <div class="layui-form-item">
                         <button class="layui-btn layui-btn-fluid" lay-submit lay-filter="login">登&nbsp;&nbsp;&nbsp;&nbsp;录</button>
+                        <img src="../static/img/pmgressbar4.gif" id="pmgressbar" style="display: none;position: absolute;top: 50%;left: 50%;margin-left: -60px;width: 120px;">
                     </div>
+                    <div class="layui-form-item" style="margin-bottom: 20px;">
+                        <a class="layadmin-user-jump-change layadmin-link" style="margin-top: 7px;"
+                           href=<%=path + "/url/gate"%> target="_blank">进场&nbsp;&nbsp;</a>
+                        <a class="layadmin-user-jump-change layadmin-link" style="margin-top: 7px;"
+                           href=<%=path + "/url/departure"%> target="_blank">出场&nbsp;&nbsp;</a>
+                    </div>
+
                 </div>
             </div>
         </div>
     </div>
 </form>
-
 
 <script src=<%=path + "/static/layuiadmin/layui/layui.js"%>></script>
 <script>

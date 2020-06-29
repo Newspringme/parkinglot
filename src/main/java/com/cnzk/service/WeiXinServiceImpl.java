@@ -74,6 +74,11 @@ public class WeiXinServiceImpl implements WeiXinService{
         }else{
             tbBill.setComboName("购买"+tbBill.getComboName());
         }
+        if("1".equals(tbBill.getBillState())){
+            tbBill.setBillType("支付成功");
+        }else{
+            tbBill.setBillType("支付失败");
+        }
         return tbBill;
     }
 

@@ -126,6 +126,8 @@
 							layer.msg("白名单添加失败", {icon: 2});
 						} else if(msg=='noCar'){
 							layer.msg("该车辆未绑定，请先绑定", {icon: 3});
+						}else if(msg=='had'){
+							layer.msg('该车辆已经存入白名单',{icon:6});
 						}
 					})
 				})
@@ -140,11 +142,11 @@
 					$.post("${pageContext.request.contextPath}/CarController/deleteWhiteList?carNum=" + encodeURI(data.carNum), function (msg) {
 							msg = msg + '';
 						if (msg == 'true') {
-							layer.alert('删除成功', {icon: 6}, function (index) {
+							layer.alert('白名单删除成功', {icon: 6}, function (index) {
 								window.location.reload();
 							});
 						} else {
-							layer.alert("删除失败", {icon: 2});
+							layer.msg("白名单删除失败", {icon: 2});
 						}
 					})
 
