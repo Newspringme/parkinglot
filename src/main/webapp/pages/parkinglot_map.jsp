@@ -492,7 +492,6 @@
             mapAudioSrc: '${pageContext.request.contextPath}/static/Case/lib',
             token:'20200611',
             themeID: styleid, //自定义样式主题ID
-            mapAudioSrc: '${pageContext.request.contextPath}/static/Case/lib',
         });
         map.openMapById(esmapID); //打开地图
         map.showCompass = true; //显示指南针
@@ -592,116 +591,6 @@
         };
     };
 
-    //获取停车场数据
-    function getParkData() {
-        $.getJSON("${pageContext.request.contextPath}/parkController/getParkData",function (data) {
-            parkData = data.put;
-            //解析数据
-            var total = 0;
-            var d = {"idList":[[],[],[]]};
-            for (var i = 0; i < parkData.length; i++)
-            {
-                var park = parkData[i];
-                var parkState;
-                if (park.parkState == "已停车")
-                {
-                    parkState = 1;
-                }else{
-                    parkState = 2;
-                }
-                total++;
-                d.idList[parkState].push(park.eventId);
-            }
-            var showText = "";
-
-            //调用批量修改颜色接口来修改
-            map.changeModelColor({
-                id: d.idList[1],
-                color: color[0]
-            });
-            map.changeModelColor({
-                id: d.idList[2],
-                color: color[1]
-            });
-            showText += ":"+d.idList[2].length+"个";
-            //3.显示更新统计
-            $("#free").html(showText); //滚动字幕 相应楼层剩余停车位数
-            $("#total").html(total);
-        });
-    }
-
-    //滚动字幕
-    function marquee() {
-        var scrollWidth = $('#i-test-tip').width();
-        var textWidth = $('.test-tip').width();
-        var i = scrollWidth;
-        setInterval(function () {
-            i--;
-            if (i < -textWidth) {
-                i = scrollWidth;
-            }
-            $('.test-tip').animate({
-                'left': i + 'px'
-            }, 8);
-        }, 8);
-    }
-
-    //绑定事件2D-3D
-    function bingEvents() {
-        document.getElementById("btn3D").onclick = function () {
-            if (map.viewMode == esmap.ESViewMode.MODE_2D) {
-                map.viewMode = esmap.ESViewMode.MODE_3D; //2D-->3D
-                document.getElementById("btn3D").style.backgroundImage =
-                    "url('${pageContext.request.contextPath}/static/Case/image/wedgets/3D.png')";
-            } else {
-                map.viewMode = esmap.ESViewMode.MODE_2D; //3D-->2D
-                document.getElementById("btn3D").style.backgroundImage =
-                    "url('${pageContext.request.contextPath}/static/Case/image/wedgets/2D.png')";
-            }
-        };
-    }
-
-    var searchText;
-    //搜索车辆
-    $("#searchCar").on("click",function () {
-        removeAll();
-        searchText = $("#searchText").val();
-        if (searchText != null || searchText != "") {
-            $.post("${pageContext.request.contextPath}/parkController/queryParkByCarNum?searchText="+searchText,function (data) {
-                if (data==="false") {
-                    alert("停车场内没有车牌号为：【"+searchText+"】的车");
-                }else{
-                    var park = JSON.parse(data);
-                    map.changeModelColor({
-                        id: park.eventId,
-                        color: color[2]
-                    });
-                    var layer = new esmap.ESLayer('imageMarker');
-                    im = new esmap.ESImageMarker({
-                        x: park.tbCoordinate.coordinateX - 0,
-                        y: park.tbCoordinate.coordinateY - 0,
-                        url: '${pageContext.request.contextPath}/static/Case/image/user.png',
-                        size: 64,
-                        showLevel: 20,
-                        height: 0.5,
-                        id: 1,
-                        name: 'imageMarker'
-                    });
-                    layer.addMarker(im);
-                    floorLayer.addLayer(layer);
-                }
-            });
-        } else {
-            alert("请输入车牌号");
-        }
-    });
-
-    //清除功能
-    var removeAll = function () {
-        var re = floorLayer.removeLayersByTypes([esmap.ESLayerType.IMAGE_MARKER]);
-        lm && map.removeLocationMarker(lm);
-    };
-
     //创建导航对象
     function createNavi() {
         if (map.naviData.length == 0) {
@@ -784,6 +673,37 @@
         navi.simulate();
     }
 
+    //滚动字幕
+    function marquee() {
+        var scrollWidth = $('#i-test-tip').width();
+        var textWidth = $('.test-tip').width();
+        var i = scrollWidth;
+        setInterval(function () {
+            i--;
+            if (i < -textWidth) {
+                i = scrollWidth;
+            }
+            $('.test-tip').animate({
+                'left': i + 'px'
+            }, 8);
+        }, 8);
+    }
+
+    //绑定事件2D-3D
+    function bingEvents() {
+        document.getElementById("btn3D").onclick = function () {
+            if (map.viewMode == esmap.ESViewMode.MODE_2D) {
+                map.viewMode = esmap.ESViewMode.MODE_3D; //2D-->3D
+                document.getElementById("btn3D").style.backgroundImage =
+                    "url('${pageContext.request.contextPath}/static/Case/image/wedgets/3D.png')";
+            } else {
+                map.viewMode = esmap.ESViewMode.MODE_2D; //3D-->2D
+                document.getElementById("btn3D").style.backgroundImage =
+                    "url('${pageContext.request.contextPath}/static/Case/image/wedgets/2D.png')";
+            }
+        };
+    }
+
     //显示路径数据
     function showDis(data) {
         //距终点的距离
@@ -798,6 +718,85 @@
         document.getElementById('description').innerHTML = '<p>距终点：' + distance.toFixed(1) + ' 米</p><p>大约需要：  ' + m + '  分钟   ' + s +
             '   秒</p><p>路线提示：' + f + ' </p>';
     }
+
+    //获取停车场数据
+    function getParkData() {
+        $.getJSON("${pageContext.request.contextPath}/parkController/getParkData",function (data) {
+            parkData = data.put;
+            //解析数据
+            var total = 0;
+            var d = {"idList":[[],[],[]]};
+            for (var i = 0; i < parkData.length; i++)
+            {
+                var park = parkData[i];
+                var parkState;
+                if (park.parkState == "已停车")
+                {
+                    parkState = 1;
+                }else{
+                    parkState = 2;
+                }
+                total++;
+                d.idList[parkState].push(park.eventId);
+            }
+            var showText = "";
+
+            //调用批量修改颜色接口来修改
+            map.changeModelColor({
+                id: d.idList[1],
+                color: color[0]
+            });
+            map.changeModelColor({
+                id: d.idList[2],
+                color: color[1]
+            });
+            showText += ":"+d.idList[2].length+"个";
+            //3.显示更新统计
+            $("#free").html(showText); //滚动字幕 相应楼层剩余停车位数
+            $("#total").html(total);
+        });
+    }
+
+    var searchText;
+    //搜索车辆
+    $("#searchCar").on("click",function () {
+        removeAll();
+        searchText = $("#searchText").val();
+        if (searchText != null || searchText != "") {
+            $.post("${pageContext.request.contextPath}/parkController/queryParkByCarNum?searchText="+searchText,function (data) {
+                if (data==="false") {
+                    alert("停车场内没有车牌号为：【"+searchText+"】的车");
+                }else{
+                    var park = JSON.parse(data);
+                    map.changeModelColor({
+                        id: park.eventId,
+                        color: color[2]
+                    });
+                    var layer = new esmap.ESLayer('imageMarker');
+                    im = new esmap.ESImageMarker({
+                        x: park.tbCoordinate.coordinateX - 0,
+                        y: park.tbCoordinate.coordinateY - 0,
+                        url: '${pageContext.request.contextPath}/static/Case/image/user.png',
+                        size: 64,
+                        showLevel: 20,
+                        height: 0.5,
+                        id: 1,
+                        name: 'imageMarker'
+                    });
+                    layer.addMarker(im);
+                    floorLayer.addLayer(layer);
+                }
+            });
+        } else {
+            alert("请输入车牌号");
+        }
+    });
+
+    //清除功能
+    var removeAll = function () {
+        var re = floorLayer.removeLayersByTypes([esmap.ESLayerType.IMAGE_MARKER,esmap.ESLayerType.TEXT_MARKER]);
+        lm && map.removeLocationMarker(lm);
+    };
 </script>
 </body>
 </html>
