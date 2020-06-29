@@ -698,7 +698,7 @@
 
     //清除功能
     var removeAll = function () {
-        var re = floorLayer.removeLayersByTypes([esmap.ESLayerType.IMAGE_MARKER]);
+        var re = floorLayer.removeLayersByTypes([esmap.ESLayerType.IMAGE_MARKER,esmap.ESLayerType.TEXT_MARKER]);
         lm && map.removeLocationMarker(lm);
     };
 
