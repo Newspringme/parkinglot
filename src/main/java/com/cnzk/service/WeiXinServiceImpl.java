@@ -149,8 +149,8 @@ public class WeiXinServiceImpl implements WeiXinService{
     }
 
     @Override
-    public TbUser queryUser(String userTel) {
-        return userMapper.queryUser(userTel);
+    public TbUser queryUser(String userCard) {
+        return userMapper.queryUser(userCard);
     }
 
 }

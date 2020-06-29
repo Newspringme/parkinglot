@@ -108,9 +108,9 @@ public class WeixinController {
 
     // 根据手机号查用户
     @ResponseBody
-    @RequestMapping("queryUserbyUserTel")
-    public Object queryUser(String userTel){
-        TbUser tbUser =weiXinService.queryUser(userTel);
+    @RequestMapping("queryUserbyUserCard")
+    public Object queryUser(String userCard){
+        TbUser tbUser =weiXinService.queryUser(userCard);
         System.out.println(tbUser);
         return tbUser;
     }
@@ -119,7 +119,6 @@ public class WeixinController {
     @ResponseBody
     @RequestMapping("weChatLogin")
     public Object weChatLogin(String code,String userHead, String userName, String userGender, String userCity,String userProvince) {
-        System.out.println("????????????????");
         ResultData resultData = weiXinService.weChatLogin(code, userHead, userName, userGender);
         return JSON.toJSONString(resultData);
     }

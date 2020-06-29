@@ -65,7 +65,8 @@ public interface UserMapper
 	List<TbCar> queryEndTime();
 
 	//通过手机号获取用户
-	TbUser queryUser(@Param("userTel")String userTel);
+	TbUser queryUser(@Param("userCard")String userCard);
+
 
 
 	TbUser queryOpenIdUser(@Param("userCard")String open_id);

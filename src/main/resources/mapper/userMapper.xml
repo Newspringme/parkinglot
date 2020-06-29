@@ -105,7 +105,7 @@
 
     <!--根据手机号查询用户-->
     <select id="queryUser" resultType="com.cnzk.pojo.TbUser">
-        select * from tb_user where user_tel=#{userTel};
+        select * from tb_user where user_card=#{userCard};
     </select>
 
 
