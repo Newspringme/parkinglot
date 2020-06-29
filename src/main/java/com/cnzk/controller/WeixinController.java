@@ -1,16 +1,13 @@
 package com.cnzk.controller;
 
 import com.alibaba.fastjson.JSON;
-import com.cnzk.pojo.LayuiData;
-import com.cnzk.pojo.TbCar;
-import com.cnzk.pojo.TbFeedback;
-import com.cnzk.pojo.TbBill;
-import com.cnzk.pojo.TbUser;
+import com.cnzk.pojo.*;
 import com.cnzk.service.RoleServeice;
 import com.cnzk.service.WeiXinService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
@@ -116,6 +113,15 @@ public class WeixinController {
         TbUser tbUser =weiXinService.queryUser(userTel);
         System.out.println(tbUser);
         return tbUser;
+    }
+
+    //微信登录
+    @ResponseBody
+    @RequestMapping("weChatLogin")
+    public Object weChatLogin(String code,String userHead, String userName, String userGender, String userCity,String userProvince) {
+        System.out.println("????????????????");
+        ResultData resultData = weiXinService.weChatLogin(code, userHead, userName, userGender);
+        return JSON.toJSONString(resultData);
     }
 
 }

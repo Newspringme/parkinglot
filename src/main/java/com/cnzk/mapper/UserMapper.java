@@ -66,4 +66,13 @@ public interface UserMapper
 
 	//通过手机号获取用户
 	TbUser queryUser(@Param("userTel")String userTel);
+
+
+	TbUser queryOpenIdUser(@Param("userCard")String open_id);
+
+	Integer uploadLoginTime(TbUser user);
+
+	Integer insertUserInfo(TbUser user);
+
+
 }

@@ -107,4 +107,17 @@
     <select id="queryUser" resultType="com.cnzk.pojo.TbUser">
         select * from tb_user where user_tel=#{userTel};
     </select>
+
+
+    <insert id="insertUserInfo" parameterType="TbUser">
+        insert into tb_user (user_name,user_age,user_sex,user_card)values(#{userName},#{userAge},#{userSex},#{userCard});
+    </insert>
+    <select id="queryOpenIdUser" resultType="TbUser">
+        select * from tb_user where user_card=#{userCard};
+    </select>
+
+    <update id="uploadLoginTime" >
+        update  tb_user set reg_time=#{regTime} where user_card=#{userCard};
+    </update>
+
 </mapper>
