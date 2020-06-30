@@ -1,11 +1,6 @@
 package com.cnzk.service;
 
-import com.cnzk.pojo.TbCar;
-import com.cnzk.pojo.TbFeedback;
-
-import com.cnzk.pojo.LayuiData;
-import com.cnzk.pojo.TbBill;
-import com.cnzk.pojo.TbUser;
+import com.cnzk.pojo.*;
 
 import java.util.List;
 
@@ -23,9 +18,13 @@ public interface WeiXinService {
     //    查看空车位
     Integer queryNullPark();
 
-//    根据手机号查车牌
-    List<TbCar>  queryCarNum(String userTel);
+    ResultData weChatLogin(String code, String userHead, String userName, String userGender);
 
-    TbUser queryUser(String userTel);
+//    根据用户标识查车牌
+    List<TbCar>  queryCarNum(String userCard);
+
+    TbUser queryUser(String userCard);
+
+    ResultData addVehicle(String carNum,String userCard);
 
 }

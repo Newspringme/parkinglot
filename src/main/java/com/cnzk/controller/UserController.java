@@ -2,8 +2,11 @@ package com.cnzk.controller;
 import com.alibaba.fastjson.JSON;
 import com.cnzk.aoplog.Log;
 import com.cnzk.pojo.LayuiData;
+import com.cnzk.pojo.ResultData;
 import com.cnzk.pojo.TbUser;
 import com.cnzk.service.UserService;
+import com.cnzk.service.WeiXinService;
+import org.hibernate.annotations.Source;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Controller;
@@ -29,6 +32,8 @@ public class UserController
 {
 	@Autowired
 	private UserService userService;
+	@Source
+	private WeiXinService weiXinService;
 	//登陆l
 	@RequestMapping(value = "/userLogin", produces = {"application/json;charset=UTF-8"})
 	@ResponseBody
@@ -118,5 +123,6 @@ public class UserController
 		System.out.println("layuiData = " + JSON.toJSONString(layuiData));
 		return layuiData;
 	}
+
 
 }

@@ -43,7 +43,7 @@ public class PayController
 	//签名方式
 	private final String SIGN_TYPE = "RSA2";
 	//支付宝异步通知路径,付款完毕后会异步调用本项目的方法,必须为公网地址
-	private final String NOTIFY_URL = "http://39.102.35.36:8080/parkinglot/exitcar";
+	private final String NOTIFY_URL = "http://39.102.35.36:8080/parkinglot/notify";
 	//    //支付宝同步通知路径,也就是当付款完毕后跳转本项目的页面,可以不是公网地址
 	private final String RETURN_URL = "http://localhost:8080/parkinglot/returnurl";
 	//    private final String RETURN_URL = "http://localhost:8080/parkinglot/returnurl";
@@ -167,61 +167,9 @@ public class PayController
 		return billmap;
 	}
 
-	//测试在手机跳出app支付
-	@ResponseBody
-	@RequestMapping("appalipay")
-	public void appalipay(HttpServletResponse response, HttpServletRequest request) throws IOException, ParseException
-	{
-		String out_trade_no = UUID.randomUUID().toString();
-		// 订单名称，必填
-		String subject = "菜鸟停车场";
-		String timeout_express = "5m";
-		// 付款金额，必填
-		String total_amount = "11";        // 商品描述，可空
-		String body = "菜鸟停车场";        // 超时时间 可空
-		// 销售产品码 必填
-		String product_code = "QUICK_WAP_WAY";
-		/**********************/
-		// SDK 公共请求类，包含公共请求参数，以及封装了签名与验签，开发者无需关注签名与验签
-		//调用RSA签名方式
-		AlipayClient client = new DefaultAlipayClient(GATEWAY_URL, APP_ID, AlipayConfig.APP_PRIVATE_KEY, FORMAT, CHARSET, ALIPAY_PUBLIC_KEY, SIGN_TYPE);
-		AlipayTradeWapPayRequest alipay_request = new AlipayTradeWapPayRequest();
-
-		// 封装请求支付信息
-		AlipayTradeWapPayModel model = new AlipayTradeWapPayModel();
-		model.setOutTradeNo(out_trade_no);
-		model.setSubject(subject);
-		model.setTotalAmount(total_amount);
-		model.setBody(body);
-		model.setTimeoutExpress(timeout_express);
-		model.setProductCode(product_code);
-		alipay_request.setBizModel(model);
-		// 设置异步通知地址
-		alipay_request.setNotifyUrl(NOTIFY_URL);
-		// 设置同步地址
-		alipay_request.setReturnUrl(RETURN_URL);
-
-		// form表单生产
-		String form = "";
-		try
-		{
-			// 调用SDK生成表单
-			form = client.pageExecute(alipay_request).getBody();
-			System.out.println(form);
-			response.setContentType("text/html;charset=" + AlipayConfig.CHARSET);
-			response.getWriter().write(form);//直接将完整的表单html输出到页面
-			response.getWriter().flush();
-			response.getWriter().close();
-		}
-		catch (AlipayApiException e)
-		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
 
 	@ResponseBody
-	@RequestMapping("exitcar")
+	@RequestMapping("notify")
 	public void exitcar(HttpServletRequest request, HttpServletResponse Response) throws IOException, AlipayApiException, ParseException
 	{
 //获取支付宝POST过来反馈信息

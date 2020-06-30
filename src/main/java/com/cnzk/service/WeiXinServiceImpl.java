@@ -1,15 +1,16 @@
 package com.cnzk.service;
 
+import com.alibaba.fastjson.JSONObject;
+import com.cnzk.controller.HttpClientUtil;
+import com.cnzk.controller.UserConstantInterface;
 import com.cnzk.mapper.*;
-import com.cnzk.pojo.TbCar;
-import com.cnzk.pojo.TbFeedback;
-import com.cnzk.pojo.LayuiData;
-import com.cnzk.pojo.TbBill;
-import com.cnzk.pojo.TbUser;
+import com.cnzk.pojo.*;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.sql.ResultSet;
 import java.text.SimpleDateFormat;
+import java.util.*;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -91,15 +92,81 @@ public class WeiXinServiceImpl implements WeiXinService{
     public Integer queryNullPark() {
         return parkMapper.queryNullPark();
     }
-    //    根据手机号查车牌
+
+	@Override
+	public ResultData weChatLogin(String code, String userHead, String userName, String userGender) {
+		// 配置请求参数
+		Map<String, String> param = new HashMap<>();
+		param.put("appid", UserConstantInterface.WX_LOGIN_APPID);
+		param.put("secret", UserConstantInterface.WX_LOGIN_SECRET);
+		param.put("js_code", code);
+		param.put("grant_type", UserConstantInterface.WX_LOGIN_GRANT_TYPE);
+		// 发送请求
+		String wxResult = HttpClientUtil.doGet(UserConstantInterface.WX_LOGIN_URL, param);
+		JSONObject jsonObject = JSONObject.parseObject(wxResult);
+		// 获取参数返回的
+		String session_key = jsonObject.get("session_key").toString();
+		String open_id = jsonObject.get("openid").toString();
+
+		System.out.println("-----------openId:"+open_id);
+
+		ResultData resultData = new ResultData();
+		TbUser user = userMapper.queryOpenIdUser(open_id);
+		if(user!=null){
+			System.out.println("用户 登陆");
+			user.setRegTime(new SimpleDateFormat("yyyy-MM-dd  HH:mm:ss").format(new Date()));
+			user.setUserCard(open_id);
+			userMapper.uploadLoginTime(user);
+//			List<User> list = new ArrayList<>();
+//			list.add(user);
+			resultData.setData(user);
+
+		} else {
+			TbUser addUser = new TbUser();
+			addUser.setUserCard(open_id);
+			addUser.setUserName(userName);
+			addUser.setUserSex(userGender);
+			addUser.setHeadImg(userHead);
+			addUser.setRegTime(new SimpleDateFormat("yyyy-MM-dd  HH:mm:ss").format(new Date()));
+			int addRes = userMapper.insertUserInfo(addUser);
+			if(addRes>=1){
+				resultData.setCode(0);
+				resultData.setMsg("添加用户成功");
+                addUser= userMapper.queryOpenIdUser(open_id);
+				resultData.setData(addUser);
+			} else {
+				resultData.setCode(0);
+				resultData.setMsg("添加用户失败");
+			}
+		}
+		resultData.setMsg(wxResult);
+		System.out.println("-------------微信登录："+wxResult);
+		return resultData;
+	}
+
+    //    根据用户标识查车牌
     @Override
-    public List<TbCar> queryCarNum(String userTel) {
-        return carMapper.queryCarNum(userTel);
+    public List<TbCar> queryCarNum(String userCard) {
+        return carMapper.queryCarNum(userCard);
     }
 
     @Override
-    public TbUser queryUser(String userTel) {
-        return userMapper.queryUser(userTel);
+    public TbUser queryUser(String userCard) {
+        return userMapper.queryUser(userCard);
     }
 
+    @Override
+    public ResultData addVehicle(String carNum, String userId){
+        System.out.println(userId);
+       int i= userMapper.addVehicle(carNum);
+        ResultData data=new ResultData();
+       if (i==1){
+           long carId=userMapper.queryVehicle(carNum);
+           i=userMapper.addVehicleforuser(carId,userId);
+           data.setData(carNum);
+       }
+
+        data.setCode(i);
+        return data;
+    }
 }

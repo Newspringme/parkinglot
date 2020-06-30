@@ -1,16 +1,13 @@
 package com.cnzk.controller;
 
 import com.alibaba.fastjson.JSON;
-import com.cnzk.pojo.LayuiData;
-import com.cnzk.pojo.TbCar;
-import com.cnzk.pojo.TbFeedback;
-import com.cnzk.pojo.TbBill;
-import com.cnzk.pojo.TbUser;
+import com.cnzk.pojo.*;
 import com.cnzk.service.RoleServeice;
 import com.cnzk.service.WeiXinService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
@@ -100,22 +97,40 @@ public class WeixinController {
     }
 
 
-    // 根据手机号查车牌
+    // 根据用户标识查车牌
     @ResponseBody
     @RequestMapping("queryCarNum")
-    public Object queryCarNum(String userTel){
-        List<TbCar> tbCarList =weiXinService.queryCarNum(userTel);
+    public Object queryCarNum(String userCard){
+        System.out.println("queryCarNum:"+userCard);
+        List<TbCar> tbCarList =weiXinService.queryCarNum(userCard);
         System.out.println(tbCarList);
         return tbCarList;
     }
 
     // 根据手机号查用户
     @ResponseBody
-    @RequestMapping("queryUserbyUserTel")
-    public Object queryUser(String userTel){
-        TbUser tbUser =weiXinService.queryUser(userTel);
+    @RequestMapping("queryUserbyUserCard")
+    public Object queryUser(String userCard){
+        TbUser tbUser =weiXinService.queryUser(userCard);
         System.out.println(tbUser);
         return tbUser;
     }
+
+    //微信登录
+    @ResponseBody
+    @RequestMapping("weChatLogin")
+    public Object weChatLogin(String code,String userHead, String userName, String userGender, String userCity,String userProvince) {
+        ResultData resultData = weiXinService.weChatLogin(code, userHead, userName, userGender);
+        return JSON.toJSONString(resultData);
+    }
+
+    //增加车牌（车位直接添加
+    @ResponseBody
+    @RequestMapping("addVehicle")
+    public Object addVehicle(String carNum,String userId) {
+        ResultData resultData = weiXinService.addVehicle(carNum, userId);
+        return JSON.toJSONString(resultData);
+    }
+
 
 }
