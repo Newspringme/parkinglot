@@ -102,4 +102,19 @@ public class TbBill {
     this.billType = billType;
   }
 
+  @Override
+  public String toString() {
+    return "TbBill{" +
+            "billId=" + billId +
+            ", billTime='" + billTime + '\'' +
+            ", billNum='" + billNum + '\'' +
+            ", billMoney='" + billMoney + '\'' +
+            ", comboId=" + comboId +
+            ", comboName='" + comboName + '\'' +
+            ", userName='" + userName + '\'' +
+            ", billState=" + billState +
+            ", carNum='" + carNum + '\'' +
+            ", billType='" + billType + '\'' +
+            '}';
+  }
 }
