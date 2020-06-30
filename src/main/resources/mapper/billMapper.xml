@@ -43,12 +43,12 @@
 <!--//统计一周中每天的临时停车收入-->
     <select id="showWeekTempStatistics" resultType="java.lang.Integer" parameterType="java.util.Map">
 		SELECT sum(bill_money) FROM tb_bill
-		WHERE DATE_FORMAT(DATE(bill_time),'%Y-%m-%d') = (select subdate(curdate(),date_format(curdate(),'%w')-#{dayid})) and combo_id is null and bill_state=1;
+		WHERE DATE_FORMAT(DATE(bill_time),'%Y-%m-%d') = (select subdate(curdate(),date_format(curdate(),'%w')-#{dayid})) and combo_id = 0 and bill_state=1;
 	</select>
 <!--//统计一周中每天的月缴办理收入-->
     <select id="showWeekComboStatistics" resultType="java.lang.Integer" parameterType="java.util.Map">
 		SELECT sum(bill_money) FROM tb_bill
-		WHERE DATE_FORMAT(DATE(bill_time),'%Y-%m-%d') = (select subdate(curdate(),date_format(curdate(),'%w')-#{dayid})) and combo_id is not null and bill_state=1;
+		WHERE DATE_FORMAT(DATE(bill_time),'%Y-%m-%d') = (select subdate(curdate(),date_format(curdate(),'%w')-#{dayid})) and combo_id !=0 and bill_state=1;
 	</select>
 
 
@@ -63,7 +63,7 @@
 		SELECT SUM(bill_money) FROM tb_bill
 		WHERE DATE_FORMAT(DATE(bill_time),'%Y-%m-%d') &gt;= DATE_FORMAT(DATE(#{daytime1}),'%Y-%m-%d')
 		and DATE_FORMAT(DATE(bill_time),'%Y-%m-%d') &lt;= DATE_FORMAT(DATE(#{daytime2}),'%Y-%m-%d')
-		and combo_id is null and bill_state=1;
+		and combo_id = 0 and bill_state=1;
 	</select>
 
     <!--//统计一月中每周的月缴办理收入-->
@@ -71,7 +71,7 @@
 		SELECT SUM(bill_money) FROM tb_bill
 		WHERE DATE_FORMAT(DATE(bill_time),'%Y-%m-%d') &gt;= DATE_FORMAT(DATE(#{daytime1}),'%Y-%m-%d')
 		and DATE_FORMAT(DATE(bill_time),'%Y-%m-%d') &lt;= DATE_FORMAT(DATE(#{daytime2}),'%Y-%m-%d')
-		and combo_id is not null and bill_state=1;
+		and combo_id  !=0 and bill_state=1;
 	</select>
 
     <!-- 查半年的总收入-->
@@ -86,7 +86,7 @@
 		select SUM(bill_money) from tb_bill
 		WHERE DATE_FORMAT(DATE(bill_time),'%Y-%m-%d') &gt;= DATE_FORMAT(DATE(#{daytime3}),'%Y-%m-%d')
 		and DATE_FORMAT(DATE(bill_time),'%Y-%m-%d') &lt; DATE_FORMAT(DATE(#{daytime4}),'%Y-%m-%d')
-		and combo_id is null and bill_state=1;
+		and combo_id = 0 and bill_state=1;
 	</select>
 
 <!--    //统计半年中每月的月缴办理收入-->
@@ -94,19 +94,19 @@
 		select SUM(bill_money) from tb_bill
 		WHERE DATE_FORMAT(DATE(bill_time),'%Y-%m-%d') &gt;= DATE_FORMAT(DATE(#{daytime3}),'%Y-%m-%d')
 		and DATE_FORMAT(DATE(bill_time),'%Y-%m-%d') &lt; DATE_FORMAT(DATE(#{daytime4}),'%Y-%m-%d')
-		and combo_id is not null and bill_state=1;
+		and combo_id  !=0 and bill_state=1;
 	</select>
 
     <!--//补充缺失当天的临时车收入-->
     <select id="lackTempMoney" resultType="java.lang.Integer" parameterType="java.util.Map">
 		select SUM(bill_money) from tb_bill
-		WHERE DATE_FORMAT(DATE(bill_time),'%Y-%m-%d') = DATE_FORMAT(DATE(#{lacktime}),'%Y-%m-%d') and combo_id is null and bill_state=1;
+		WHERE DATE_FORMAT(DATE(bill_time),'%Y-%m-%d') = DATE_FORMAT(DATE(#{lacktime}),'%Y-%m-%d') and combo_id = 0 and bill_state=1;
 	</select>
 
     <!--//补充缺失当天的月缴办理收入-->
     <select id="lackComboMoney" resultType="java.lang.Integer" parameterType="java.util.Map">
 		select SUM(bill_money) from tb_bill
-		WHERE DATE_FORMAT(DATE(bill_time),'%Y-%m-%d') = DATE_FORMAT(DATE(#{lacktime}),'%Y-%m-%d') and combo_id is not null and bill_state=1;
+		WHERE DATE_FORMAT(DATE(bill_time),'%Y-%m-%d') = DATE_FORMAT(DATE(#{lacktime}),'%Y-%m-%d') and combo_id !=0 and bill_state=1;
 	</select>
 
 	<insert id="insertBill" parameterType="com.cnzk.pojo.TbBill">
