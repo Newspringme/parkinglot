@@ -1,6 +1,7 @@
 package com.cnzk.service;
 
 import com.cnzk.pojo.TbPark;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.HashMap;
