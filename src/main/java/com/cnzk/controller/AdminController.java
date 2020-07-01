@@ -661,8 +661,8 @@ public class AdminController
 			LayuiData layuiData = new LayuiData();
 			layuiData.setCode(0);
 			layuiData.setMsg("上传成功");
-            projectPath="http://localhost:8080/parkinglot/upload/"+ dateStr + "/"+ uuid + "." + prefix;
-//			projectPath="http://39.102.35.36:8080/parkinglot/upload/"+ dateStr + "/"+ uuid + "." + prefix;
+//            projectPath="http://localhost:8080/parkinglot/upload/"+ dateStr + "/"+ uuid + "." + prefix;
+			projectPath="http://39.102.35.36:8080/parkinglot/upload/"+ dateStr + "/"+ uuid + "." + prefix;
 //			TabAdmin admin = (TabAdmin) request.getSession().getAttribute("admin");
 			layuiData.setFiles(projectPath);
 
