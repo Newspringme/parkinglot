@@ -24,29 +24,7 @@
 <body style="margin: 0">
 <div style="height: 100%;width: 19%;float: left;border: 1px solid #92B8B1">
     <%--    <img src="https://i.loli.net/2020/06/09/dPjLE2aeGVKhADT.jpg" style="width: 100%;">--%>
-    <div class="layui-form layuimini-form">
-        <div class="layui-form-item">
-            <label class="layui-form-label required">车牌号</label>
-            <div class="layui-input-block">
-                <input type="text" name="carnum" lay-verify="required" lay-reqtext="车牌号不能为空" placeholder="请输入车牌号" value="" class="layui-input">
-            </div>
-        </div>
-        <div class="layui-form-item">
-            <div class="layui-input-block">
-                <button class="layui-btn layui-btn-normal" lay-submit lay-filter="saveBtn">查询</button>
-            </div>
-        </div>
-        <div class="layui-form-item">
-            <div class="layui-input-block">
-                <input type="hidden" class="enter">
-                <input type="hidden" class="exit">
-                <input type="hidden" class="carnum">
-                <input type="hidden" class="username">
-                <input type="hidden" class="money">
-                <button class="layui-btn layui-btn-normal" lay-submit onclick="zhifu()">出库</button>
-            </div>
-        </div>
-    </div>
+
     <div style="width: 100%;height: 57%;background-color: black">
         <br><br>
         <br><br>

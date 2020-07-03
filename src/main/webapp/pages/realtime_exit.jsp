@@ -220,7 +220,7 @@
             });
         }
         else {
-            window.open("${pageContext.request.contextPath}/alipay?type=car:&enter="+entertime+"&exit="+exittime+"&carNum="+carnumber+"&username="+username);
+            window.open("${pageContext.request.contextPath}/alipay?type=car&&carNum="+carnumber);
         }
     }
     //现金收费
