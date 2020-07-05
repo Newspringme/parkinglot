@@ -45,9 +45,6 @@ public class ChackphotoController
 		if (PS.size() == 0) {//无车位
 			return "NO";
 		}else{
-
-
-
 			String carNum = chackphotoService.file(file);
 			System.out.println("车牌-----------:"+carNum);
 			String ParkSpace=chackphotoService.parkspacemsg(carNum);//查重

@@ -122,7 +122,7 @@
 	</select>
 
 	<insert id="insertCashBill" parameterType="TbBill">
-		 insert into tb_bill (bill_num,bill_money,car_num,user_name,bill_state) values (#{billNum},#{billMoney},#{carNum},#{userName},#{billState});
+		 insert into tb_bill (bill_num,bill_money,car_num,user_name,bill_state,combo_id,bill_type) values (#{billNum},#{billMoney},#{carNum},#{userName},#{billState},#{comboId},#{billType});
 	</insert>
 
 	<!--//查订单是否完成-->
@@ -137,7 +137,7 @@
 		left join tb_user_car c on b.car_id = c.car_id
 		left join tb_user d on c.user_id = d.user_id
 		left join tb_combo e on a.combo_id = e.combo_id
-		where a.car_num = #{carNum};
+		where a.car_num = #{carNum} order by a.bill_time desc;
 	</select>
 
     <!--根据订单编号查账单信息-->
