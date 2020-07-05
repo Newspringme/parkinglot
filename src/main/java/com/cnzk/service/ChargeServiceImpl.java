@@ -106,6 +106,8 @@ public class ChargeServiceImpl implements ChargeService {
         tbBill.setUserName(hashMap.get("username").toString());
         tbBill.setBillMoney(hashMap.get("money").toString());
         tbBill.setBillState(1);
+        tbBill.setBillType("car");
+        tbBill.setComboId(0);
         System.out.println("cashPay_tbBill="+tbBill);
         row += billMapper.insertCashBill(tbBill);
         row += carMapper.carexit(hashMap.get("carnumber").toString());
