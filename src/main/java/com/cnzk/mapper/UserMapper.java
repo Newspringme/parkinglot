@@ -60,26 +60,29 @@ public interface UserMapper
 
 	String findPhone(String phone);
 
-	void userReg(String phone,String password);
+	void userReg(String phone, String password);
+
 	//  获取月缴要到期的车辆
 	List<TbCar> queryEndTime();
 
+	//	更改过期套餐
+	int updateCombo(TbCar tbCar);
+
 	//通过手机号获取用户
-	TbUser queryUser(@Param("userCard")String userCard);
+	TbUser queryUser(@Param("userCard") String userCard);
 
 
-
-	TbUser queryOpenIdUser(@Param("userCard")String open_id);
+	TbUser queryOpenIdUser(@Param("userCard") String open_id);
 
 	Integer uploadLoginTime(TbUser user);
 
 	Integer insertUserInfo(TbUser user);
 
-	Integer addVehicle(@Param("carNum")String carNum);
+	Integer addVehicle(@Param("carNum") String carNum);
 
-	Long queryVehicle(@Param("carNum")String carNum);
+	Long queryVehicle(@Param("carNum") String carNum);
 
-	Integer addVehicleforuser(@Param("carId")Long carId,@Param("userId")String userId);
+	Integer addVehicleforuser(@Param("carId") Long carId, @Param("userId") String userId);
 
 
 }

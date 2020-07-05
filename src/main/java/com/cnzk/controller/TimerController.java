@@ -23,43 +23,40 @@ public class TimerController
 {
 	@Resource
 	UserMapper userMapper;
-//	@Scheduled(cron = "0/3 * * * * *")//每隔两秒执行一次
-	@Scheduled(cron = "0 0 10 * * *")//每天早上10点执行一次
+
+		@Scheduled(cron = "0/3 * * * * *")//每隔3秒执行一次
+//	@Scheduled(cron = "0 0 0 * * *")//每天0点执行一次
 	public void runTimer() throws IOException, ParseException
 	{
-		List<TbCar> list =userMapper.queryEndTime();
+		List<TbCar> list = userMapper.queryEndTime();
 		System.out.println("月缴到期list ===== " + list.size());
-		if(list.size()>0){
-			for(TbCar tbCar:list){
-				SimpleDateFormat sd=new SimpleDateFormat("yy-MM-dd");
-				int days=(int)((sd.parse(tbCar.getEndTime()).getTime() - sd.parse(sd.format(new Date())).getTime()) / (1000*3600*24));
+		if (list.size() > 0)
+		{
+			for (TbCar tbCar : list)
+			{
+				SimpleDateFormat sd = new SimpleDateFormat("yy-MM-dd");
+				int days = (int) ((sd.parse(tbCar.getEndTime()).getTime() - sd.parse(sd.format(new Date())).getTime()) / (1000 * 3600 * 24));
 				System.out.println("days = " + days);
-				if(WebSocket.electricSocketMap.get("ip")!=null){
-					for (Session session:WebSocket.electricSocketMap.get("ip"))
+				if (WebSocket.electricSocketMap.get("ip") != null)
+				{
+					for (Session session : WebSocket.electricSocketMap.get("ip"))
 					{
-						if(days>=0){
-							session.getBasicRemote().sendText(tbCar.getCarNum()+"的月缴产品还剩"+days+"天到期");
-						}else {
+						if (days >= 0)
+						{
+							session.getBasicRemote().sendText(tbCar.getCarNum() + "的月缴产品还剩" + days + "天到期");
+						}
+						else
+						{
 							System.out.println("-days = " + days);
-							session.getBasicRemote().sendText(tbCar.getCarNum()+"未办理月缴产品或已过期，请自行选择办理");
-
+							//更改过期套餐
+							int num=userMapper.updateCombo(tbCar);
+							System.out.println("num ===== " + num);
+							session.getBasicRemote().sendText(tbCar.getCarNum() + "未办理月缴产品或已过期，请自行选择办理");
 						}
 					}
-
 				}
 			}
 
 		}
-//		TbCar tbCar=userMapper.queryEndTime();
-//		System.out.println("月缴到期tbCar ===== " + tbCar);
-//		if(tbCar!=null){
-//			if(WebSocket.electricSocketMap.get("ip")!=null){
-//				for (Session session:WebSocket.electricSocketMap.get("ip"))
-//				{
-//					session.getBasicRemote().sendText(tbCar.getCarNum()+"的月缴产品还剩"+5+"天到期");
-//				}
-//
-//			}
-//		}
 	}
 }

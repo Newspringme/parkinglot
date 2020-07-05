@@ -89,6 +89,10 @@
     <select id="userLogin" resultType="java.lang.String">
         select user_pass from tb_user where user_tel=#{phone};
     </select>
+<!--更改过期套餐-->
+    <update id="updateCombo" parameterType="com.cnzk.pojo.TbCar">
+        update tb_car set combo_id=0,vip_id=0,end_time='' where car_num=#{carNum};
+    </update>
 
     <select id="findPhone" resultType="java.lang.String">
         select * from tb_user where user_tel=#{phone};
