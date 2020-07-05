@@ -351,7 +351,7 @@ public class PayController
 //            out.clear();
 //            out.println("验证成功<br />");
 			//——请根据您的业务逻辑来编写程序（以上代码仅作参考）——
-			Response.sendRedirect("http://localhost:8080/parkinglot/url/close");
+			Response.sendRedirect("http://39.102.35.36:8080/parkinglot/url/close");
 			//////////////////////////////////////////////////////////////////////////////////////////
 		}
 		else
