@@ -24,8 +24,8 @@ public class TimerController
 	@Resource
 	UserMapper userMapper;
 
-		@Scheduled(cron = "0/3 * * * * *")//每隔3秒执行一次
-//	@Scheduled(cron = "0 0 0 * * *")//每天0点执行一次
+//		@Scheduled(cron = "0/3 * * * * *")//每隔3秒执行一次
+	@Scheduled(cron = "0 0 0 * * *")//每天0点执行一次
 	public void runTimer() throws IOException, ParseException
 	{
 		List<TbCar> list = userMapper.queryEndTime();
